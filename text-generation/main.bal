@@ -1,11 +1,9 @@
 import ballerina/io;
 import ballerinax/openai.gpt3;
 
-// OpenAI token
 configurable string openAIToken = ?;
 
-// Configure OpenAI gpt3 client
-gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
+final gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
 
 public function main() returns error? {
 
