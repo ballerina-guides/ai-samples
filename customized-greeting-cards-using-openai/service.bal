@@ -1,22 +1,13 @@
 import ballerina/http;
-import ballerina/log;
 import ballerinax/googleapis.gmail;
 import ballerinax/openai.dalle; // the names will change in th final connectors
 import ballerinax/openai.gpt3; // the names will change in th final connectors
 
-// OpenAI token
 configurable string openAIToken = ?;
-
-// Gmail credentials
 configurable string gmailToken = ?;
 
-// Configure OpenAI gpt3 client
 final gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
-
-// Configure OpenAI dalle client
 final dalle:Client dalleClient = check new ({auth: {token: openAIToken}});
-
-// Configure Gmail client
 final gmail:Client gmailClient = check new ({auth: {token: gmailToken}});
 
 type Reqquest record {|
@@ -27,7 +18,7 @@ type Reqquest record {|
 |};
 
 service / on new http:Listener(8080) {
-    resource function post sendGreeding(@http:Payload Reqquest req) returns error? {
+    resource function post greetingCard(@http:Payload Reqquest req) returns error? {
 
         string occasion = req.occasion;
         string recipientEmail = req.recipientEmail;
@@ -71,19 +62,7 @@ service / on new http:Listener(8080) {
                 messageBody: htmlBody,
                 contentType: gmail:TEXT_HTML
             };
-            gmail:Message|error sendMessageResponse = check gmailClient->sendMessage(messageRequest, userId = userId);
-
-            if (sendMessageResponse is gmail:Message) {
-                log:printInfo("Sucessfully sent the email");
-            } else {
-                log:printError("An error occured while sending the email: ", 'error = sendMessageResponse);
-            }
-        }
-        else if greeting is error {
-            log:printError("An error occured while generating greeting: ", 'error = greeting);
-        }
-        else if image is error {
-            log:printError("An error occured while generating design: ", 'error = image);
+            gmail:Message _ = check gmailClient->sendMessage(messageRequest, userId = userId);
         }
     }
 }
