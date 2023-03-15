@@ -1,43 +1,23 @@
-import ballerinax/openai.gpt3; // the names will change in th final connectors
-import ballerinax/openai.dalle; // the names will change in th final connectors
 import ballerina/http;
-import ballerinax/googleapis.gmail;
 import ballerina/log;
+import ballerinax/googleapis.gmail;
+import ballerinax/openai.dalle; // the names will change in th final connectors
+import ballerinax/openai.gpt3; // the names will change in th final connectors
 
 // OpenAI token
 configurable string openAIToken = ?;
 
 // Gmail credentials
 configurable string gmailToken = ?;
-configurable string gmailClientID = ?;
-configurable string gmailClientSecret = ?;
-configurable string gmailRefreshToken = ?;
 
 // Configure OpenAI gpt3 client
-gpt3:Client gpt3Client = check new ({
-    auth: {
-        token: openAIToken
-    }
-});
+final gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
 
 // Configure OpenAI dalle client
-dalle:Client dalleClient = check new ({
-    auth: {
-        token: openAIToken
-    }
-});
+final dalle:Client dalleClient = check new ({auth: {token: openAIToken}});
 
 // Configure Gmail client
-gmail:ConnectionConfig gmailConfig = {
-    auth: {
-        refreshUrl: gmail:REFRESH_URL,
-        refreshToken: gmailRefreshToken,
-        clientId: gmailClientID,
-        clientSecret: gmailClientSecret
-    }
-};
-
-gmail:Client gmailClient = check new (gmailConfig);
+final gmail:Client gmailClient = check new ({auth: {token: gmailToken}});
 
 type Reqquest record {|
     string occasion;
@@ -55,37 +35,28 @@ service / on new http:Listener(8080) {
         string specialNotes = req.specialNotes ?: "";
 
         fork {
-            worker contentWorker returns string|error {
-                string contentPrompt = "Generate a greeting for a/an " + occasion + ".\nSpecial notes: " + specialNotes;
-
+            // Parallelly generate greeting text and design
+            worker contentWorker returns string?|error {
+                string contentPrompt = string `Generate a greeting for a/an ${occasion}.\nSpecial notes: ${specialNotes}`;
                 gpt3:CreateCompletionRequest textPrompt = {
                     prompt: contentPrompt,
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
                 gpt3:CreateCompletionResponse completionRes = check gpt3Client->/completions.post(textPrompt);
-
-                string greeting = <string>completionRes.choices[0].text;
-                log:printInfo("Greeting: " + greeting);
-
-                return greeting;
+                return completionRes.choices[0].text;
             }
-            worker designWorker returns string|error {
-                string designPrompt = "Greeting card design for " + occasion + ", " + specialNotes;
-
+            worker designWorker returns string?|error {
+                string designPrompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
                 dalle:CreateImageRequest imagePrompt = {
                     prompt: designPrompt
                 };
-
                 dalle:ImagesResponse imageRes = check dalleClient->/images/generations.post(imagePrompt);
-                string image = <string>imageRes.data[0].url;
-                log:printInfo("Design URL: " + image);
-
-                return image;
+                return imageRes.data[0].url;
             }
         }
 
-        map<string|error> responses = wait {contentWorker, designWorker};
+        map<string?|error> responses = wait {contentWorker, designWorker};
         string|error? greeting = responses["contentWorker"];
         string|error? image = responses["designWorker"];
 
@@ -95,12 +66,11 @@ service / on new http:Listener(8080) {
             string htmlBody = "<p>" + greeting + "</p> <br/> <img src=" + image + ">";
 
             gmail:MessageRequest messageRequest = {
-                recipient : recipientEmail,
-                subject : emailSubject,
-                messageBody : htmlBody,
-                contentType : gmail:TEXT_HTML
+                recipient: recipientEmail,
+                subject: emailSubject,
+                messageBody: htmlBody,
+                contentType: gmail:TEXT_HTML
             };
-
             gmail:Message|error sendMessageResponse = check gmailClient->sendMessage(messageRequest, userId = userId);
 
             if (sendMessageResponse is gmail:Message) {
@@ -116,5 +86,4 @@ service / on new http:Listener(8080) {
             log:printError("An error occured while generating design: ", 'error = image);
         }
     }
-    
 }
