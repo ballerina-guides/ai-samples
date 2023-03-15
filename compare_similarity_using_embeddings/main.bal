@@ -1,31 +1,27 @@
 import ballerina/io;
-import ballerinax/openai;
 import ballerina/math.vector as MathVector; 
+import ballerinax/openai;
 
-configurable string openAIKey = ?;
+configurable string openAIToken = ?;
 
 public function main() returns error? {
 
-    openai:OpenAIClient openaiClient = check new ({
-        auth: {
-            token: openAIKey
-        }
-    });
+    final openai:OpenAIClient openaiClient = check new ({auth: {token: openAIToken}});
 
     string text1 = "What are you thinking?";
     string text2 = "What is on your mind?";
 
-    openai:CreateEmbeddingRequest text_embedding_request = {
+    openai:CreateEmbeddingRequest textEmbeddingRequest = {
         model: "text-embedding-ada-002",
         input: [text1, text2]
     }; 
 
-    openai:CreateEmbeddingResponse text_embedding_response = check openaiClient->/embeddings.post(text_embedding_request);
+    openai:CreateEmbeddingResponse textEmbeddingResponse = check openaiClient->/embeddings.post(textEmbeddingRequest);
 
-    float[] text1_embedding = text_embedding_response.data[0].embedding;
-    float[] text2_embedding = text_embedding_response.data[1].embedding;
+    float[] text1Embedding = textEmbeddingResponse.data[0].embedding;
+    float[] text2Embedding = textEmbeddingResponse.data[1].embedding;
 
-    float similarity = check MathVector:cosineSimilarity(text1_embedding, text2_embedding);
+    float similarity = check MathVector:cosineSimilarity(text1Embedding, text2Embedding);
 
     io:println("The similarity between the given two texts : ", similarity);
 
