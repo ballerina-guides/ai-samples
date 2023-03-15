@@ -84,6 +84,6 @@ public function main() returns error? {
 
     float similarity = check cosineSimilarity(text1_embedding, text2_embedding);
 
-    io:println(similarity);
+    io:println("The similarity between the given two texts : ", similarity);
 
 }
