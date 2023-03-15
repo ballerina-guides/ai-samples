@@ -1,0 +1,14 @@
+[package]
+org = "isururuhunage"
+name = "converting_audio_to_text_and_translation_using_openai"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "openai"
+version = "0.1.0"
+repository = "local"
