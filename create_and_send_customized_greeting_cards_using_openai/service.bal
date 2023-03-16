@@ -19,13 +19,12 @@ type GreetingDetails record {|
 
 service / on new http:Listener(8080) {
     resource function post greetingCard(@http:Payload GreetingDetails req) returns error? {
-
         string occasion = req.occasion;
         string specialNotes = req.specialNotes ?: "";
 
         fork {
             // Generate greeting text and design in parallel
-            worker contentWorker returns string|error? {
+            worker greetingWorker returns string|error? {
                 string prompt = string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`;
                 text:CreateCompletionRequest textPrompt = {
                     prompt,
@@ -35,7 +34,7 @@ service / on new http:Listener(8080) {
                 text:CreateCompletionResponse completionRes = check openaiText->/completions.post(textPrompt);
                 return completionRes.choices[0].text;
             }
-            worker designWorker returns string|error? {
+            worker imageWorker returns string|error? {
                 string prompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
                 images:CreateImageRequest imagePrompt = {
                     prompt
@@ -46,18 +45,21 @@ service / on new http:Listener(8080) {
         }
 
         record {|
-            string|error? contentWorker;
-            string|error? designWorker;
-        |} {contentWorker: greeting, designWorker: image} = wait {contentWorker, designWorker};
+            string|error? greetingWorker;
+            string|error? imageWorker;
+        |} resutls = wait {greetingWorker, imageWorker};
 
-        if greeting !is string || image !is string {
+        string? greeting = check resutls.greetingWorker;
+        string? imageURL = check resutls.imageWorker;
+        if greeting !is string || imageURL !is string {
             return error("Error while generating greeting card");
         }
+
         // Send an email with the greeting and the image using the email connector
         gmail:MessageRequest messageRequest = {
             recipient: req.recipientEmail,
             subject: req.emailSubject,
-            messageBody: "<p>" + greeting + "</p> <br/> <img src=" + image + ">",
+            messageBody: "<p>" + greeting + "</p> <br/> <img src=" + imageURL + ">",
             contentType: gmail:TEXT_HTML
         };
         _ = check gmail->sendMessage(messageRequest, userId = "me");
