@@ -1,5 +1,5 @@
 [package]
-org = "anupama"
+org = "ai_samples"
 name = "create_products_in_shopify_using_sheets_data"
 version = "0.1.0"
 distribution = "2201.3.2"
