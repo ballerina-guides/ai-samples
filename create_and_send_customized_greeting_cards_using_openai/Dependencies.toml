@@ -8,7 +8,7 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "create_and_send_customized_greeting_cards"
+name = "create_and_send_customized_greeting_cards_using_openai"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -18,7 +18,7 @@ dependencies = [
 	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "create_and_send_customized_greeting_cards", moduleName = "create_and_send_customized_greeting_cards"}
+	{org = "ai_samples", packageName = "create_and_send_customized_greeting_cards_using_openai", moduleName = "create_and_send_customized_greeting_cards_using_openai"}
 ]
 
 [[package]]
