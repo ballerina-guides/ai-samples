@@ -9,6 +9,6 @@ observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "openai.gpt3"
+name = "openai.text"
 version = "0.1.0"
 repository = "local"
