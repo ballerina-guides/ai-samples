@@ -1,6 +1,6 @@
 [package]
 org = "isururuhunage"
-name = "converting_audio_to_text_and_translation_using_openai"
+name = "audio_to_text_summarization_using_openai"
 version = "0.1.0"
 distribution = "2201.4.0"
 
