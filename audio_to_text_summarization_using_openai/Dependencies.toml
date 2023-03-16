@@ -7,6 +7,22 @@
 dependencies-toml-version = "2"
 
 [[package]]
+org = "ai_samples"
+name = "audio_to_text_summarization_using_openai"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "io"},
+	{org = "ballerinai", name = "observe"},
+	{org = "ballerinax", name = "openai.audio"},
+	{org = "ballerinax", name = "openai.text"},
+	{org = "ballerinax", name = "twitter"}
+]
+modules = [
+	{org = "ai_samples", packageName = "audio_to_text_summarization_using_openai", moduleName = "audio_to_text_summarization_using_openai"}
+]
+
+[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.6.0"
@@ -360,21 +376,5 @@ dependencies = [
 modules = [
 	{org = "ballerinax", packageName = "twitter", moduleName = "twitter"},
 	{org = "ballerinax", packageName = "twitter", moduleName = "twitter.listener"}
-]
-
-[[package]]
-org = "isururuhunage"
-name = "audio_to_text_summarization_using_openai"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "openai.audio"},
-	{org = "ballerinax", name = "openai.text"},
-	{org = "ballerinax", name = "twitter"}
-]
-modules = [
-	{org = "isururuhunage", packageName = "audio_to_text_summarization_using_openai", moduleName = "audio_to_text_summarization_using_openai"}
 ]
 
