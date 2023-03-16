@@ -9,9 +9,9 @@ configurable string sheetId = ?;
 configurable string sheetName = ?;
 configurable string openAIToken = ?;
 
-final sheets:Client spreadsheetClient = check new ({auth: {token: sheetsAccessToken}});
-final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
-final embeddings:Client openaiEmbeddingClient = check new ({auth: {token: openAIToken}});
+final sheets:Client gSheets = check new ({auth: {token: sheetsAccessToken}});
+final text:Client openaiText = check new ({auth: {token: openAIToken}});
+final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken}});
 
 service / on new http:Listener(8080) {
 
@@ -19,7 +19,7 @@ service / on new http:Listener(8080) {
     map<decimal[]> docEmbeddings = {};
 
     function init() returns error? {
-        sheets:Range range = check spreadsheetClient->getRange(sheetId, sheetName, "A2:B");
+        sheets:Range range = check gSheets->getRange(sheetId, sheetName, "A2:B");
 
         //Populate the dictionaries with the content and embeddings for each doc.
         foreach any[] row in range.values {
@@ -36,7 +36,7 @@ service / on new http:Listener(8080) {
             prompt: prompt,
             model: "text-davinci-003"
         };
-        text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(prmt);
+        text:CreateCompletionResponse completionRes = check openaiText->/completions.post(prmt);
         return completionRes.choices[0].text;
     }
 }
@@ -46,7 +46,7 @@ function getEmbedding(string text) returns decimal[]|error {
         input: text,
         model: "text-embedding-ada-002"
     };
-    embeddings:CreateEmbeddingResponse embeddingRes = check openaiEmbeddingClient->/embeddings.post(embeddingRequest);
+    embeddings:CreateEmbeddingResponse embeddingRes = check openaiEmbeddings->/embeddings.post(embeddingRequest);
     return embeddingRes.data[0].embedding;
 }
 
