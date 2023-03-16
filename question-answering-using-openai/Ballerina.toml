@@ -1,0 +1,14 @@
+[package]
+org = "ai_samples"
+name = "question_answering_using_openai"
+version = "0.1.0"
+distribution = "2201.3.1"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "openai"
+version = "0.1.0"
+repository = "local"
