@@ -3,7 +3,7 @@ import ballerinax/openai.text;
 
 configurable string openAIToken = ?;
 
-final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
+final text:Client openaiText = check new ({auth: {token: openAIToken}});
 
 public function main() returns error? {
 
@@ -17,7 +17,7 @@ public function main() returns error? {
         model: "text-davinci-003",
         max_tokens: 2000
     };
-    text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(textPrompt);
+    text:CreateCompletionResponse completionRes = check openaiText->/completions.post(textPrompt);
     string summary = <string>completionRes.choices[0].text;
     io:println(string `Summary: ${summary}`);
 }

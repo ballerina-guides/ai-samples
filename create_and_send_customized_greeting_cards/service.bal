@@ -6,9 +6,9 @@ import ballerinax/openai.text;
 configurable string openAIToken = ?;
 configurable string gmailToken = ?;
 
-final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
-final images:Client openaiImagesClient = check new ({auth: {token: openAIToken}});
-final gmail:Client gmailClient = check new ({auth: {token: gmailToken}});
+final text:Client openaiText = check new ({auth: {token: openAIToken}});
+final images:Client openaiImages = check new ({auth: {token: openAIToken}});
+final gmail:Client gmail = check new ({auth: {token: gmailToken}});
 
 type GreetingDetails record {|
     string occasion;
@@ -24,7 +24,7 @@ service / on new http:Listener(8080) {
         string specialNotes = req.specialNotes ?: "";
 
         fork {
-            // Parallelly generate greeting text and design
+            // Generate greeting text and design in parallel
             worker contentWorker returns string|error? {
                 string prompt = string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`;
                 text:CreateCompletionRequest textPrompt = {
@@ -32,7 +32,7 @@ service / on new http:Listener(8080) {
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
-                text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(textPrompt);
+                text:CreateCompletionResponse completionRes = check openaiText->/completions.post(textPrompt);
                 return completionRes.choices[0].text;
             }
             worker designWorker returns string|error? {
@@ -40,7 +40,7 @@ service / on new http:Listener(8080) {
                 images:CreateImageRequest imagePrompt = {
                     prompt
                 };
-                images:ImagesResponse imageRes = check openaiImagesClient->/images/generations.post(imagePrompt);
+                images:ImagesResponse imageRes = check openaiImages->/images/generations.post(imagePrompt);
                 return imageRes.data[0].url;
             }
         }
@@ -60,6 +60,6 @@ service / on new http:Listener(8080) {
             messageBody: "<p>" + greeting + "</p> <br/> <img src=" + image + ">",
             contentType: gmail:TEXT_HTML
         };
-        _ = check gmailClient->sendMessage(messageRequest, userId = "me");
+        _ = check gmail->sendMessage(messageRequest, userId = "me");
     }
 }
