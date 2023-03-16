@@ -51,7 +51,7 @@ public function main() returns error? {
 
     // Creates a request to translate the audio file to text (English)
     audio:CreateTranscriptionRequest transcriptionsReq = {
-        file: {fileContent: (check io:fileReadBytes(AUDIOFILEPATH)).slice(0, BINARYLENGTH), fileName:AUDIOFILE},
+        file: {fileContent: (check io:fileReadBytes(AUDIOFILEPATH)).slice(0, BINARYLENGTH), fileName: AUDIOFILE},
         model: "whisper-1"
     };
 
