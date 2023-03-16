@@ -11,6 +11,7 @@ org = "ai_samples"
 name = "correct_grammar_and_spelling_in_text_using_openai"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "openai.text"}
@@ -99,6 +100,9 @@ dependencies = [
 	{org = "ballerina", name = "regex"},
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
+]
+modules = [
+	{org = "ballerina", packageName = "http", moduleName = "http"}
 ]
 
 [[package]]
