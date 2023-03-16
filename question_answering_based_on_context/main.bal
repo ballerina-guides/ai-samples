@@ -1,7 +1,8 @@
 import ballerina/http;
 import ballerina/regex;
 import ballerinax/googleapis.sheets;
-import ballerinax/openai;
+import ballerinax/openai.embeddings;
+import ballerinax/openai.text;
 
 configurable string sheetsAccessToken = ?;
 configurable string sheetId = ?;
@@ -9,7 +10,8 @@ configurable string sheetName = ?;
 configurable string openAIToken = ?;
 
 final sheets:Client spreadsheetClient = check new ({auth: {token: sheetsAccessToken}});
-final openai:OpenAIClient openaiClient = check new ({auth: {token: openAIToken}});
+final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
+final embeddings:Client openaiEmbeddingClient = check new ({auth: {token: openAIToken}});
 
 // Load the data and compute the embeddings when the service starts
 [map<string>, map<decimal[]>] [documents, docEmbeddings] = check loadData(sheetId, sheetName);
@@ -19,11 +21,11 @@ service / on new http:Listener(8080) {
     resource function get answer(string question) returns string?|error {
 
         string prompt = check constructPrompt(question, documents, docEmbeddings);
-        openai:CreateCompletionRequest prmt = {
+        text:CreateCompletionRequest prmt = {
             prompt: prompt,
             model: "text-davinci-003"
         };
-        openai:CreateCompletionResponse completionRes = check openaiClient->/completions.post(prmt);
+        text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(prmt);
 
         return completionRes.choices[0].text;
     }
@@ -55,11 +57,11 @@ function cosineSimilarity(decimal[] vector1, decimal[] vector2) returns float {
 }
 
 function getEmbedding(string text) returns decimal[]|error {
-    openai:CreateEmbeddingRequest input = {
+    embeddings:CreateEmbeddingRequest input = {
         input: text,
         model: "text-embedding-ada-002"
     };
-    openai:CreateEmbeddingResponse embeddingRes = check openaiClient->/embeddings.post(input);
+    embeddings:CreateEmbeddingResponse embeddingRes = check openaiEmbeddingClient->/embeddings.post(input);
     return embeddingRes.data[0].embedding;
 }
 
@@ -100,7 +102,7 @@ function constructPrompt(string question, map<string> documents, map<decimal[]> 
     }
 
     string instruction = "Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say \"I don't know.\"\n\nContext:\n";
-    return string `${instruction} ${context} \n\n Q: ${question} \n A:`;
+    return string `${instruction} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
 }
 
 function loadData(string sheetId, string sheetName = "Sheet1") returns [map<string>, map<decimal[]>]|error {
