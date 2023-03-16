@@ -11,7 +11,7 @@ public function main() returns error? {
         count: 3, // Number of retry attempts before stopping.
         backOffFactor: 2.0 // Multiplier of the retry interval.
     };
-    final text:Client openaiText = check new ({auth: {token: openAIToken}, retryConfig: retryConfig});
+    final text:Client openaiText = check new ({auth: {token: openAIToken}, retryConfig});
     string fileContent = check io:fileReadString(filePath);
 
     text:CreateEditRequest request = {
