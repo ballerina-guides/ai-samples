@@ -2,12 +2,10 @@ import ballerina/io;
 import ballerinax/openai.text;
 
 configurable string openAIToken = ?;
-
-final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
+configurable string filePath = ?;
 
 public function main() returns error? {
-
-    string filePath = "./data/example.txt";
+    final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
     string fileContent = check io:fileReadString(filePath);
 
     text:CreateEditRequest request = {
