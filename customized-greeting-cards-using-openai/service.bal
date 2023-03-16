@@ -10,7 +10,7 @@ final gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
 final dalle:Client dalleClient = check new ({auth: {token: openAIToken}});
 final gmail:Client gmailClient = check new ({auth: {token: gmailToken}});
 
-type Reqquest record {|
+type GreetingDetails record {|
     string occasion;
     string recipientEmail;
     string emailSubject;
@@ -18,51 +18,48 @@ type Reqquest record {|
 |};
 
 service / on new http:Listener(8080) {
-    resource function post greetingCard(@http:Payload Reqquest req) returns error? {
+    resource function post greetingCard(@http:Payload GreetingDetails req) returns error? {
 
         string occasion = req.occasion;
-        string recipientEmail = req.recipientEmail;
-        string emailSubject = req.emailSubject;
         string specialNotes = req.specialNotes ?: "";
 
         fork {
             // Parallelly generate greeting text and design
-            worker contentWorker returns string?|error {
-                string contentPrompt = string `Generate a greeting for a/an ${occasion}.\nSpecial notes: ${specialNotes}`;
+            worker contentWorker returns string|error? {
+                string prompt = string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`;
                 gpt3:CreateCompletionRequest textPrompt = {
-                    prompt: contentPrompt,
+                    prompt,
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
                 gpt3:CreateCompletionResponse completionRes = check gpt3Client->/completions.post(textPrompt);
                 return completionRes.choices[0].text;
             }
-            worker designWorker returns string?|error {
-                string designPrompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
+            worker designWorker returns string|error? {
+                string prompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
                 dalle:CreateImageRequest imagePrompt = {
-                    prompt: designPrompt
+                    prompt
                 };
                 dalle:ImagesResponse imageRes = check dalleClient->/images/generations.post(imagePrompt);
                 return imageRes.data[0].url;
             }
         }
 
-        map<string?|error> responses = wait {contentWorker, designWorker};
-        string|error? greeting = responses["contentWorker"];
-        string|error? image = responses["designWorker"];
+        record {|
+            string|error? contentWorker;
+            string|error? designWorker;
+        |} {contentWorker: greeting, designWorker: image} = wait {contentWorker, designWorker};
 
-        if (greeting is string && image is string) {
-            // Send an email with the greeting and the image using the email connector
-            string userId = "me";
-            string htmlBody = "<p>" + greeting + "</p> <br/> <img src=" + image + ">";
-
-            gmail:MessageRequest messageRequest = {
-                recipient: recipientEmail,
-                subject: emailSubject,
-                messageBody: htmlBody,
-                contentType: gmail:TEXT_HTML
-            };
-            gmail:Message _ = check gmailClient->sendMessage(messageRequest, userId = userId);
+        if greeting !is string || image !is string {
+            return error("Error while generating greeting card");
         }
+        // Send an email with the greeting and the image using the email connector
+        gmail:MessageRequest messageRequest = {
+            recipient: req.recipientEmail,
+            subject: req.emailSubject,
+            messageBody: "<p>" + greeting + "</p> <br/> <img src=" + image + ">",
+            contentType: gmail:TEXT_HTML
+        };
+        _ = check gmailClient->sendMessage(messageRequest, userId = "me");
     }
 }
