@@ -318,7 +318,7 @@ modules = [
 ]
 
 [[package]]
-org = "isururuhunage"
+org = "io_samples"
 name = "converting_audio_to_text_and_translation_using_openai"
 version = "0.1.0"
 dependencies = [
@@ -328,6 +328,6 @@ dependencies = [
 	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "isururuhunage", packageName = "converting_audio_to_text_and_translation_using_openai", moduleName = "converting_audio_to_text_and_translation_using_openai"}
+	{org = "io_samples", packageName = "converting_audio_to_text_and_translation_using_openai", moduleName = "converting_audio_to_text_and_translation_using_openai"}
 ]
 
