@@ -37,8 +37,8 @@ public function main(string podcastURL) returns error? {
     };
 
     // Converts the audio file to text (English) using OpenAI speach to text API
-    audio:Client openaiAudio = check new ({auth: {token: openAIToken}});
-    audio:CreateTranscriptionResponse transcriptionsRes = check openaiAudio->/audio/transcriptions.post(transcriptionsReq);
+    audio:Client openAIAudio = check new ({auth: {token: openAIToken}});
+    audio:CreateTranscriptionResponse transcriptionsRes = check openAIAudio->/audio/transcriptions.post(transcriptionsReq);
     io:println("Text from the audio :", transcriptionsRes.text);
 
     // Creates a request to summarize the text
@@ -54,8 +54,8 @@ public function main(string podcastURL) returns error? {
     };
 
     // Summarizes the text using OpenAI text completion API
-    text:Client openaiText = check new ({auth: {token: openAIToken}});
-    text:CreateCompletionResponse completionRes = check openaiText->/completions.post(textCompletionReq);
+    text:Client openAIText = check new ({auth: {token: openAIToken}});
+    text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textCompletionReq);
     string summerizedText = check completionRes.choices[0].text.ensureType();
     io:println("Summarized text: ", summerizedText);
 
