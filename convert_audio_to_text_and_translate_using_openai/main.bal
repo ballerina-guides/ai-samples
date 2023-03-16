@@ -4,25 +4,13 @@ import ballerinax/openai.audio;
 
 configurable string openAIKey = ?;
 
-const string AUDIOFILEPATH = "./audo_clips/german-hello.mp3";
-const string AUDIOFILE = "german-hello.mp3";
+const string AUDIOFILEPATH = "./audo_clips/german_hello.mp3";
+const string AUDIOFILE = "german_hello.mp3";
 const string TRANSLATINGLANGUAGE = "French";
 
-// OpenAI API audio client configuration
-audio:Client openaiAudioClient = check new ({
-    auth: {
-        token: openAIKey
-    }
-});
-
-// OpenAI API client configuration
-text:Client openaiTextClient = check new ({
-    auth: {
-        token: openAIKey
-    }
-});
-
 public function main() returns error? {
+    audio:Client openAIAudioClient = check new ({auth: {token: openAIKey}});
+    text:Client openAITextClient = check new ({auth: {token: openAIKey}});
 
     // Creates a request to translate the audio file to text (English)
     audio:CreateTranslationRequest translationsReq = {
@@ -30,11 +18,12 @@ public function main() returns error? {
         model: "whisper-1"
     };
 
-    audio:CreateTranscriptionResponse translationsRes = check openaiAudioClient->/audio/translations.post(translationsReq);
+    // Translates the audio file to text (English)
+    audio:CreateTranscriptionResponse translationsRes = check openAIAudioClient->/audio/translations.post(translationsReq);
     io:println("Audio text in English: ", translationsRes.text);
 
     // Creates a request to translate the text from English to other language
-    string prmt = "Translate the following text from English to " + TRANSLATINGLANGUAGE + ": " + translationsRes.text;
+    string prmt = string `Translate the following text from English to ${TRANSLATINGLANGUAGE} : ${translationsRes.text}`;
     text:CreateCompletionRequest createCompletionRequest = {
         model: "text-davinci-003",
         prompt: prmt,
@@ -46,7 +35,7 @@ public function main() returns error? {
     };
 
     // Translates the text from English to other language
-    text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(createCompletionRequest);
+    text:CreateCompletionResponse completionRes = check openAITextClient->/completions.post(createCompletionRequest);
     string productDescription = check completionRes.choices[0].text.ensureType();
     io:println("Translated text: ", productDescription);
 }
