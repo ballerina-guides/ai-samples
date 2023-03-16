@@ -1,0 +1,14 @@
+[package]
+org = "jayanihewavitharana"
+name = "text_generation"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "openai.gpt3"
+version = "0.1.0"
+repository = "local"
