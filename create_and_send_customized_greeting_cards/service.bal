@@ -1,13 +1,13 @@
 import ballerina/http;
 import ballerinax/googleapis.gmail;
-import ballerinax/openai.dalle; // the names will change in th final connectors
-import ballerinax/openai.gpt3; // the names will change in th final connectors
+import ballerinax/openai.images;
+import ballerinax/openai.text;
 
 configurable string openAIToken = ?;
 configurable string gmailToken = ?;
 
-final gpt3:Client gpt3Client = check new ({auth: {token: openAIToken}});
-final dalle:Client dalleClient = check new ({auth: {token: openAIToken}});
+final text:Client openaiTextClient = check new ({auth: {token: openAIToken}});
+final images:Client openaiImagesClient = check new ({auth: {token: openAIToken}});
 final gmail:Client gmailClient = check new ({auth: {token: gmailToken}});
 
 type GreetingDetails record {|
@@ -27,20 +27,20 @@ service / on new http:Listener(8080) {
             // Parallelly generate greeting text and design
             worker contentWorker returns string|error? {
                 string prompt = string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`;
-                gpt3:CreateCompletionRequest textPrompt = {
+                text:CreateCompletionRequest textPrompt = {
                     prompt,
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
-                gpt3:CreateCompletionResponse completionRes = check gpt3Client->/completions.post(textPrompt);
+                text:CreateCompletionResponse completionRes = check openaiTextClient->/completions.post(textPrompt);
                 return completionRes.choices[0].text;
             }
             worker designWorker returns string|error? {
                 string prompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
-                dalle:CreateImageRequest imagePrompt = {
+                images:CreateImageRequest imagePrompt = {
                     prompt
                 };
-                dalle:ImagesResponse imageRes = check dalleClient->/images/generations.post(imagePrompt);
+                images:ImagesResponse imageRes = check openaiImagesClient->/images/generations.post(imagePrompt);
                 return imageRes.data[0].url;
             }
         }

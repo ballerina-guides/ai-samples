@@ -8,18 +8,17 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "customized_greeting_cards_using_openai"
+name = "create_and_send_customized_greeting_cards"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "log"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "googleapis.gmail"},
-	{org = "ballerinax", name = "openai.dalle"},
-	{org = "ballerinax", name = "openai.gpt3"}
+	{org = "ballerinax", name = "openai.images"},
+	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "customized_greeting_cards_using_openai", moduleName = "customized_greeting_cards_using_openai"}
+	{org = "ai_samples", packageName = "create_and_send_customized_greeting_cards", moduleName = "create_and_send_customized_greeting_cards"}
 ]
 
 [[package]]
@@ -218,9 +217,6 @@ dependencies = [
 	{org = "ballerina", name = "lang.value"},
 	{org = "ballerina", name = "observe"}
 ]
-modules = [
-	{org = "ballerina", packageName = "log", moduleName = "log"}
-]
 
 [[package]]
 org = "ballerina"
@@ -341,7 +337,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "openai.dalle"
+name = "openai.images"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -350,12 +346,12 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.dalle", moduleName = "openai.dalle"}
+	{org = "ballerinax", packageName = "openai.images", moduleName = "openai.images"}
 ]
 
 [[package]]
 org = "ballerinax"
-name = "openai.gpt3"
+name = "openai.text"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
@@ -364,6 +360,6 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.gpt3", moduleName = "openai.gpt3"}
+	{org = "ballerinax", packageName = "openai.text", moduleName = "openai.text"}
 ]
 
