@@ -70,8 +70,9 @@ function constructPrompt(string question, map<string> documents, map<decimal[]> 
         context += "\n*" + content;
     }
 
-    return string `Answer the question as truthfully as possible using the provided context, and if the answer is not contained within the text below, say "I don't know."${
-    "\n\n"}Context:${"\n"} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
+    string instruction = "Answer the question as truthfully as possible using the provided context," +
+    " and if the answer is not contained within the text below, say \"I don't know.\"\n\n";
+    return string `${instruction}Context:${"\n"} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
 }
 
 function cosineSimilarity(decimal[] vector1, decimal[] vector2) returns float {
