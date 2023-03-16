@@ -2,12 +2,9 @@ import ballerina/io;
 import ballerinax/openai.text;
 
 configurable string openAIToken = ?;
-configurable string filePath = ?;
 
-final text:Client openaiText = check new ({auth: {token: openAIToken}});
-
-public function main() returns error? {
-
+public function main(string filePath) returns error? {
+    text:Client openaiText = check new ({auth: {token: openAIToken}});
     string fileContent = check io:fileReadString(filePath);
     io:println(string `Content: ${fileContent}`);
 
