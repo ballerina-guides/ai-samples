@@ -8,15 +8,15 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "correct_grammar_and_spellings_using_openai"
+name = "correct_grammar_and_spelling_in_text"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "openai.gpt3"}
+	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "correct_grammar_and_spellings_using_openai", moduleName = "correct_grammar_and_spellings_using_openai"}
+	{org = "ai_samples", packageName = "correct_grammar_and_spelling_in_text", moduleName = "correct_grammar_and_spelling_in_text"}
 ]
 
 [[package]]
@@ -304,7 +304,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "openai.gpt3"
+name = "openai.text"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
@@ -313,6 +313,6 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.gpt3", moduleName = "openai.gpt3"}
+	{org = "ballerinax", packageName = "openai.text", moduleName = "openai.text"}
 ]
 
