@@ -6,7 +6,7 @@ configurable string openAIToken = ?;
 
 public function main() returns error? {
 
-    final embeddings:Client embeddingsClient = check new ({auth: {token: openAIToken}});
+    final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken}});
 
     string text1 = "What are you thinking?";
     string text2 = "What is on your mind?";
@@ -16,7 +16,7 @@ public function main() returns error? {
         input: [text1, text2]
     }; 
 
-    embeddings:CreateEmbeddingResponse textEmbeddingResponse = check embeddingsClient->/embeddings.post(textEmbeddingRequest);
+    embeddings:CreateEmbeddingResponse textEmbeddingResponse = check openaiEmbeddings->/embeddings.post(textEmbeddingRequest);
 
     float[] text1Embedding = textEmbeddingResponse.data[0].embedding;
     float[] text2Embedding = textEmbeddingResponse.data[1].embedding;
