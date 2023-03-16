@@ -1,11 +1,17 @@
 [package]
 org = "ai_samples"
-name = "correct_grammar_and_spelling_in_text"
+name = "create_and_send_customized_greeting_cards_using_openai"
 version = "0.1.0"
 distribution = "2201.4.0"
 
 [build-options]
 observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "openai.images"
+version = "0.1.0"
+repository = "local"
 
 [[dependency]]
 org = "ballerinax"

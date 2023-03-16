@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "generate_images_and_store_in_google_drive_using_openai"
+name = "generate_images_using_openai_and_store_in_google_drive"
 version = "0.1.0"
 distribution = "2201.4.0"
 

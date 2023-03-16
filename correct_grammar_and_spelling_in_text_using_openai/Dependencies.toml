@@ -8,18 +8,15 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "question_answering_based_on_context"
+name = "correct_grammar_and_spelling_in_text_using_openai"
 version = "0.1.0"
 dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "regex"},
+	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "googleapis.sheets"},
-	{org = "ballerinax", name = "openai.embeddings"},
 	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "question_answering_based_on_context", moduleName = "question_answering_based_on_context"}
+	{org = "ai_samples", packageName = "correct_grammar_and_spelling_in_text_using_openai", moduleName = "correct_grammar_and_spelling_in_text_using_openai"}
 ]
 
 [[package]]
@@ -103,9 +100,6 @@ dependencies = [
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
 ]
-modules = [
-	{org = "ballerina", packageName = "http", moduleName = "http"}
-]
 
 [[package]]
 org = "ballerina"
@@ -114,6 +108,9 @@ version = "1.4.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.value"}
+]
+modules = [
+	{org = "ballerina", packageName = "io", moduleName = "io"}
 ]
 
 [[package]]
@@ -267,9 +264,6 @@ dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.string"}
 ]
-modules = [
-	{org = "ballerina", packageName = "regex", moduleName = "regex"}
-]
 
 [[package]]
 org = "ballerina"
@@ -306,47 +300,6 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinai", packageName = "observe", moduleName = "observe"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "client.config"
-version = "1.0.1"
-dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "oauth2"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "googleapis.sheets"
-version = "3.2.0"
-dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.array"},
-	{org = "ballerina", name = "lang.int"},
-	{org = "ballerina", name = "log"},
-	{org = "ballerina", name = "os"},
-	{org = "ballerina", name = "regex"},
-	{org = "ballerinax", name = "client.config"}
-]
-modules = [
-	{org = "ballerinax", packageName = "googleapis.sheets", moduleName = "googleapis.sheets"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "openai.embeddings"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "constraint"},
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "url"},
-	{org = "ballerinai", name = "observe"}
-]
-modules = [
-	{org = "ballerinax", packageName = "openai.embeddings", moduleName = "openai.embeddings"}
 ]
 
 [[package]]
