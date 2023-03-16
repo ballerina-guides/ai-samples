@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "question_answering_based_on_context"
+name = "question_answering_based_on_context_using_openai"
 version = "0.1.0"
 distribution = "2201.3.1"
 
