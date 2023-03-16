@@ -1,0 +1,20 @@
+[package]
+org = "ai_samples"
+name = "customized_greeting_cards_using_openai"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "openai.dalle"
+version = "0.1.0"
+repository = "local"
+
+[[dependency]]
+org = "ballerinax"
+name = "openai.gpt3"
+version = "0.1.0"
+repository = "local"
