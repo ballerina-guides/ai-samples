@@ -1,11 +1,9 @@
 # Ceate products in Shopify using sheets data
-
-In this sample use case,
-Read product descriptions from a Google Sheet.
-For the lasted added product (read the last line in the Google sheet), call OpenAI text completion API to generate a product description.
-Call OpenAI image generation API to generate a product image.
-Call Shopify API and create a new product.
-
+ In this sample use case,
+ 1. Read product descriptions from a Google Sheet.
+ 2. For the lasted added product (read the last line in the Google sheet), call OpenAI text completion API to generate a product description.
+ 3. Call OpenAI image generation API to generate a product image.
+ 4. Call Shopify API and create a new product.
 
  ## Prerequisites
  * OpenAI account
