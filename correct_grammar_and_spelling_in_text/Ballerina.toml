@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "correct_grammar_and_spellings_using_openai"
+name = "correct_grammar_and_spelling_in_text"
 version = "0.1.0"
 distribution = "2201.4.0"
 
@@ -9,6 +9,6 @@ observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "openai.gpt3"
+name = "openai.text"
 version = "0.1.0"
 repository = "local"
