@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "question_answering_using_openai"
+name = "question_answering_based_on_context"
 version = "0.1.0"
 distribution = "2201.3.1"
 
@@ -9,6 +9,12 @@ observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "openai"
+name = "openai.text"
+version = "0.1.0"
+repository = "local"
+
+[[dependency]]
+org = "ballerinax"
+name = "openai.embeddings"
 version = "0.1.0"
 repository = "local"

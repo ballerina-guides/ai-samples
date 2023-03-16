@@ -8,18 +8,18 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "question_answering_using_openai"
+name = "question_answering_based_on_context"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "log"},
 	{org = "ballerina", name = "regex"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "googleapis.sheets"},
-	{org = "ballerinax", name = "openai"}
+	{org = "ballerinax", name = "openai.embeddings"},
+	{org = "ballerinax", name = "openai.text"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "question_answering_using_openai", moduleName = "question_answering_using_openai"}
+	{org = "ai_samples", packageName = "question_answering_based_on_context", moduleName = "question_answering_based_on_context"}
 ]
 
 [[package]]
@@ -218,9 +218,6 @@ dependencies = [
 	{org = "ballerina", name = "lang.value"},
 	{org = "ballerina", name = "observe"}
 ]
-modules = [
-	{org = "ballerina", packageName = "log", moduleName = "log"}
-]
 
 [[package]]
 org = "ballerina"
@@ -340,16 +337,29 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "openai"
+name = "openai.embeddings"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "mime"},
 	{org = "ballerina", name = "url"},
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai", moduleName = "openai"}
+	{org = "ballerinax", packageName = "openai.embeddings", moduleName = "openai.embeddings"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "openai.text"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "constraint"},
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "url"},
+	{org = "ballerinai", name = "observe"}
+]
+modules = [
+	{org = "ballerinax", packageName = "openai.text", moduleName = "openai.text"}
 ]
 
