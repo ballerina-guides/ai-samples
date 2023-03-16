@@ -9,6 +9,6 @@ observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "openai"
+name = "openai.embeddings"
 version = "0.1.0"
 repository = "local"
