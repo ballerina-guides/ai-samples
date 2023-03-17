@@ -4,7 +4,7 @@ import ballerinax/openai.text;
 import ballerinax/openai.audio;
 import ballerinax/twitter;
 
-configurable string openAIToken = ?;
+configurable string openAIKey = ?;
 
 configurable string twitterApiKey = ?;
 configurable string twitterApiSecret = ?;
@@ -37,7 +37,7 @@ public function main(string podcastURL) returns error? {
     };
 
     // Converts the audio file to text (English) using OpenAI speach to text API
-    audio:Client openAIAudio = check new ({auth: {token: openAIToken}});
+    audio:Client openAIAudio = check new ({auth: {token: openAIKey}});
     audio:CreateTranscriptionResponse transcriptionsRes = check openAIAudio->/audio/transcriptions.post(transcriptionsReq);
     io:println("Text from the audio :", transcriptionsRes.text);
 
@@ -53,7 +53,7 @@ public function main(string podcastURL) returns error? {
     };
 
     // Summarizes the text using OpenAI text completion API
-    text:Client openAIText = check new ({auth: {token: openAIToken}});
+    text:Client openAIText = check new ({auth: {token: openAIKey}});
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textCompletionReq);
     string summerizedText = check completionRes.choices[0].text.ensureType();
     io:println("Summarized text: ", summerizedText);
