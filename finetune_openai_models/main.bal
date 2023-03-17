@@ -11,10 +11,9 @@ public function main() returns error? {
     finetunes:Client openaiFineTunes = check new ({auth: {token: openAIToken}});
 
     byte[] fileContent = check io:fileReadBytes(TRAINDATAFILEPATH);
-    string fileName = TRAINDATAFILENAME;
 
     finetunes:CreateFileRequest fileRequest = {
-        file: {fileContent, fileName},
+        file: {fileContent, TRAINDATAFILENAME},
         purpose: "fine-tune"
     };
 
