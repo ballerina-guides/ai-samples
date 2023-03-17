@@ -25,9 +25,8 @@ service / on new http:Listener(8080) {
         fork {
             // Generate greeting text and design in parallel
             worker greetingWorker returns string|error? {
-                string prompt = string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`;
                 text:CreateCompletionRequest textPrompt = {
-                    prompt,
+                    prompt: string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`,
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
@@ -35,9 +34,8 @@ service / on new http:Listener(8080) {
                 return completionRes.choices[0].text;
             }
             worker imageWorker returns string|error? {
-                string prompt = string `Greeting card design for ${occasion}, ${specialNotes}`;
                 images:CreateImageRequest imagePrompt = {
-                    prompt
+                    prompt: string `Greeting card design for ${occasion}, ${specialNotes}`
                 };
                 images:ImagesResponse imageRes = check openaiImages->/images/generations.post(imagePrompt);
                 return imageRes.data[0].url;
@@ -59,7 +57,7 @@ service / on new http:Listener(8080) {
         gmail:MessageRequest messageRequest = {
             recipient: req.recipientEmail,
             subject: req.emailSubject,
-            messageBody: "<p>" + greeting + "</p> <br/> <img src=" + imageURL + ">",
+            messageBody: string `<p>${greeting}</p> <br/> <img src="${imageURL}">`,
             contentType: gmail:TEXT_HTML
         };
         _ = check gmail->sendMessage(messageRequest, userId = "me");
