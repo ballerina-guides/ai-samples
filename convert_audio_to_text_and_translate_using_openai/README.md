@@ -14,5 +14,5 @@
 
  ### Config.toml
  ```
- openAIKey="<OPENAI_API_KEY>"
+ openAIToken="<OPENAI_API_KEY>"
  ```

@@ -12,6 +12,7 @@ name = "compare_similarity_using_embeddings"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "math.vector"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "openai.embeddings"}
 ]
@@ -218,6 +219,14 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
+name = "math.vector"
+version = "1.0.0"
+modules = [
+	{org = "ballerina", packageName = "math.vector", moduleName = "math.vector"}
+]
+
+[[package]]
+org = "ballerina"
 name = "mime"
 version = "2.6.0"
 dependencies = [
@@ -305,7 +314,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.embeddings"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},

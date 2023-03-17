@@ -6,8 +6,8 @@ import ballerinax/openai.text;
 configurable string openAIToken = ?;
 configurable string gmailToken = ?;
 
-final text:Client openaiText = check new ({auth: {token: openAIToken}});
-final images:Client openaiImages = check new ({auth: {token: openAIToken}});
+final text:Client openAIText = check new ({auth: {token: openAIToken}});
+final images:Client openAIImages = check new ({auth: {token: openAIToken}});
 final gmail:Client gmail = check new ({auth: {token: gmailToken}});
 
 type GreetingDetails record {|
@@ -30,14 +30,14 @@ service / on new http:Listener(8080) {
                     model: "text-davinci-003",
                     max_tokens: 100
                 };
-                text:CreateCompletionResponse completionRes = check openaiText->/completions.post(textPrompt);
+                text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
                 return completionRes.choices[0].text;
             }
             worker imageWorker returns string|error? {
                 images:CreateImageRequest imagePrompt = {
                     prompt: string `Greeting card design for ${occasion}, ${specialNotes}`
                 };
-                images:ImagesResponse imageRes = check openaiImages->/images/generations.post(imagePrompt);
+                images:ImagesResponse imageRes = check openAIImages->/images/generations.post(imagePrompt);
                 return imageRes.data[0].url;
             }
         }
