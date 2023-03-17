@@ -372,4 +372,3 @@ dependencies = [
 modules = [
 	{org = "ballerinax", packageName = "shopify.admin", moduleName = "shopify.admin"}
 ]
-
