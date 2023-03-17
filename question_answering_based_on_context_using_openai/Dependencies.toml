@@ -223,7 +223,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "math.vector"
-version = "1.0.1"
+version = "1.0.0"
 modules = [
 	{org = "ballerina", packageName = "math.vector", moduleName = "math.vector"}
 ]

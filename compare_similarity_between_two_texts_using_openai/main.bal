@@ -2,10 +2,10 @@ import ballerina/io;
 import ballerina/math.vector;
 import ballerinax/openai.embeddings;
 
-configurable string openAIKey = ?;
+configurable string openAIToken = ?;
 
 public function main() returns error? {
-    final embeddings:Client openAIEmbeddings = check new ({auth: {token: openAIKey}});
+    final embeddings:Client openAIEmbeddings = check new ({auth: {token: openAIToken}});
 
     string text1 = "What are you thinking?";
     string text2 = "What is on your mind?";

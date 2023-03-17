@@ -8,7 +8,7 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "create_products_in_shopify_using_sheets_data"
+name = "create_products_in_shopify_using_openai"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -19,7 +19,7 @@ dependencies = [
 	{org = "ballerinax", name = "shopify.admin"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "create_products_in_shopify_using_sheets_data", moduleName = "create_products_in_shopify_using_sheets_data"}
+	{org = "ai_samples", packageName = "create_products_in_shopify_using_openai", moduleName = "create_products_in_shopify_using_openai"}
 ]
 
 [[package]]
@@ -335,7 +335,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.images"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "mime"},
@@ -349,7 +349,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.text"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
@@ -372,3 +372,4 @@ dependencies = [
 modules = [
 	{org = "ballerinax", packageName = "shopify.admin", moduleName = "shopify.admin"}
 ]
+

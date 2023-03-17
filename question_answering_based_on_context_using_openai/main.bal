@@ -11,7 +11,7 @@ configurable string sheetName = ?;
 configurable string openAIToken = ?;
 
 final sheets:Client gSheets = check new ({auth: {token: sheetsAccessToken}});
-final text:Client openaiText = check new ({auth: {token: openAIToken}});
+final text:Client openAIText = check new ({auth: {token: openAIToken}});
 final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken}});
 
 service / on new http:Listener(8080) {
@@ -37,7 +37,7 @@ service / on new http:Listener(8080) {
             prompt: prompt,
             model: "text-davinci-003"
         };
-        text:CreateCompletionResponse completionRes = check openaiText->/completions.post(prmt);
+        text:CreateCompletionResponse completionRes = check openAIText->/completions.post(prmt);
         return completionRes.choices[0].text;
     }
 }
