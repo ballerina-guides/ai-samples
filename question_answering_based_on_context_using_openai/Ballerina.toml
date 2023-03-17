@@ -6,15 +6,3 @@ distribution = "2201.3.1"
 
 [build-options]
 observabilityIncluded = true
-
-[[dependency]]
-org = "ballerinax"
-name = "openai.text"
-version = "0.1.0"
-repository = "local"
-
-[[dependency]]
-org = "ballerinax"
-name = "openai.embeddings"
-version = "0.1.0"
-repository = "local"

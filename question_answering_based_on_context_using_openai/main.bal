@@ -1,4 +1,5 @@
 import ballerina/http;
+import ballerina/math.vector;
 import ballerina/regex;
 import ballerinax/googleapis.sheets;
 import ballerinax/openai.embeddings;
@@ -16,7 +17,7 @@ final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken
 service / on new http:Listener(8080) {
 
     map<string> documents = {};
-    map<decimal[]> docEmbeddings = {};
+    map<float[]> docEmbeddings = {};
 
     function init() returns error? {
         sheets:Range range = check gSheets->getRange(sheetId, sheetName, "A2:B");
@@ -26,7 +27,7 @@ service / on new http:Listener(8080) {
             string title = <string>row[0];
             string content = <string>row[1];
             self.documents[title] = content;
-            self.docEmbeddings[title] = check getEmbedding(title + "\n" + content);
+            self.docEmbeddings[title] = check getEmbedding(string `${title} ${"\n"} ${content}`);
         }
     }
 
@@ -41,7 +42,7 @@ service / on new http:Listener(8080) {
     }
 }
 
-function getEmbedding(string text) returns decimal[]|error {
+function getEmbedding(string text) returns float[]|error {
     embeddings:CreateEmbeddingRequest embeddingRequest = {
         input: text,
         model: "text-embedding-ada-002"
@@ -52,21 +53,19 @@ function getEmbedding(string text) returns decimal[]|error {
 
 function countWords(string text) returns int => regex:split(text, " ").length();
 
-function constructPrompt(string question, map<string> documents, map<decimal[]> docEmbeddings) returns string|error {
-    [string, float?][] documentSimilarity = check getDocumentSimilarity(question, docEmbeddings);
+function constructPrompt(string question, map<string> documents, map<float[]> docEmbeddings) returns string|error {
+    string[] documentSimilarity = check getDocumentSimilarity(question, docEmbeddings);
     string context = "";
     int contextLen = 0;
     int maxLen = 1125; // approx equivalence between word and token count
 
-    foreach [string, float?] item in documentSimilarity {
-        string heading = item[0];
-        string content = <string>documents[heading];
+    foreach string heading in documentSimilarity {
+        string content = documents[heading] ?: "";
 
         contextLen += countWords(content);
         if contextLen > maxLen {
             break;
         }
-
         context += "\n*" + content;
     }
 
@@ -75,41 +74,17 @@ function constructPrompt(string question, map<string> documents, map<decimal[]> 
     return string `${instruction}Context:${"\n"} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
 }
 
-function cosineSimilarity(decimal[] vector1, decimal[] vector2) returns float {
-    float dotProduct = 0.0;
-    float magnitude1 = 0.0;
-    float magnitude2 = 0.0;
-
-    // Compute dot product and magnitudes
-    foreach int i in 0 ..< vector1.length() {
-        dotProduct += <float>vector1[i] * <float>vector2[i];
-        magnitude1 += (<float>vector1[i]).pow(2);
-        magnitude2 += (<float>vector2[i]).pow(2);
-    }
-
-    // Compute cosine similarity
-    float magnitudeProduct = magnitude1.sqrt() * magnitude2.sqrt();
-    if (magnitudeProduct == 0.0) {
-        return 0.0;
-    }
-    return dotProduct / magnitudeProduct;
-}
-
-function getDocumentSimilarity(string question, map<decimal[]> docEmbeddings) returns [string, float?][]|error {
+function getDocumentSimilarity(string question, map<float[]> docEmbeddings) returns string[]|error {
     // Get question embedding
-    decimal[] questionEmbedding = check getEmbedding(question);
+    float[] questionEmbedding = check getEmbedding(question);
 
-    [string, float?][] docSimilarity = [];
-
+    map<float> docSimilarity = {};
     foreach string heading in docEmbeddings.keys() {
-        float similarity = cosineSimilarity(<decimal[]>docEmbeddings[heading], questionEmbedding);
-        docSimilarity.push([heading, similarity]);
+        float similarity = vector:cosineSimilarity(docEmbeddings[heading] ?: [], questionEmbedding);
+        docSimilarity[heading] = similarity;
     }
-
-    [string, float?][] docSimilaritySorted = from var item in docSimilarity
-        order by item[1] descending
-        select item;
-
-    return docSimilaritySorted;
+    //Order the headings by similarity
+    return from string heading in docSimilarity.keys()
+        order by docSimilarity[heading] descending
+        select heading;
 }
-
