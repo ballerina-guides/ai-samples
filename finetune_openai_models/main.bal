@@ -13,7 +13,7 @@ public function main() returns error? {
     byte[] fileContent = check io:fileReadBytes(TRAINDATAFILEPATH);
 
     finetunes:CreateFileRequest fileRequest = {
-        file: {fileContent, TRAINDATAFILENAME},
+        file: {fileContent, fileName: TRAINDATAFILENAME},
         purpose: "fine-tune"
     };
 
