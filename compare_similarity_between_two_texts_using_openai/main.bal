@@ -1,5 +1,5 @@
 import ballerina/io;
-import ballerina/math.vector; 
+import ballerina/math.vector;
 import ballerinax/openai.embeddings;
 
 configurable string openAIToken = ?;
@@ -14,7 +14,7 @@ public function main() returns error? {
     embeddings:CreateEmbeddingRequest embeddingRequest = {
         model: "text-embedding-ada-002",
         input: [text1, text2]
-    }; 
+    };
     embeddings:CreateEmbeddingResponse embeddingResponse = check openaiEmbeddings->/embeddings.post(embeddingRequest);
 
     float[] text1Embedding = embeddingResponse.data[0].embedding;
