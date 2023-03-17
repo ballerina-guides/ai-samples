@@ -1,0 +1,9 @@
+[package]
+org = "ai_samples"
+name = "audio_to_text_summarization_using_openai"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
+
