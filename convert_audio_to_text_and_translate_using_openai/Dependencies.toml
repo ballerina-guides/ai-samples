@@ -87,6 +87,9 @@ dependencies = [
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
 ]
+modules = [
+	{org = "ballerina", packageName = "http", moduleName = "http"}
+]
 
 [[package]]
 org = "ballerina"
@@ -292,7 +295,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.audio"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "mime"},
@@ -306,7 +309,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.text"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
@@ -322,6 +325,7 @@ org = "io_samples"
 name = "converting_audio_to_text_and_translation_using_openai"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "openai.audio"},
