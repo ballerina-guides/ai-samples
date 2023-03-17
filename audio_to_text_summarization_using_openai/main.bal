@@ -1,8 +1,8 @@
-import ballerinax/twitter;
-import ballerina/io;
 import ballerina/http;
+import ballerina/io;
 import ballerinax/openai.text;
 import ballerinax/openai.audio;
+import ballerinax/twitter;
 
 configurable string openAIToken = ?;
 
@@ -42,10 +42,9 @@ public function main(string podcastURL) returns error? {
     io:println("Text from the audio :", transcriptionsRes.text);
 
     // Creates a request to summarize the text
-    string prmt = "Summarize the following text to 100 characters : " + transcriptionsRes.text;
     text:CreateCompletionRequest textCompletionReq = {
         model: "text-davinci-003",
-        prompt: prmt,
+        prompt: string `Summarize the following text to 100 characters : ${transcriptionsRes.text}`,
         temperature: 0.7,
         max_tokens: 256,
         top_p: 1,
