@@ -4,7 +4,7 @@
 
  ## Prerequisites
  * OpenAI account
-* Twitter developer account
+ * Twitter developer account
 
  ### Setting up an OpenAI account
  1. Create an [OpenAI](https://platform.openai.com/) account.
@@ -24,3 +24,10 @@
  accessToken="<TWITTER_ACCESS_TOKEN>"
  accessTokenSecret="<TWITTER_ACCESS_TOKEN_SECRET>"
  ```
+
+## Testing
+Run the Ballerina project by executing `bal run` from the root.
+
+```
+bal run -- "https://cdn.simplecast.com/audio/404a3f47-e74f-4c91-beff-bf2977e22d22/episodes/5b5a2a5c-6334-4bcd-939c-8d25e96ff522/audio/3b66b225-9e44-4656-9cde-920e14c92220/default_tc.mp3?aid=rss_feed&feed=bKMTTEds"
+```
