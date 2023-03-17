@@ -11,9 +11,9 @@ configurable string twitterApiSecret = ?;
 configurable string twitterAccessToken = ?;
 configurable string twitterAccessTokenSecret = ?;
 
-const string AUDIOFILE = "test.mp3";
-const string AUDIOFILEPATH = "podcast-clips/" + AUDIOFILE;
-const int BINARYLENGTH = 1000000;
+const string AUDIO_FILE = "test.mp3";
+const string AUDIO_FILE_PATH = "podcast-clips/" + AUDIO_FILE;
+const int BINARY_LENGTH = 1000000;
 
 // Twitter API client configuration
 twitter:ConnectionConfig twitterConfig = {
@@ -28,11 +28,11 @@ public function main(string podcastURL) returns error? {
     http:Client podcastEP = check new (podcastURL);
     http:Response httpResp = check podcastEP->/get();
     byte[] audioBytes = check httpResp.getBinaryPayload();
-    check io:fileWriteBytes(AUDIOFILEPATH, audioBytes);
+    check io:fileWriteBytes(AUDIO_FILE_PATH, audioBytes);
 
     // Creates a request to translate the audio file to text (English)
     audio:CreateTranscriptionRequest transcriptionsReq = {
-        file: {fileContent: (check io:fileReadBytes(AUDIOFILEPATH)).slice(0, BINARYLENGTH), fileName: AUDIOFILE},
+        file: {fileContent: (check io:fileReadBytes(AUDIO_FILE_PATH)).slice(0, BINARY_LENGTH), fileName: AUDIO_FILE},
         model: "whisper-1"
     };
 
