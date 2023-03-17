@@ -2,17 +2,16 @@ import ballerina/io;
 import ballerinax/openai.finetunes;
 
 configurable string openAIToken = ?;
-configurable string trainFilePath = ?;
 
 const string TRAINDATAFILEPATH = "./data/train_prepared.jsonl";
-const string TRAINDATAFILE = "train_prepared.jsonl";
+const string TRAINDATAFILENAME = "train_prepared.jsonl";
 
 public function main() returns error? {
 
     finetunes:Client openaiFineTunes = check new ({auth: {token: openAIToken}});
 
     byte[] fileContent = check io:fileReadBytes(TRAINDATAFILEPATH);
-    string fileName = TRAINDATAFILE;
+    string fileName = TRAINDATAFILENAME;
 
     finetunes:CreateFileRequest fileRequest = {
         file: {fileContent, fileName},
