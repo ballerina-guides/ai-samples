@@ -7,6 +7,19 @@
 dependencies-toml-version = "2"
 
 [[package]]
+org = "ai_samples"
+name = "fine_tune_openai_models"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "io"},
+	{org = "ballerinai", name = "observe"},
+	{org = "ballerinax", name = "openai.finetunes"}
+]
+modules = [
+	{org = "ai_samples", packageName = "fine_tune_openai_models", moduleName = "fine_tune_openai_models"}
+]
+
+[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.6.0"
@@ -292,7 +305,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.finetunes"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
@@ -302,18 +315,5 @@ dependencies = [
 ]
 modules = [
 	{org = "ballerinax", packageName = "openai.finetunes", moduleName = "openai.finetunes"}
-]
-
-[[package]]
-org = "oshadajayasinghe"
-name = "fine_tuning_sample"
-version = "0.1.0"
-dependencies = [
-	{org = "ballerina", name = "io"},
-	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "openai.finetunes"}
-]
-modules = [
-	{org = "oshadajayasinghe", packageName = "fine_tuning_sample", moduleName = "fine_tuning_sample"}
 ]
 
