@@ -60,7 +60,7 @@ public function main(string podcastURL) returns error? {
     io:println("Summarized text: ", summerizedText);
 
     // Tweet it out!
-    twitter:Client twitterClient = check new (twitterConfig);
-    var tweet = check twitterClient->tweet(summerizedText);
+    twitter:Client twitter = check new (twitterConfig);
+    var tweet = check twitter->tweet(summerizedText);
     io:println("Tweet: ", tweet);
 }
