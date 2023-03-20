@@ -22,3 +22,17 @@ The training data jsonl file should contain `prompt` and `completion` pairs for 
 
 ### Obtaining predictions from the fine-tuned model
 Generating predictions from the fine-tuned model can be done similar to any base model provided by OpenAI. You just have to specify the model id of the fine-tuned model in the `model` parameter of the request. You can find the model id of the fine-tuned model by doing an API call to `openai.finetunes` or by simply logging into the playground of your OpenAI account.
+
+```
+text:Client openAIText = check new ({auth: {token: openAIToken}});
+
+text:CreateCompletionRequest textPrompt = {
+    prompt: "i am in such a good mood today",
+    model: "davinci:ft-xxxx"
+};
+
+text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
+string emotion = <string>completionRes.choices[0].text;
+
+io:println(string `Predicted emotion: ${emotion}`);
+```
