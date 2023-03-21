@@ -34,6 +34,7 @@ public function main() returns error? {
 
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
     string? completion = completionRes.choices[0].text;
+    
     if completion is string{ 
         string emotion = regex:split(completion, " ")[1];
         io:println(string `Predicted emotion: ${emotion}`); 
@@ -46,7 +47,6 @@ You can find the model id of the fine-tuned model by doing an API call to `opena
 ```
 public function main() returns error? {
     finetunes:Client openAIFineTunes = check new ({auth: {token: openAIToken}});
-
     finetunes:ListModelsResponse models = check openAIFineTunes->/models.get();
     io:print(models);
 }
