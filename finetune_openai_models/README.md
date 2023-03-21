@@ -34,8 +34,8 @@ public function main() returns error? {
 
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
     string? completion = completionRes.choices[0].text;
-    
-    if completion is string{ 
+
+    if completion is string { 
         string emotion = regex:split(completion, " ")[1];
         io:println(string `Predicted emotion: ${emotion}`); 
     }
