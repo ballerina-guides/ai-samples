@@ -18,6 +18,9 @@ public function main(string filePath) returns error? {
         model: "text-davinci-edit-001"
     };
     text:CreateEditResponse editRes = check openAIText->/edits.post(editReq);
-    string text = check editRes.choices[0].text.ensureType();
-    io:println(string `Corrected: ${text}`);
+    string? text = editRes.choices[0].text;
+
+    if text is string { 
+	io:println(string `Corrected: ${text}`);
+    }    
 }

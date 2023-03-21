@@ -40,6 +40,9 @@ public function main(string audioURL, string toLanguage) returns error? {
     // Translates the text from English to another language
     text:Client openAIText = check new ({auth: {token: openAIToken}});
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(completionReq);
-    string translatedText = check completionRes.choices[0].text.ensureType();
-    io:println("Translated text: ", translatedText);
+    string? translatedText = completionRes.choices[0].text;
+
+    if translatedText is string { 
+	io:println("Translated text: ", translatedText);
+    }
 }

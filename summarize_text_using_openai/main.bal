@@ -15,6 +15,9 @@ public function main(string filePath) returns error? {
         max_tokens: 2000
     };
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
-    string summary = <string>completionRes.choices[0].text;
-    io:println(string `Summary: ${summary}`);
+    string? summary = completionRes.choices[0].text;
+
+    if summary is string { 
+        io:println(string `Summary: ${summary}`);
+    }
 }
