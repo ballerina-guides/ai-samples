@@ -1,0 +1,137 @@
+heading,content
+Quick Start Guide,"Choreo is a full lifecycle cloud-native developer platform that enables your developers to create, deploy, run, and govern APIs, integrations, and microservices on Kubernetes.This guide walks you through the following:Developing, deploying, testing, and publishing a REST API.
+ Consuming the published REST API via an external application.
+ Releasing a new version of the REST API with added functionality.Let's consider a use case where a web application developer designs an application that allows you to maintain reading lists. A user can create a private reading list by adding books. The user can also view and delete them when required. A Choreo developer develops a REST API for this web application to consume. The two developers will create two versions of the solution in two iterations. The second version of the application will add data persistence as a new feature.The following diagram summarizes the use case:{.cInlineImage-full}Let's get started!"
+Get Started with Choreo iPaaS,"Choreo iPaaS provides integration capabilities to connect different systems, applications, or services to exchange data and information. You can create integrations between a variety of technologies, including APIs, messaging systems, and integration platforms. The goal of integration is to create a seamless user experience and improve the efficiency and effectiveness of business operations.Choreo provides Integrations developed in Ballerina and integrations based on WSO2 Micro Integrator.For more information, see the following topics:Develop Integrations with Ballerina
+ Develop Integrations with the Micro Integrator"
+Create Your First Integration as an API,"An integration component integrates APIs, microservices, applications, and data in different languages and formats.Consider a scenario where a developer has created an integration in WSO2 Integration Studio and wants to use it for API-led integration by exposing it in Choreo. In this tutorial, you will learn how to do the following actions to address this requirement:Expose an integration created in WSO2 Integration Studio as an API in Choreo by connecting the GitHub repository in which it resides to Choreo.
+ Deploy the Integration component to the development environment.
+ Test the Integration component.
+ Observe statistics for the Integration component.
+ Publish the Integration component and try it out in the production environment.For this tutorial, let's use a basic sample application to expose a proxy service developed in the WSO2 Integration Studio.!!! tip ""Before you begin!""
+ To try this tutorial, you can use a sample integration designed via WSO2 Integration Studio.To do this, fork the choreo-examples GitHub repository."
+Deploy Your Component,"Deploying your component on Choreo makes it invokable. Once you have designed, tested, and committed the REST API, you can deploy it.To deploy a component, follow the steps below:Click the Deploy icon.
+ Automatic Deployment is enabled by default. If you want do not want Choreo to automatically deploy the component after each commit that edits its implementation, you can disable automatic deployment,
+ Then in the Build Area card, click Deploy Manually.
+ !!! info
+ Choreo requires you to perform the first deployment of each component manually so that you can provide values for any configurable variables that the implementation may include.
+ {.cInlineImage-full}
+ You can view the progress of the deployment from the console.
+ {.cInlineImage-full}Once you deploy the component, the Development card indicates that it is active.{.cInlineImage-full}Now you can test your deployed component to check if it is working as expected."
+What is Choreo?,"Today, with the growth of the global API ecosystem, APIs have become an essential part of modern engineering. Therefore, it has become necessary for organizations to participate in this global API supply chain by consuming and producing APIs. The adoption of cloud and microservices-based distributed architecture has also become increasingly significant, causing more and more organizations to rapidly evolve and look for innovative ways to build their digital business ecosystem. This has led to the need for a state-of-the-art iPaaS that can address the complex challenges that organizations face when connecting applications, systems, and data to build integrations and expose those integrated services to internal and external consumers in a future-proof manner.Choreo, a versatile and comprehensive platform for low-code, cloud-native engineering, provides the following advantages:An AI-assisted, low-code application development environment that can help developers build enterprise-class integrations faster while ensuring best practices and secure coding guidelines.
+ Developers can switch between a visual low-code and typical code environment and select the experience that best supports a given situation.
+ Even without expert-level coding skills, Choreo's low-code environment empowers developers to build applications with ease. It also provides capabilities to collaborate and improve these applications as needed.
+ Its low-code application development platform auto-generates editable and version-controlled code and maintains it in GitHub. This makes it possible to apply the engineering rigor required for enterprise applications on low-code.
+ API management capabilities to develop APIs and get them to production. Choreo’s API Publisher Portal allows API developers to design, publish, and manage the lifecycle of APIs whereas the API Developer Portal allows consumers to consume APIs.
+ Realistic DevOps with versions, environments, CI/CD pipelines, and automation tests.
+ Deep observability to trace your executions from the code statement level to the machine on which those run."
+Create Your First Webhook,"Choreo’s low-code editor allows developers to easily design (and then implement) high-quality webhooks. To explore this capability, let's consider a scenario where a team of software engineers in an organization wants to be notified via email whenever someone creates a GitHub issue with the bug label in a specific repository.In this tutorial, you will address this requirement by doing the following:Create a webhook component by connecting to your GitHub repository that includes the implementation of the webhook that addresses the described requirement.
+ Deploy the webhook you created to the development environment.
+ Modify the webhook implementation to connect the webhook implementation to GitHub, enabling it to act in response to selected GitHub-related events.
+ Test the webhook.
+ Promote the webhook to the production environment."
+Create Your First REST API Proxy,"This tutorial introduces REST API proxies.An API Proxy exposes an existing API on Choreo and intercepts the requests to the REST API. It API Proxy acts as a managed API to which you can apply security, rate-limiting, etc.In this tutorial, you will learn how to do the following:Expose an existing API by creating a REST API proxy
+ Deploy the REST API proxy
+ Test the REST API proxy to verify its functionality
+ Manage your REST API proxy by adding rate limiting and security policies, thereby leveraging the platform's API management capabilities.!!!tip ""Before you begin...""
+ Familiarize yourself with REST API Proxies in Choreo. REST API ProxiesLet's begin!"
+Test an API,"Before using your API in production, you can test it using the integrated console in Choreo. Once you deploy your API in the required environment, an API consumer can use the application credentials, generate an OAuth 2.0 token, and invoke the API to test its functionality by providing values for the required parameters.This guide will take you through the steps to test an API in Choreo.Sign in to Choreo Developer Portal at https://devportal.choreo.dev. Alternatively, click Developer Portal on the Choreo Console header.
+ {.cInlineImage-half}
+ Click APIs.
+ Select an API you want to test and click Try Out on the card. In this case, skip step 4. Alternatively, you can click on the API and follow step 4.
+ In the left pane, click Try Out.
+ Select the required environment from the Environment list.
+ {.cInlineImage-half}
+ From the Subscribed Application list, select the application you used to subscribe the API to. To learn how to subscribe to an application, see Manage Subscriptions.
+ Click Get Test Key on the Access Token field to generate a test access token. To learn more about access tokens and generating tokens for production usage, see Manage Applications.
+ Next, expand a resource you want to test by clicking on it.
+ {.cInlineImage-half}
+ Click Try it Out to enable the resource to be tested.
+ Fill in values for the required parameters and click Execute.
+ {.cInlineImage-half}
+ Once Choreo executes the request, you can view the response in the Choreo Console."
+Create Your First Event-triggered Integration,"Choreo allows you to deploy, test, manage, and observe integration components that integrate APIs, microservices, applications, and data in different languages and formats.To explore this capability, let's consider a scenario where a team of software engineers in an organization wants to be notified via email whenever someone creates a GitHub issue with the bug label in a specific GitHub repository.In this tutorial, you will address this requirement by doing the following:Create an Event-triggered Integration component by connecting to your GitHub repository where the webhook implementation that addresses the described requirement resides.
+ Deploy the event-triggered integration you created to the development environment.
+ Update the implementation of the event-triggered integration, enabling it to listen to selected GitHub events and act in response.
+ Test the event-triggered integration.
+ Promote the event-triggered Integration to the production environment."
+Scheduled Tasks,Learn how to use scheduled tasks to execute routine tasks at specified time intervals.
+REST API Proxy,Learn how you can expose an existing API through a REST API Proxy in Choreo and go on to manage it leveraging the full API Management capabilities of Choreo.
+Create Your First Integration,"An integration component integrates APIs, microservices, applications, and data in different languages and formats.Consider a scenario where a developer has created an integration in WSO2 Integration Studio and wants to use it for API-led integration by exposing it in Choreo. In this tutorial, you will learn how to do the following actions to address this requirement:Expose an integration created in WSO2 Integration Studio as an API in Choreo by connecting the GitHub repository in which it resides to Choreo.
+ Deploy the Integration component to the development environment.
+ Test the Integration component.
+ Observe statistics for the Integration component.
+ Publish the Integration component and try it out in the production environment.For this tutorial, let's use a basic sample application to expose a proxy service developed in the WSO2 Integration Studio.!!! tip ""Before you begin!""
+ To try this tutorial, you can use a sample integration designed via WSO2 Integration Studio.To do this, fork the choreo-examples GitHub repository."
+Create Your First REST API,"A RESTful API (Application Program Interface) uses HTTP requests to access and use data. The operations you can perform on data are GET (reading), PUT (updating), POST (creating), and DELETE (deleting).Choreo’s low-code editor allows developers to easily design (and then implement) high-quality REST APIs. To explore this capability, let's consider a scenario where an Analyst needs to retrieve the daily count of COVID-19 patients per one million population by country. In this tutorial, you will address this requirement by doing the following:Design a REST API that addresses the described requirement, test it in the Web Editor, and then commit it so that it is available in the Choreo Console.
+ Deploy the REST API you created to make it available for use.
+ Test the REST API after deploying it to check whether it works as expected."
+What is a webhook?,"A webhook is a cause that activates an action. Webhooks in Choreo are no different and are user-defined callbacks.Webhooks are used by developers to implement event-driven integrations. Before event-driven solutions, to identify an event occurrence, systems had to keep polling other systems periodically. With event-driven solutions, systems can focus on the main business-flow, and proactively be notified when an event of interest occurs in real-time. The following are some examples of scenarios where you can create webhooks for the mentioned platforms:Sending a chat message in a group chat when an event gets added in a slack channel.
+ Generating an alert when a new issue gets created in a specific Git repository.
+ Sending a notification when an event gets scheduled in a google calendar.Webhooks are a widely used programming element to create event-driven API architectures for real-time solutions."
+Step 2: Develop the REST API Proxy,"Let's develop the REST API proxy by adding an operation. To do this, follow the steps given below:In the left navigation, click Develop.
+ In the Resources tab, add a new resource to fetch the department ID as follows:
+ Select GET as the HTTP verb.
+ Enter /department/{departmentId} as the URI pattern.
+ To add the new resource, click +.
+ Once the resource is added, expand it, and then enter a name and a description for it as given below:
+ Field
+ Description
+ Operation ID
+ findDepartment
+ Description
+ Find a department by Department ID
+ Click Save.
+ Click API Definition. You will see the new operation you added in the OpenAPI definition."
+Designing a REST API,"Designing a REST API is the process of declaring the resources, the appropriate HTTP verbs, paths, and input (request) and output (response) data formats to showcase the capabilities of the API. Designing an API based on a standard helps to do the design well and provide a consistent experience to the users of your API. The OpenAPI Specification is the most widely used standard for declaring HTTP/REST APIs. The design of an API is a crucial factor that determines the usability and the value of the API. A well-designed API is profitable due to the ease of adoption.Choreo’s low-code editor allows developers to design (and develop) high-quality REST APIs with ease. To design a REST API in Choreo, you must create a REST API component. You can design a REST API from scratch by manually specifying the resources, the HTTP verbs, paths, and other required elements. The Choreo roadmap also includes the capability to design a REST API by importing an OpenAPI document, which will be available soon.Choreo allows you to design your REST API in three possible ways as shown in the image below:{.cInlineImage-small}Start from scratch
+ You can design a REST API via Choreo’s low-code editor that allows developers to design (and develop) high-quality REST APIs with ease. This method involves designing the REST API from scratch by manually specifying the resources, the HTTP verbs, paths, and other required elements.
+ {.cInlineImage-threeQuarter}
+ Choreo allows developers to easily specify input and output data formats for each API resource:
+ {.cInlineImage-threeQuarter}
+ {.cInlineImage-threeQuarter}
+ Connect existing Ballerina repository
+ If you have a REST API written in the Ballerina Programming Language, you can deploy it in Choreo. To do this, you must save it in a private GitHub repository and connect that repository to Choreo.
+ Bring your Dockerfile
+ If you have an existing REST API written in any programming language, you can deploy it in Choreo. To do this, you must generate a Docker image for the REST API and save the Dockerfile in a private GitHub repository. When you connect this GitHub repository to Choreo, you can build the Dockerfile to pull the REST API implementation from the Docker image."
+Step 3: Create and publish a new version of the REST API,"Currently, the updates to the readinglist REST API are saved only as long as the deployment status of the readingList API remains Active. If you undeploy and redeploy the readingList API, Choreo deploys it in a new container. Therefore you cannot retrieve the reading list with the updates you made after the last deployment. To persist the data even after undeploying and redeploying the REST API, let's connect it to a MySQL database. Then let's create and publish a new version of the REST API with the ability to persist the data to the MySQL database.
+ h3 -> Step 3.1: Provision a database
+ To persist your updates to the reading list, provision a MySQL database on a cloud-based platform. For example, see AWS Documentation - Provision a database.To allow Choreo to interact with the database, add the following IPs to the allowlist of the provisioned database:- 20.22.170.144/28
+ - 20.22.170.176/28For more information, see Connect with Protected Third Party Applications
+ h3 -> Step 3.2: Create a new version of the REST API
+ Let's create a new version of the readingList REST API that can connect to a MySQL database on a cloud platform to persist data, and then redeploy it. To do this, follow the steps given below:In the Choreo Console, open the readingList REST API (if it is not already open) and click the Deploy icon to open the Deploy tab.
+ Expand the list of versions and click + Create New.
+ {.cInlineImage-threeQuarters}
+ Select version-2 as the associated GitHub branch and enter 2.0.0 as the version name. Next click Create.
+ !!! info
+ The version-2 GitHub branch has another version of the REST API implementation with the required configurations to connect to the sample MySQL.
+ Click Config & Deploy. When the Config & Deploy pane opens, enter values for the dbHost, dbUser, dbPassword, dbName, and dbPort fields based on the database you provisioned in Step 3.1: Provision a database.
+ Click Deploy.Now you have successfully deployed a new version of your REST API.
+ h3 -> Step 3.3: Publish the new REST API version
+ To publish the new version of the REST API you created, repeat Step 1.4: Publish the REST API
+ h3 -> Step 3.4: Consume the new REST API version
+ You can try out the new version via the front-end application. For more information about accessing and using the front-end application, see Step 2.3.5: Invoke the REST API.!!! info
+ You do not need to subscribe the readingListApp application on the Developer Portal to the new REST API version because Choreo automatically creates this subscription."
+Step 3: Test,"Once you have deployed the Integration REST API you can test it via the OpenAPI Console, or a cURL command.In this tutorial, let's test via the OpenAPI Console:To open the test view, click Test in the Development card. Alternatively, you can click the Test icon in the left panel.
+ Click OpenAPI Console.
+ Select the /HelloWorld resource and click Try it out.
+ Click Execute. Choreo displays the following response under Response body.
+ {""Hello"":""Integration""}The above response indicates that your micro integrator REST API is working as expected."
+Step 1: Create and publish a REST API - Step 1: Create and publish a REST API,"In this step, you are playing the role of the API developer. You will create and publish the REST API that the web application needs to consume."
+Developing a REST API,"Choreo supports spec-driven API development. Once you have carefully designed and defined your API, you can start implementing the functionality of your API. Choreo allows you to link a GitHub project when creating the REST API. You can implement your API as a Ballerina project or as in any language as a Docker container and store in the GitHub repo. Alternatively, if you are selecting the Ballerina preset when creating the REST API, you can link an empty GitHub repository, and then proceed to implement it before deploying the REST API.WSO2 provides a Ballerina extension for Visual Studio Code which you can use to easily develop your REST API as a Ballerina project."
+Step 3: Deploy the REST API Proxy,"Deploying the REST API proxy makes it invokable. By default, Choreo maintains two environments for development and production. Learn more. For this tutorial, let's deploy the proxy to the development environment.In the left navigation menu, click Deploy.
+ Click Configure & Deploy. The Configure & Deploy pane opens.
+ In the Endpoint field, enter https://samples.choreoapps.dev/company/hr.
+ The above URL is the endpoint of the sample API.
+ If you have a sandbox environment to test the API proxy, you can give the URL to that environment in the Sandbox Endpoint field.
+ Click Save & Deploy.Once you have deployed it to the development environment, you can test it. When you are ready to take it to production, you can return to this view and promote it by clicking Promote on the Development card."
+Step 2: Build and deploy,"To implement the REST API, you need to build and deploy it. When you trigger the build you execute the commands in the selected Dockerfile to apply the required configurations to the REST API.To build and deploy the REST API, follow these steps:On the Deploy page, click Build and Deploy.
+ !!! note
+ Deploying the REST API component may take a while. You can track the progress by observing the logs.
+ Once the deployment is complete, the deployment status changes to Active. The Invoke URL field displays the URL via which you can invoke the REST API.
+ Check the deployment progress by observing the console logs on the right of the page.
+ You can access the following scans under Build.
+ The Dockerfile scan: This scans the Dockerfile for a user ID and fails the build if no user is assigned to the Docker container.
+ Container (Trivy) vulnerability scan: This detects vulnerabilities in the Dockerfile-based image and in the third-party packages that the source code uses. If you click Container (Trivy) vulnerability scan, the details of the vulnerabilities open in a separate pane. If this scan detects critical vulnerabilities, the build will fail.
+ !!! info
+ If you want to bypass these vulnerabilities, you need to run Choreo on a private data plane.You can test, manage, and observe this REST API you created from a Dockerfile the way you would a Ballerina component.For detailed instructions, see the following sections of the Create Your First REST API tutorial.Step 3: Test
+ Step 4: Manage"
