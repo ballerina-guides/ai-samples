@@ -21,6 +21,8 @@ public function main(string filePath) returns error? {
     string? text = editRes.choices[0].text;
 
     if text is string { 
-	io:println(string `Corrected: ${text}`);
-    }    
+	    io:println(string `Corrected: ${text}`);
+    } else {
+        return error("Failed to correct grammar and spelling in the given text.");
+    }
 }

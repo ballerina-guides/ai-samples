@@ -19,5 +19,7 @@ public function main(string filePath) returns error? {
 
     if summary is string { 
         io:println(string `Summary: ${summary}`);
+    } else {
+        return error("Failed to summarize the given text.");
     }
 }

@@ -43,6 +43,8 @@ public function main(string audioURL, string toLanguage) returns error? {
     string? translatedText = completionRes.choices[0].text;
 
     if translatedText is string { 
-	io:println("Translated text: ", translatedText);
+	    io:println("Translated text: ", translatedText);
+    } else {
+        return error("Failed to translate the given audio.");
     }
 }
