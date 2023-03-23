@@ -1,0 +1,14 @@
+[package]
+org = "ai_samples"
+name = "create_blog_post_using_azure_openai_and_publish_in_medium"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "azure_openai.text"
+version = "0.1.0"
+repository = "local"
