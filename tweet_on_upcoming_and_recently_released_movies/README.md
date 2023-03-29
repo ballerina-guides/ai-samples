@@ -16,7 +16,7 @@ Obtaines information on few upcoming and recently released movies from [TMDB](ht
 ## Setting up TMDB account
 1. Sign up and log into [TMDB](https://www.themoviedb.org/login).
 2. Click `Settings` and then click `API` tab in the left side bar.
-3. Click `Create` or `click here` on the API page.
+3. Click `Create` or `click here` on the API page to obtain the API Key.
 
 ## Creating a Twitter developer account
 Follow the instruction at https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api to create an account and obtain the required credentials.
