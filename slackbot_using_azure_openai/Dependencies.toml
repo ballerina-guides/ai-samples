@@ -11,7 +11,9 @@ org = "ai_samples"
 name = "slackbot_using_azure_openai"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "url"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "azure_openai.chat"}
 ]
@@ -58,6 +60,9 @@ version = "2.3.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
+]
+modules = [
+	{org = "ballerina", packageName = "crypto", moduleName = "crypto"}
 ]
 
 [[package]]
@@ -288,6 +293,9 @@ name = "url"
 version = "2.2.3"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
+]
+modules = [
+	{org = "ballerina", packageName = "url", moduleName = "url"}
 ]
 
 [[package]]
