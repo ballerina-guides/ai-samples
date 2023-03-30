@@ -1,7 +1,7 @@
 import ballerina/io;
-import ballerinax/weaviate;
-import ballerinax/openai.embeddings;
 import ballerinax/googleapis.sheets;
+import ballerinax/openai.embeddings;
+import ballerinax/weaviate;
 
 configurable string openAIToken = ?;
 configurable string weaviateToken = ?;
@@ -11,7 +11,10 @@ configurable string sheetAccessToken = ?;
 configurable string sheetId = ?;
 configurable string sheetName = ?;
 
-const string RANGE = "A:C";
+const RANGE = "A:C";
+const NO_OF_COLUMNS = 3;
+const NO_OF_DATA_SAMPLES = 10; 
+string className = "QuestionAnswerStore";
 
 final embeddings:Client openaiClient = check new ({auth: {token: openAIToken}});
 final weaviate:Client weaviateClient = check new ({auth: {token: weaviateToken}}, weaviateURL);
@@ -21,14 +24,13 @@ public function main() returns error? {
 
     sheets:Range range = check gsheets->getRange(sheetId, sheetName, RANGE);
 
-    string className = "QuestionAnswerStore";
     string[] textArr = [];
     weaviate:Object[] documentObjectArray = [];
 
-    // Iterates through the stream and extract the content
+    // Iterate through the stream and extract the content
     int j = 0;
     foreach var row in range.values {
-        if (row.length() == 3){
+        if (row.length() == NO_OF_COLUMNS) && (j != 0) {
             weaviate:Object obj = {
             'class: className,
             properties: {
@@ -40,30 +42,26 @@ public function main() returns error? {
             documentObjectArray.push(obj);
             textArr.push(row[1].toString());  
         } 
-        j = j+1;
-        if (j > 10){
+	j = j + 1;
+        if (j > NO_OF_DATA_SAMPLES) {
             break;
         }
     }
 
-    embeddings:CreateEmbeddingResponse embeddingResponse = check openaiClient->/embeddings.post({
-            model: "text-embedding-ada-002",
-            input: textArr
-        }
-    );
+    embeddings:CreateEmbeddingResponse embeddingRes = check openaiClient->/embeddings.post({model: "text-embedding-ada-002", input: textArr});
 
-    // insert embedding vectors to the weaviate objects
-    foreach int i in 0 ... embeddingResponse.data.length() - 1 {
-        documentObjectArray[i].vector = embeddingResponse.data[i].embedding;
+    // Insert embedding vectors to the Weaviate objects
+    foreach int i in 0 ... embeddingRes.data.length() - 1 {
+        documentObjectArray[i].vector = embeddingRes.data[i].embedding;
     }
 
-    weaviate:Batch_objects_body batch = {
-        objects: documentObjectArray
-    };
-
-    weaviate:ObjectsGetResponse[] responseArray = check weaviateClient->/batch/objects.post(batch);
+    weaviate:ObjectsGetResponse[] responseArray = check weaviateClient->/batch/objects.post({objects:documentObjectArray});
 
     foreach var res in responseArray {
-        io:println(res);
+	if res.vector !is weaviate:C11yVector {
+            return error("Failed to insert embedding vectors to Weaviate vector database");
+        } 
     }
+
+    io:println(string `Successfully inserted embedding vectors to the Weaviate vector database.`);
 }
