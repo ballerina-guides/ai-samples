@@ -35,7 +35,7 @@ public function main(string title) returns error? {
     string? content = completion.choices[0].text;
 
     if content !is string {
-        return error("Generated content is not a string");
+        return error("Failed to generate the content for the blog");
     }
 
     medium:Post post = {
