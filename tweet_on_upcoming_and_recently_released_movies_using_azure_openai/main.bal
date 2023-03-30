@@ -30,22 +30,20 @@ twitter:ConnectionConfig twitterConfig = {
 public function main() returns error? {
     // Get information on upcoming and recently released movies from TMDB
     final themoviedb:Client moviedb = check new themoviedb:Client({apiKey : moviedbApiKey});
-    themoviedb:InlineResponse2001 result = check moviedb->getUpcomingMovies();
+    themoviedb:InlineResponse2001 moviedbRes = check moviedb->getUpcomingMovies();
 
-    // Generate a tweet about five movies using Azure OpenAI   
+    // Generate a creative tweet using Azure OpenAI   
     final text:Client azureOpenAI = check new (
         config = {auth: {apiKey: openAIToken}},
         serviceUrl = serviceUrl
     );
-    string prompt = "Instruction: Generate a creative and short tweet about upcoming and recently related movies and please include the following. Movies : ";
-    int i = 0;
-    foreach var movie in result.results {
-        i = i + 1;
-        prompt += string `${i.toString()}. ${movie.title} - ${movie.overview} `;
-        if i == NO_OF_MOVIES {
-            break;
-        }
+
+    string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following upcoming and recently released movies. Movies : ";
+    foreach var i in 1...NO_OF_MOVIES {
+        var movie = moviedbRes.results[i - 1];
+        prompt += string `${i.toString()}. ${movie.title} `;  
     }
+    io:println(prompt);
 
     text:Deploymentid_completions_body completionsBody = {
         prompt,
@@ -54,15 +52,16 @@ public function main() returns error? {
     text:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/completions.post(API_VERSION, completionsBody);
     string? tweetContent = completion.choices[0].text;
 
-    // Tweet it out!
-    if tweetContent is string {
-        final twitter:Client twitter = check new (twitterConfig);
-        if tweetContent.length() > MAX_TWEET_LENGTH {
-            var tweet = check twitter->tweet(tweetContent.substring(0, MAX_TWEET_LENGTH));
-            io:println("Tweet: ", tweet.text);
-        } else {
-            var tweet = check twitter->tweet(tweetContent);
-            io:println("Tweet: ", tweet.text);
-        }
+    if tweetContent !is string {
+        return error("Failed to generate a tweet on upcoming and recenlty released movies.");
     }
+
+    if tweetContent.length() > MAX_TWEET_LENGTH {
+        return error("The generated tweet exceeded the maximum supported character length.");
+    } 
+
+    // Tweet it out!
+    final twitter:Client twitter = check new (twitterConfig);
+    var tweet = check twitter->tweet(tweetContent);
+    io:println("Tweet: ", tweet.text);
 }
