@@ -1,7 +1,7 @@
 # Insert a batch of data to Weaviate vector search engine from a Google Sheet
 
 ## Use case
-Insert a batch of data with embeeding vectors to Weaviate vector search engine that is retreived from a Google sheet. Embedding vectors are retreived using the GPT3 models from OpenAI. 
+Obtain embedding vectors for a batch of data retrieved from a Google sheet using OpenAI GPT3 models and insert them to Weaviate vector database.
 
 ## Prerequisites
 * Google account
