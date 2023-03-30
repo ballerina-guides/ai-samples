@@ -1,6 +1,5 @@
-import ballerina/http;
 import ballerina/io;
-import ballerinax/azure_openai.text;
+import ballerinax/azure.openai.text;
 import ballerinax/medium;
 
 configurable string openAIToken = ?;
@@ -13,7 +12,7 @@ const API_VERSION = "2023-03-15-preview";
 public function main(string title) returns error? {
     final medium:Client medium = check new ({auth: {token: mediumToken}});
     final text:Client azureOpenAI = check new (
-        config = {httpVersion: http:HTTP_1_1, auth: {apiKey: openAIToken}},
+        config = {auth: {apiKey: openAIToken}},
         serviceUrl = serviceUrl
     );
 

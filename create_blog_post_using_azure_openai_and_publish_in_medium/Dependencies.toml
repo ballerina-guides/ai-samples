@@ -11,10 +11,9 @@ org = "ai_samples"
 name = "create_blog_post_using_azure_openai_and_publish_in_medium"
 version = "0.1.0"
 dependencies = [
-	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "azure_openai.text"},
+	{org = "ballerinax", name = "azure.openai.text"},
 	{org = "ballerinax", name = "medium"}
 ]
 modules = [
@@ -101,9 +100,6 @@ dependencies = [
 	{org = "ballerina", name = "regex"},
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
-]
-modules = [
-	{org = "ballerina", packageName = "http", moduleName = "http"}
 ]
 
 [[package]]
@@ -273,7 +269,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -282,7 +278,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "time"
-version = "2.2.3"
+version = "2.2.4"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -309,15 +305,15 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "azure_openai.text"
-version = "0.1.0"
+name = "azure.openai.text"
+version = "1.0.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "url"}
+	{org = "ballerina", name = "url"},
+	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "azure_openai.text", moduleName = "azure_openai.text"}
+	{org = "ballerinax", packageName = "azure.openai.text", moduleName = "azure.openai.text"}
 ]
 
 [[package]]

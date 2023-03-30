@@ -13,8 +13,8 @@ Generates content in markdown format for a blog article for a given topic using 
 3. Go to **Deployments** in the **Resource Management** section and obtain the name of the text completion model which was deployed in step 1.
 
 ## Setting up Medium account
-1. Sign up or sign in to [Medium](https://medium.com/)
-2. Go to the profile [**Settings**](https://medium.com/me/settings) -> **Security and apps**
+1. Sign up and log into [Medium](https://medium.com/).
+2. Go to the profile [**Settings**](https://medium.com/me/settings) -> **Security and apps**.
 3. Click **Integration tokens**, insert a description and generate a token to access Medium via the API.
 
 ## Configuration
