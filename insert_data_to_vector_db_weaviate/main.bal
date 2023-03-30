@@ -40,10 +40,6 @@ public function main() returns error? {
             documentObjectArray.push(obj);
             textArr.push(row[1].toString());  
         } 
-        j = j+1;
-        if (j > 10){
-            break;
-        }
     }
 
     embeddings:CreateEmbeddingResponse embeddingResponse = check openaiClient->/embeddings.post({
