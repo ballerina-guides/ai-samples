@@ -40,5 +40,5 @@ public function main(string title) returns error? {
         content
     };
     medium:PostResponse postResponse = check medium->createUserPost(userId, post);
-    io:println(string `Blog post url - ${postResponse.data?.url ?: ""}`);
+    io:println(string `Blog post URL - ${postResponse.data?.url ?: "URL not found."}`);
 }
