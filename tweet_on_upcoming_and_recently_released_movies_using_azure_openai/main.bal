@@ -38,7 +38,7 @@ public function main() returns error? {
         serviceUrl = serviceUrl
     );
 
-    string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following upcoming and recently released movies. Movies : ";
+    string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following upcoming and recently released movies. Movies: ";
     foreach var i in 1...NO_OF_MOVIES {
         var movie = moviedbRes.results[i - 1];
         prompt += string `${i.toString()}. ${movie.title} `;  
