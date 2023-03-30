@@ -1,6 +1,5 @@
-import ballerina/http;
 import ballerina/io;
-import ballerinax/azure_openai.text;
+import ballerinax/azure.openai.text;
 import ballerinax/themoviedb;
 import ballerinax/twitter;
 
@@ -17,6 +16,8 @@ configurable string twitterAccessTokenSecret = ?;
 
 const API_VERSION = "2023-03-15-preview";
 const MAX_TWEET_LENGTH = 280;
+const MAX_TOKENS = 1000;
+const NO_OF_MOVIES = 5;
 
 // Twitter API client configuration
 twitter:ConnectionConfig twitterConfig = {
@@ -33,7 +34,7 @@ public function main() returns error? {
 
     // Generate a tweet about five movies using Azure OpenAI   
     final text:Client azureOpenAI = check new (
-        config = {httpVersion: http:HTTP_1_1, auth: {apiKey: openAIToken}},
+        config = {auth: {apiKey: openAIToken}},
         serviceUrl = serviceUrl
     );
     string prompt = "Instruction: Generate a creative and short tweet about upcoming and recently related movies and please include the following. Movies : ";
@@ -41,18 +42,17 @@ public function main() returns error? {
     foreach var movie in result.results {
         i = i + 1;
         prompt += string `${i.toString()}. ${movie.title} - ${movie.overview} `;
-        if i == 5 {
+        if i == NO_OF_MOVIES {
             break;
         }
     }
 
     text:Deploymentid_completions_body completionsBody = {
         prompt,
-        max_tokens: 1000
+        max_tokens: MAX_TOKENS
     };
     text:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/completions.post(API_VERSION, completionsBody);
     string? tweetContent = completion.choices[0].text;
-    io:println(tweetContent);
 
     // Tweet it out!
     if tweetContent is string {
