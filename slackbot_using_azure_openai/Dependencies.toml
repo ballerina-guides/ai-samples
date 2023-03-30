@@ -15,7 +15,7 @@ dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "url"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "azure_openai.chat"}
+	{org = "ballerinax", name = "azure.openai.chat"}
 ]
 modules = [
 	{org = "ai_samples", packageName = "slackbot_using_azure_openai", moduleName = "slackbot_using_azure_openai"}
@@ -273,7 +273,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -312,15 +312,15 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "azure_openai.chat"
-version = "0.1.0"
+name = "azure.openai.chat"
+version = "1.0.0"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
-	{org = "ballerina", name = "url"}
+	{org = "ballerina", name = "url"},
+	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "azure_openai.chat", moduleName = "azure_openai.chat"}
+	{org = "ballerinax", packageName = "azure.openai.chat", moduleName = "azure.openai.chat"}
 ]
 

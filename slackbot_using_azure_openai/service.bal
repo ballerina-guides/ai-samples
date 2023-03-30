@@ -1,7 +1,7 @@
 import ballerina/crypto;
 import ballerina/http;
 import ballerina/url;
-import ballerinax/azure_openai.chat;
+import ballerinax/azure.openai.chat;
 
 configurable string openAIToken = ?;
 configurable string serviceUrl = ?;
@@ -9,9 +9,10 @@ configurable string deploymentId = ?;
 configurable string slackSigningSecret = ?;
 
 const API_VERSION = "2023-03-15-preview";
+const MAX_MESSAGES = 25;
 
 final chat:Client azureOpenAI = check new (
-    config = {httpVersion: http:HTTP_1_1, auth: {apiKey: openAIToken}},
+    config = {auth: {apiKey: openAIToken}},
     serviceUrl = serviceUrl
 );
 
@@ -24,7 +25,6 @@ service /slack on new http:Listener(8080) {
     map<ChatMessage[]> chatHistory = {};
 
     resource function post events(http:Request request) returns json|error {
-
         map<string> requestPayload = check request.getFormParams();
         string signature = check request.getHeader("X-Slack-Signature");
         string timestamp = check request.getHeader("X-Slack-Request-Timestamp");
@@ -41,7 +41,7 @@ service /slack on new http:Listener(8080) {
 
         ChatMessage[] history = self.chatHistory[chanelName] ?: [];
         if history.length() == 0 {
-            history = [{role: "system", content: "You an AI slack bot to assist with user questions."}, {role: "user", content: requestText}];
+            history = [{role: "system", content: "You are an AI slack bot to assist with user questions."}, {role: "user", content: requestText}];
         } else {
             history.push({role: "user", content: requestText});
         }
@@ -55,7 +55,7 @@ service /slack on new http:Listener(8080) {
         }
 
         // Limit history to 25 messages to preserve token limit
-        if (history.length() > 25) {
+        if (history.length() > MAX_MESSAGES) {
             history = history.slice(1, history.length());
         }
         history.push({role: "assistant", content: response.content});

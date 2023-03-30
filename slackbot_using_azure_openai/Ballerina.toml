@@ -9,6 +9,6 @@ observabilityIncluded = true
 
 [[dependency]]
 org = "ballerinax"
-name = "azure_openai.chat"
-version = "0.1.0"
+name = "azure.openai.chat"
+version = "1.0.0"
 repository = "local"
