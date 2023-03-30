@@ -17,12 +17,8 @@ public function main(string title) returns error? {
     );
 
     medium:UserResponse response = check medium->getUserDetail();
-    medium:User? user = response.data;
+    string? userId = response.data?.id;
 
-    if user !is medium:User {
-        return error("User is not a medium user");
-    }
-    string? userId = user.id;
     if userId !is string {
         return error("Medium user ID is not valid");
     }
@@ -44,5 +40,5 @@ public function main(string title) returns error? {
         content
     };
     medium:PostResponse postResponse = check medium->createUserPost(userId, post);
-    io:println(postResponse);
+    io:println(string `Blog post url - ${postResponse.data?.url ?: ""}`);
 }
