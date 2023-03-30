@@ -13,7 +13,6 @@ configurable string sheetName = ?;
 
 const RANGE = "A:C";
 const NO_OF_COLUMNS = 3;
-const NO_OF_DATA_SAMPLES = 10; 
 string className = "QuestionAnswerStore";
 
 final embeddings:Client openaiClient = check new ({auth: {token: openAIToken}});
@@ -41,10 +40,6 @@ public function main() returns error? {
             };
             documentObjectArray.push(obj);
             textArr.push(row[1].toString());  
-        } 
-	j = j + 1;
-        if (j > NO_OF_DATA_SAMPLES) {
-            break;
         }
     }
 
