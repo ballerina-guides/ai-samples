@@ -47,7 +47,7 @@ public function main() returns error? {
     }
 
     weaviate:ObjectsGetResponse[] responses = check weaviate->/batch/objects.post({objects: documentObjects});
-    
+
     string[] failedQuestions = [];
     foreach var res in responses {
         if res.result["errors"]["error"] != null {
@@ -55,7 +55,7 @@ public function main() returns error? {
         }
     }
     if failedQuestions.length() > 0 {
-        return error( "Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
+        return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
     }
 
     io:println(string `Successfully inserted embedding vectors to the Weaviate vector database.`);
