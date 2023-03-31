@@ -8,24 +8,22 @@ configurable string weaviateURL = ?;
 
 const CLASS_NAME = "QuestionAnswerStore";
 
-final embeddings:Client openaiClient = check new ({auth: {token: openAIToken}});
-final weaviate:Client weaviateClient = check new({auth: {token: weaviateToken}}, weaviateURL);
+final embeddings:Client openai = check new ({auth: {token: openAIToken}});
+final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}}, weaviateURL);
 
 service / on new http:Listener(8080) {
-    
     resource function get answer(string question) returns error|record {|weaviate:JsonObject...;|}? {
 
-        // retrieve open-ai ada embeddings for the query
-        embeddings:CreateEmbeddingResponse embeddingResponse = check openaiClient->/embeddings.post({
+        // Retrieve OpenAI embeddings for the input question
+        embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({
                 model: "text-embedding-ada-002",
                 input: question
             }
         );
-
-    
         float[] vector = embeddingResponse.data[0].embedding;
-        
-        string graphQLQuery =  string`{
+
+        // Querying Weaviate for the closest vector using GraphQL
+        string graphQLQuery = string `{
                                     Get {
                                         ${CLASS_NAME} (
                                         nearVector: {
@@ -43,14 +41,12 @@ service / on new http:Listener(8080) {
                                     }
                                 }`;
 
-        weaviate:GraphQLResponse|error results = check weaviateClient->/graphql.post({
-            query: graphQLQuery
-        });
-    
-        if (results is weaviate:GraphQLResponse){
-            return results.data;
-        } else {
-            return results;
+        weaviate:GraphQLResponse|error results = check weaviate->/graphql.post({query: graphQLQuery});
+        
+        if (results !is weaviate:GraphQLResponse) {
+            return error("Error while retrieving data from Weaviate.");
         }
+
+        return results.data; 
     }
 }
