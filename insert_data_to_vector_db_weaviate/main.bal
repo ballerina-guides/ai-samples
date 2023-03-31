@@ -20,9 +20,7 @@ final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}, timeo
 final sheets:Client gsheets = check new ({auth: {token: sheetAccessToken}});
 
 public function main() returns error? {
-
     sheets:Range range = check gsheets->getRange(sheetId, sheetName, RANGE);
-
     string[] data = [];
     weaviate:Object[] documentObjects = [];
 
@@ -41,7 +39,6 @@ public function main() returns error? {
             data.push(row[1].toString());
         }
     }
-
     embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({model: "text-embedding-ada-002", input: data});
 
     // Insert embedding vectors to the Weaviate objects
@@ -50,17 +47,15 @@ public function main() returns error? {
     }
 
     weaviate:ObjectsGetResponse[] responses = check weaviate->/batch/objects.post({objects: documentObjects});
-
+    
     string[] failedQuestions = [];
     foreach var res in responses {
-        if res.vector !is weaviate:C11yVector {
+        if res.result["errors"]["error"] != null {
             failedQuestions.push(res.properties["question"].toString());
         }
     }
     if failedQuestions.length() > 0 {
-        io:println(failedQuestions);
-        return error("Failed to insert embedding vectors for the above questions.");
-        
+        return error( "Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
     }
 
     io:println(string `Successfully inserted embedding vectors to the Weaviate vector database.`);
