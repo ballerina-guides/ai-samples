@@ -39,11 +39,10 @@ public function main() returns error? {
     );
 
     string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following upcoming and recently released movies. Movies: ";
-    foreach var i in 1...NO_OF_MOVIES {
+    foreach int i in 1 ... NO_OF_MOVIES {
         var movie = moviedbRes.results[i - 1];
         prompt += string `${i.toString()}. ${movie.title} `;  
     }
-    io:println(prompt);
 
     text:Deploymentid_completions_body completionsBody = {
         prompt,
@@ -53,7 +52,7 @@ public function main() returns error? {
     string? tweetContent = completion.choices[0].text;
 
     if tweetContent !is string {
-        return error("Failed to generate a tweet on upcoming and recenlty released movies.");
+        return error("Failed to generate a tweet on upcoming and recently released movies.");
     }
 
     if tweetContent.length() > MAX_TWEET_LENGTH {
