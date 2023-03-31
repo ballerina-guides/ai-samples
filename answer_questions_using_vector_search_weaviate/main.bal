@@ -1,6 +1,6 @@
 import ballerina/http;
-import ballerinax/weaviate;
 import ballerinax/openai.embeddings;
+import ballerinax/weaviate;
 
 configurable string openAIToken = ?;
 configurable string weaviateToken = ?;
@@ -42,7 +42,7 @@ service / on new http:Listener(8080) {
                                 }`;
 
         weaviate:GraphQLResponse|error results = check weaviate->/graphql.post({query: graphQLQuery});
-        
+
         if (results !is weaviate:GraphQLResponse) {
             return error("Error while retrieving data from Weaviate.");
         }
