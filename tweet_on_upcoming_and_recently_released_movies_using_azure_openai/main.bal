@@ -29,26 +29,27 @@ twitter:ConnectionConfig twitterConfig = {
 
 public function main() returns error? {
     // Get information on upcoming and recently released movies from TMDB
-    final themoviedb:Client moviedb = check new themoviedb:Client({apiKey : moviedbApiKey});
+    final themoviedb:Client moviedb = check new themoviedb:Client({apiKey: moviedbApiKey});
     themoviedb:InlineResponse2001 moviedbRes = check moviedb->getUpcomingMovies();
 
     // Generate a creative tweet using Azure OpenAI   
-    final text:Client azureOpenAI = check new (
-        config = {auth: {apiKey: openAIToken}},
-        serviceUrl = serviceUrl
-    );
-
-    string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following upcoming and recently released movies. Movies: ";
+    string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following " +
+    "upcoming and recently released movies. Movies: ";
     foreach int i in 1 ... NO_OF_MOVIES {
-        var movie = moviedbRes.results[i - 1];
-        prompt += string `${i.toString()}. ${movie.title} `;  
+        prompt += string `${i.toString()}. ${moviedbRes.results[i - 1].title} `;
     }
 
     text:Deploymentid_completions_body completionsBody = {
         prompt,
         max_tokens: MAX_TOKENS
     };
-    text:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/completions.post(API_VERSION, completionsBody);
+    final text:Client azureOpenAI = check new (
+        config = {auth: {apiKey: openAIToken}},
+        serviceUrl = serviceUrl
+    );
+    text:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/completions.post(
+        API_VERSION, completionsBody
+    );
     string? tweetContent = completion.choices[0].text;
 
     if tweetContent !is string {
@@ -57,10 +58,10 @@ public function main() returns error? {
 
     if tweetContent.length() > MAX_TWEET_LENGTH {
         return error("The generated tweet exceeded the maximum supported character length.");
-    } 
+    }
 
     // Tweet it out!
     final twitter:Client twitter = check new (twitterConfig);
-    var tweet = check twitter->tweet(tweetContent);
+    twitter:Tweet tweet = check twitter->tweet(tweetContent);
     io:println("Tweet: ", tweet.text);
 }
