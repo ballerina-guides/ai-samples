@@ -7,16 +7,17 @@ configurable string weaviateToken = ?;
 configurable string weaviateURL = ?;
 
 const CLASS_NAME = "QuestionAnswerStore";
+const MODEL = "text-embedding-ada-002";
 
 final embeddings:Client openai = check new ({auth: {token: openAIToken}});
 final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}}, weaviateURL);
 
 service / on new http:Listener(8080) {
-    resource function get answer(string question) returns error|record {|weaviate:JsonObject...;|}? {
-
+    //resource function get answer(string question) returns error|record {|weaviate:JsonObject...;|}? {
+    resource function get answer(string question) returns weaviate:JsonObject|error? {
         // Retrieve OpenAI embeddings for the input question
         embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({
-                model: "text-embedding-ada-002",
+                model: MODEL,
                 input: question
             }
         );
@@ -41,12 +42,8 @@ service / on new http:Listener(8080) {
                                     }
                                 }`;
 
-        weaviate:GraphQLResponse|error results = check weaviate->/graphql.post({query: graphQLQuery});
+        weaviate:GraphQLResponse results = check weaviate->/graphql.post({query: graphQLQuery});
 
-        if (results !is weaviate:GraphQLResponse) {
-            return error("Error while retrieving data from Weaviate.");
-        }
-
-        return results.data; 
+        return results.data;
     }
 }

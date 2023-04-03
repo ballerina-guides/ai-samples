@@ -1,7 +1,7 @@
-# Answer questions by performing similarity search on embedding vectors stored in Weaviate
+# Answer questions by performing a similarity search on embedding vectors stored in Weaviate
 
 ## Use case
-Ask questions from knowledge stored in a Weaviate cluster using embedding similarity search. Embedding vectors are retreived using OpenAI GPT3 models. 
+Ask questions from knowledge stored in a Weaviate cluster using embedding similarity search. Embedding vectors are retrieved using OpenAI GPT3 models. 
 
 ## Prerequisites
 * OpenAI account
