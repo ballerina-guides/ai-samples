@@ -24,7 +24,7 @@ public function main() returns error? {
     sheets:Range range = check gsheets->getRange(sheetId, sheetName, RANGE);
     string[] data = [];
     weaviate:Object[] documentObjects = [];
-    int j = 0;
+
     // Iterate through the data stream and extract the content
     foreach var row in range.values {
         if (row.length() != NO_OF_COLUMNS) {
@@ -33,20 +33,15 @@ public function main() returns error? {
         weaviate:Object obj = {
             'class: className,
             properties: {
-                title: row[0],
-                question: row[1],
-                answer: row[2]
+                "title": row[0],
+                "question": row[1],
+                "answer": row[2]
             }
         };
         documentObjects.push(obj);
         data.push(row[1].toString());
-        j = j + 1;
-        if j == 5{
-            break;
-        }
     }
     embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({model: MODEL, input: data});
-    documentObjects[0]["class"] = "abc";
 
     // Insert embedding vectors to the Weaviate objects
     foreach int i in 0 ... embeddingResponse.data.length() - 1 {
