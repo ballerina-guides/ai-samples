@@ -39,25 +39,25 @@ service /slack on new http:Listener(8080) {
             return error("Request verification failed");
         }
 
-        map<string> requestPayload = check request.getFormParams();
+        map<string> params = check request.getFormParams();
 
-        string? channelName = requestPayload["channel_name"];
-        string? requestText = requestPayload["text"];
+        string? channelName = params["channel_name"];
+        string? requestText = params["text"];
         if channelName is () || requestText is () {
-            return error("Invalid values in the request payload for channel_name or text");
+            return error("Invalid values in the request parameters for channel_name or text");
         }
 
         ChatMessage[] history = self.chatHistory[channelName] ?:
                                 [{role: SYSTEM, content: "You are an AI slack bot to assist with user questions."}];
         history.push({role: USER, content: requestText});
 
-        chat:Chat_completions_body chatBody = {messages: history};
         chat:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/chat/completions.post(
-            API_VERSION, chatBody
+            API_VERSION, {messages: history}
         );
 
         chat:Inline_response_200_message? response = completion.choices[0].message;
-        if response is () {
+        string? responseText = response?.content;
+        if response is () || responseText is () {
             return error("Error in response generation");
         }
 
@@ -68,12 +68,7 @@ service /slack on new http:Listener(8080) {
         history.push({role: ASSISTANT, content: response.content});
         self.chatHistory[channelName] = history;
 
-        string? responseText = response.content;
-        if responseText is () {
-            return error("Error generating the response");
-        }
-
-        return {"response_type": "in_channel", "text": responseText};
+        return {response_type: "in_channel", text: responseText};
     }
 }
 
