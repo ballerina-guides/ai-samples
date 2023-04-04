@@ -11,8 +11,8 @@ const API_VERSION = "2023-03-15-preview";
 
 public function main(string title) returns error? {
     final medium:Client medium = check new ({auth: {token: mediumToken}});
-    medium:UserResponse response = check medium->getUserDetail();
-    string? userId = response.data?.id;
+    medium:UserResponse userResponse = check medium->getUserDetail();
+    string? userId = userResponse.data?.id;
 
     if userId is () {
         return error("Medium user ID is not valid");
