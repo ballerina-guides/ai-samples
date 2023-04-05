@@ -61,11 +61,12 @@ service /slack on new http:Listener(8080) {
             return error("Error in response generation");
         }
 
+        history.push({role: ASSISTANT, content: response.content});
+
         // Limit history to 25 messages to preserve token limit.
         if history.length() > MAX_MESSAGES {
-            history = history.slice(1, history.length());
+            history = history.slice(history.length() - MAX_MESSAGES);
         }
-        history.push({role: ASSISTANT, content: response.content});
         self.chatHistory[channelName] = history;
 
         return {response_type: "in_channel", text: responseText};
