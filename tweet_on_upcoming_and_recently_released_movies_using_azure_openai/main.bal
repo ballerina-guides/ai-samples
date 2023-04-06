@@ -9,34 +9,23 @@ configurable string openAIToken = ?;
 configurable string serviceUrl = ?;
 configurable string deploymentId = ?;
 
-configurable string twitterApiKey = ?;
-configurable string twitterApiSecret = ?;
-configurable string twitterAccessToken = ?;
-configurable string twitterAccessTokenSecret = ?;
+configurable twitter:ConnectionConfig twitterConfig = ?;
 
 const API_VERSION = "2023-03-15-preview";
 const MAX_TWEET_LENGTH = 280;
 const MAX_TOKENS = 1000;
 const NO_OF_MOVIES = 5;
 
-// Twitter API client configuration
-twitter:ConnectionConfig twitterConfig = {
-    apiKey: twitterApiKey,
-    apiSecret: twitterApiSecret,
-    accessToken: twitterAccessToken,
-    accessTokenSecret: twitterAccessTokenSecret
-};
-
 public function main() returns error? {
     // Get information on upcoming and recently released movies from TMDB
     final themoviedb:Client moviedb = check new themoviedb:Client({apiKey: moviedbApiKey});
-    themoviedb:InlineResponse2001 moviedbRes = check moviedb->getUpcomingMovies();
+    themoviedb:InlineResponse2001 upcomingMovies = check moviedb->getUpcomingMovies();
 
     // Generate a creative tweet using Azure OpenAI   
     string prompt = "Instruction: Generate a creative and short tweet below 250 characters about the following " +
     "upcoming and recently released movies. Movies: ";
     foreach int i in 1 ... NO_OF_MOVIES {
-        prompt += string `${i.toString()}. ${moviedbRes.results[i - 1].title} `;
+        prompt += string `${i}. ${upcomingMovies.results[i - 1].title} `;
     }
 
     text:Deploymentid_completions_body completionsBody = {
@@ -52,7 +41,7 @@ public function main() returns error? {
     );
     string? tweetContent = completion.choices[0].text;
 
-    if tweetContent !is string {
+    if tweetContent is () {
         return error("Failed to generate a tweet on upcoming and recently released movies.");
     }
 

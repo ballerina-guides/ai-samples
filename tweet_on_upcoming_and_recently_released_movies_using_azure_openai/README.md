@@ -30,10 +30,11 @@ moviedbApiKey = "<TMDB_API_KEY>
 openAIToken = "<AZURE_OPENAI_API_KEY>"
 serviceUrl = "<AZURE_OPENAI_ENDPOINT>"
 deploymentId = "<AZURE_MODEL_DEPLOYMENT_NAME>"
-twitterApiKey = "<TWITTER_API_KEY>"
-twitterApiSecret = "<TWITTER_API_KEY_SECRET>"
-twitterAccessToken = "<TWITTER_ACCESS_TOKEN>"
-twitterAccessTokenSecret = "<TWITTER_ACCESS_TOKEN_SECRET>"
+[twitterConfig]
+apiKey = "<TWITTER_API_KEY>"
+apiSecret = "<TWITTER_API_KEY_SECRET>"
+accessToken = "<TWITTER_ACCESS_TOKEN>"
+accessTokenSecret = "<TWITTER_ACCESS_TOKEN_SECRET>"
 ```
 
 ## Run the program
