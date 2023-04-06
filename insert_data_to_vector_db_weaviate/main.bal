@@ -16,12 +16,10 @@ const NO_OF_COLUMNS = 3;
 const className = "QuestionAnswerStore";
 const MODEL = "text-embedding-ada-002";
 
-final embeddings:Client openai = check new ({auth: {token: openAIToken}});
-final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}, timeout: 100}, weaviateURL);
-final sheets:Client gsheets = check new ({auth: {token: sheetAccessToken}});
-
 public function main() returns error? {
+    final sheets:Client gsheets = check new ({auth: {token: sheetAccessToken}});
     sheets:Range range = check gsheets->getRange(sheetId, sheetName, RANGE);
+
     string[] data = [];
     weaviate:Object[] documentObjects = [];
 
@@ -41,21 +39,22 @@ public function main() returns error? {
         documentObjects.push(obj);
         data.push(row[1].toString());
     }
+
+    // Obtain embeddings for the questions from OpenAI
+    final embeddings:Client openai = check new ({auth: {token: openAIToken}});
     embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({model: MODEL, input: data});
 
     // Insert embedding vectors to the Weaviate objects
     foreach int i in 0 ... embeddingResponse.data.length() - 1 {
         documentObjects[i].vector = embeddingResponse.data[i].embedding;
     }
-
+    final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}, timeout: 100}, weaviateURL);
     weaviate:ObjectsGetResponse[] responses = check weaviate->/batch/objects.post({objects: documentObjects});
 
-    string[] failedQuestions = [];
-    foreach var res in responses {
-        if res.result["errors"]["error"] != () {
-            failedQuestions.push(res.properties["question"].toString());
-        }
-    }
+    // Check for any failures while inserting the embedding vectors to Weaviate
+    string[] failedQuestions = from var res in responses
+        where res.result?.errors?.'error != ()
+        select res.properties["question"].toString();
     if failedQuestions.length() > 0 {
         return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
     }

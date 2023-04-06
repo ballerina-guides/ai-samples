@@ -13,7 +13,6 @@ final embeddings:Client openai = check new ({auth: {token: openAIToken}});
 final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}}, weaviateURL);
 
 service / on new http:Listener(8080) {
-    //resource function get answer(string question) returns error|record {|weaviate:JsonObject...;|}? {
     resource function get answer(string question) returns weaviate:JsonObject|error? {
         // Retrieve OpenAI embeddings for the input question
         embeddings:CreateEmbeddingResponse embeddingResponse = check openai->/embeddings.post({
