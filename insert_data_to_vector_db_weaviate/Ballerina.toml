@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "converting_audio_to_text_and_translation_using_openai"
+name = "insert_data_to_vector_db_weaviate"
 version = "0.1.0"
 distribution = "2201.4.0"
 
