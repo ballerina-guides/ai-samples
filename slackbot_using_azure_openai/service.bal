@@ -15,8 +15,14 @@ final chat:Client azureOpenAI = check new (
     serviceUrl = serviceUrl
 );
 
+enum Role {
+    SYSTEM = "system",
+    USER = "user",
+    ASSISTANT = "assistant"
+}
+
 type ChatMessage record {|
-    string role;
+    Role role;
     string content;
 |};
 
@@ -24,12 +30,6 @@ type Response record {|
     string response_type;
     string text;
 |};
-
-enum ROLE {
-    SYSTEM = "system",
-    USER = "user",
-    ASSISTANT = "assistant"
-}
 
 service /slack on new http:Listener(8080) {
     map<ChatMessage[]> chatHistory = {};
