@@ -8,17 +8,16 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "converting_audio_to_text_and_translation_using_openai"
+name = "slackbot_using_azure_openai"
 version = "0.1.0"
 dependencies = [
+	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "openai.audio"},
-	{org = "ballerinax", name = "openai.text"}
+	{org = "ballerinax", name = "azure.openai.chat"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "converting_audio_to_text_and_translation_using_openai", moduleName = "converting_audio_to_text_and_translation_using_openai"}
+	{org = "ai_samples", packageName = "slackbot_using_azure_openai", moduleName = "slackbot_using_azure_openai"}
 ]
 
 [[package]]
@@ -61,6 +60,9 @@ dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
 ]
+modules = [
+	{org = "ballerina", packageName = "crypto", moduleName = "crypto"}
+]
 
 [[package]]
 org = "ballerina"
@@ -78,7 +80,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.6.0"
+version = "2.6.1"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -113,9 +115,6 @@ version = "1.4.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.value"}
-]
-modules = [
-	{org = "ballerina", packageName = "io", moduleName = "io"}
 ]
 
 [[package]]
@@ -273,7 +272,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -282,7 +281,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "time"
-version = "2.2.3"
+version = "2.2.4"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -309,21 +308,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "openai.audio"
-version = "1.0.1"
-dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "mime"},
-	{org = "ballerina", name = "url"},
-	{org = "ballerinai", name = "observe"}
-]
-modules = [
-	{org = "ballerinax", packageName = "openai.audio", moduleName = "openai.audio"}
-]
-
-[[package]]
-org = "ballerinax"
-name = "openai.text"
+name = "azure.openai.chat"
 version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
@@ -332,6 +317,6 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.text", moduleName = "openai.text"}
+	{org = "ballerinax", packageName = "azure.openai.chat", moduleName = "azure.openai.chat"}
 ]
 

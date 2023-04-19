@@ -8,17 +8,18 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "converting_audio_to_text_and_translation_using_openai"
+name = "tweet_on_upcoming_and_recently_released_movies_using_azure_openai"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "openai.audio"},
-	{org = "ballerinax", name = "openai.text"}
+	{org = "ballerinax", name = "azure_openai.text"},
+	{org = "ballerinax", name = "themoviedb"},
+	{org = "ballerinax", name = "twitter"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "converting_audio_to_text_and_translation_using_openai", moduleName = "converting_audio_to_text_and_translation_using_openai"}
+	{org = "ai_samples", packageName = "tweet_on_upcoming_and_recently_released_movies_using_azure_openai", moduleName = "tweet_on_upcoming_and_recently_released_movies_using_azure_openai"}
 ]
 
 [[package]]
@@ -273,7 +274,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -282,7 +283,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "time"
-version = "2.2.3"
+version = "2.2.4"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -293,6 +294,18 @@ name = "url"
 version = "2.2.3"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
+]
+
+[[package]]
+org = "ballerina"
+name = "uuid"
+version = "1.4.0"
+dependencies = [
+	{org = "ballerina", name = "crypto"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "lang.int"},
+	{org = "ballerina", name = "regex"},
+	{org = "ballerina", name = "time"}
 ]
 
 [[package]]
@@ -309,29 +322,57 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "openai.audio"
-version = "1.0.1"
+name = "azure_openai.text"
+version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "mime"},
-	{org = "ballerina", name = "url"},
-	{org = "ballerinai", name = "observe"}
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "url"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.audio", moduleName = "openai.audio"}
+	{org = "ballerinax", packageName = "azure_openai.text", moduleName = "azure_openai.text"}
 ]
 
 [[package]]
 org = "ballerinax"
-name = "openai.text"
+name = "client.config"
 version = "1.0.1"
 dependencies = [
-	{org = "ballerina", name = "constraint"},
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "oauth2"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "themoviedb"
+version = "1.4.0"
+dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "url"},
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "openai.text", moduleName = "openai.text"}
+	{org = "ballerinax", packageName = "themoviedb", moduleName = "themoviedb"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "twitter"
+version = "3.1.0"
+dependencies = [
+	{org = "ballerina", name = "crypto"},
+	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "log"},
+	{org = "ballerina", name = "os"},
+	{org = "ballerina", name = "regex"},
+	{org = "ballerina", name = "time"},
+	{org = "ballerina", name = "url"},
+	{org = "ballerina", name = "uuid"},
+	{org = "ballerinax", name = "client.config"}
+]
+modules = [
+	{org = "ballerinax", packageName = "twitter", moduleName = "twitter"},
+	{org = "ballerinax", packageName = "twitter", moduleName = "twitter.listener"}
 ]
 

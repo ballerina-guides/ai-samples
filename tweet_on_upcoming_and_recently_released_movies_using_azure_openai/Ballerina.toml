@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "converting_audio_to_text_and_translation_using_openai"
+name = "tweet_on_upcoming_and_recently_released_movies_using_azure_openai"
 version = "0.1.0"
 distribution = "2201.4.0"
 
