@@ -57,8 +57,8 @@ public function main(string podcastURL) returns error? {
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textCompletionReq);
 
     string? summerizedText = completionRes.choices[0].text;    
-    if summerizedText !is string {
-	return error("Failed to summarize the given audio.");
+    if summerizedText is () {
+	    return error("Failed to summarize the given audio.");
     }
     io:println("Summarized text: ", summerizedText);
  

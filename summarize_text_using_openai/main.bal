@@ -17,9 +17,8 @@ public function main(string filePath) returns error? {
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
     string? summary = completionRes.choices[0].text;
 
-    if summary is string { 
-        io:println(string `Summary: ${summary}`);
-    } else {
-        return error("Failed to summarize the given text.");
-    }
+    if summary is () { 
+        return error("Failed to summarize the given text.");    
+    } 
+    io:println(string `Summary: ${summary}`);
 }

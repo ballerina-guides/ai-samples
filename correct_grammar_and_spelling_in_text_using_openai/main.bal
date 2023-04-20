@@ -20,9 +20,8 @@ public function main(string filePath) returns error? {
     text:CreateEditResponse editRes = check openAIText->/edits.post(editReq);
     string? text = editRes.choices[0].text;
 
-    if text is string { 
-	    io:println(string `Corrected: ${text}`);
-    } else {
+    if text is () { 
         return error("Failed to correct grammar and spelling in the given text.");
-    }
+    } 
+	io:println(string `Corrected: ${text}`);
 }

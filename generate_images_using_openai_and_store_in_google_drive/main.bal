@@ -23,12 +23,11 @@ public function main() returns error? {
         };
         images:ImagesResponse imageRes = check openAIImages->/images/generations.post(imagePrompt);
         string? encodedImage = imageRes.data[0].b64_json;
-        if encodedImage is string {
-            // Decode the Base64 string and store image in Google Drive
-            byte[] imageBytes = check array:fromBase64(encodedImage);
-            _ = check gDrive->uploadFileUsingByteArray(imageBytes, string `${cell}.png`, gDriveFolderId);
-        } else {
+        if encodedImage is () {
             return error(string `Failed to generate image for prompt: ${prompt}`);
         }
+        // Decode the Base64 string and store image in Google Drive
+        byte[] imageBytes = check array:fromBase64(encodedImage);
+        _ = check gDrive->uploadFileUsingByteArray(imageBytes, string `${cell}.png`, gDriveFolderId);
     }
 }
