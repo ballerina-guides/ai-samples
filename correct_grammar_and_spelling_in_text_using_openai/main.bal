@@ -23,5 +23,5 @@ public function main(string filePath) returns error? {
     if text is () { 
         return error("Failed to correct grammar and spelling in the given text.");
     } 
-	io:println(string `Corrected: ${text}`);
+    io:println(string `Corrected: ${text}`);
 }
