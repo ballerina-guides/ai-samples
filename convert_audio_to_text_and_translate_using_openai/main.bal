@@ -42,9 +42,8 @@ public function main(string audioURL, string toLanguage) returns error? {
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(completionReq);
     string? translatedText = completionRes.choices[0].text;
 
-    if translatedText is string { 
-	    io:println("Translated text: ", translatedText);
-    } else {
-        return error("Failed to translate the given audio.");
-    }
+    if translatedText is () { 
+        return error("Failed to translate the given audio.");    
+    } 
+    io:println("Translated text: ", translatedText);
 }
