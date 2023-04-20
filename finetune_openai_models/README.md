@@ -18,7 +18,7 @@ openAIToken="<OPENAI_API_KEY>"
 ```
 
 ### Preparing training data jsonl file
-The training data jsonl file should contain `prompt` and `completion` pairs for each sample in each line. An example is added in the data directory. Please refer [prepare training data](https://platform.openai.com/docs/guides/fine-tuning) for more information.
+The training data jsonl file should contain `prompt` and `completion` pairs for each sample in each line. An example training data file for emotion prediction is added in the data directory. Please refer [prepare training data](https://platform.openai.com/docs/guides/fine-tuning) for more information.
 
 ### Obtaining predictions from the fine-tuned model
 Generating predictions from the fine-tuned model can be done similar to any base model provided by OpenAI. You just have to specify the model id of the fine-tuned model in the `model` parameter of the request. 
@@ -34,8 +34,8 @@ public function main() returns error? {
 
     text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
     string? completion = completionRes.choices[0].text;
-    
-    if completion is string{ 
+
+    if completion is string { 
         string emotion = regex:split(completion, " ")[1];
         io:println(string `Predicted emotion: ${emotion}`); 
     }
