@@ -75,18 +75,20 @@ function constructPrompt(string question) returns string|error {
     int contextLen = 0;
     int maxLen = 1125; // approx equivalence between word and token count
 
-    if rows is pinecone:QueryMatch[] {
-        foreach pinecone:QueryMatch row in rows {
-            pinecone:VectorMetadata? rowMetadata = row.metadata;
-            if rowMetadata is pinecone:VectorMetadata {
-                string content =  check rowMetadata["content"].ensureType();
-                contextLen += countWords(content);
-                if contextLen > maxLen {
-                    break;
-                }
-                context += "\n*" + content;
-            }
+    if rows is () {
+        return error("No documents found for the given query.");
+    }
+    foreach pinecone:QueryMatch row in rows {
+        pinecone:VectorMetadata? rowMetadata = row.metadata;
+        if rowMetadata is () {
+            return error("No metadata found for the given document.");
         }
+        string content =  check rowMetadata["content"].ensureType();
+        contextLen += countWords(content);
+        if contextLen > maxLen {
+            break;
+        }
+        context += "\n*" + content;
     }
 
     string instruction = "Answer the question as truthfully as possible using the provided context," +
