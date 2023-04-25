@@ -6,10 +6,3 @@ distribution = "2201.4.0"
 
 [build-options]
 observabilityIncluded = true
-
-[[dependency]]
-org = "ballerinax"
-name = "stabilityai"
-version = "1.0.0"
-repository="local"
-
