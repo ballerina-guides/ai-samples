@@ -8,7 +8,7 @@ dependencies-toml-version = "2"
 
 [[package]]
 org = "ai_samples"
-name = "generate_images_using_stabilityai"
+name = "generate_and_send_a_creative_email_using_openai_and_stability_ai"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
@@ -19,7 +19,7 @@ dependencies = [
 	{org = "ballerinax", name = "stabilityai"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "generate_images_using_stabilityai", moduleName = "generate_images_using_stabilityai"}
+	{org = "ai_samples", packageName = "generate_and_send_a_creative_email_using_openai_and_stability_ai", moduleName = "generate_and_send_a_creative_email_using_openai_and_stability_ai"}
 ]
 
 [[package]]
@@ -342,7 +342,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "openai.text"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},

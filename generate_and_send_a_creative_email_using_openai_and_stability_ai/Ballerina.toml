@@ -1,6 +1,6 @@
 [package]
 org = "ai_samples"
-name = "generate_images_using_stabilityai"
+name = "generate_and_send_a_creative_email_using_openai_and_stability_ai"
 version = "0.1.0"
 distribution = "2201.4.0"
 

@@ -1,7 +1,7 @@
 # Generate a poem and an image on a topic using OpenAI and Stable Diffusion and email both of them
 
 ## Use case
-Generates a poem about a topic using OpenAI and an image about the same topic using Stable Diffusion and email both of them to a given mail address.
+Generates a poem about a provided topic using OpenAI and an image about the same topic using Stable Diffusion, and email both of them to a given mail address.
 
 ## Prerequisites
 * Google account
@@ -35,5 +35,4 @@ Create a file called `Config.toml` at the root of the project.
 gmailToken = "<GMAIL_ACCESS_TOKEN>"
 openAIToken = "<OPENAI_API_KEY>"
 stabilityAIKey = "<STABILITY_AI_API_KEY>"
-recipientEmail = "<RECIPIENT_EMAIL_ADDRESS>"
 ```

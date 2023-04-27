@@ -7,18 +7,22 @@ import ballerinax/stabilityai;
 configurable string gmailToken = ?;
 configurable string openAIToken = ?;
 configurable string stabilityAIKey = ?;
-configurable string recipientEmail = ?;
 
 final text:Client openAIText = check new ({auth: {token: openAIToken}});
 final gmail:Client gmail = check new ({auth: {token: gmailToken}});
 final stabilityai:Client stabilityAI = check new ({authorization: stabilityAIKey});
 
-public function main(string topic) returns error? {
+public type EmailDetails record {|
+    string topic;
+    string recipientEmail;
+|};
+
+public function main(*EmailDetails emailDetails) returns error? {
     fork {
         // Generate greeting text and design in parallel
-        worker greetingWorker returns string|error? {
+        worker poemWorker returns string|error? {
             text:CreateCompletionRequest textPrompt = {
-                prompt: string `Generate a creative poem on the topic ${topic}.`,
+                prompt: string `Generate a creative poem on the topic ${emailDetails.topic}.`,
                 model: "text-davinci-003",
                 max_tokens: 1000
             };
@@ -27,7 +31,7 @@ public function main(string topic) returns error? {
         }
 
         worker imageWorker returns byte[]|error? {
-            stabilityai:TextToImageRequestBody payload = {text_prompts: [{"text": topic, "weight": 1}]};
+            stabilityai:TextToImageRequestBody payload = {text_prompts: [{"text": emailDetails.topic, "weight": 1}]};
             stabilityai:ImageRes listResult = check stabilityAI->/v1/generation/["stable-diffusion-v1"]/
                 text\-to\-image.post(payload);
             string? imageBytesString = listResult.artifacts[0].'base64;
@@ -35,20 +39,20 @@ public function main(string topic) returns error? {
                 return error("Image byte string is empty.");
             }
             byte[] imageBytes = imageBytesString.toBytes();
-            var base64Decode = mime:base64Decode(imageBytes);
-            if base64Decode !is byte[] {
+            var decodedImage = check mime:base64Decode(imageBytes);
+            if decodedImage !is byte[] {
                 return error("Error in decoding the image byte string.");
             }
-            return base64Decode;
+            return decodedImage;
         }
     }
 
     record {|
-        string|error? greetingWorker;
+        string|error? poemWorker;
         byte[]|error? imageWorker;
-    |} results = wait {greetingWorker, imageWorker};
+    |} results = wait {poemWorker, imageWorker};
 
-    string? poem = check results.greetingWorker;
+    string? poem = check results.poemWorker;
     byte[]? image = check results.imageWorker;
     if poem !is string || image !is byte[] {
         return error("Error while generating the poem and the image.");
@@ -70,8 +74,8 @@ public function main(string topic) returns error? {
     }
 
     gmail:MessageRequest messageRequest = {
-        recipient: recipientEmail,
-        subject: topic,
+        recipient: emailDetails.recipientEmail,
+        subject: emailDetails.topic,
         messageBody: poem,
         contentType: gmail:TEXT_HTML,
         inlineImagePaths: [{imagePath: "./image.png", mimeType: "image/png"}]
