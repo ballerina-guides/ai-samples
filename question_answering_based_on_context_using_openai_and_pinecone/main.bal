@@ -24,18 +24,16 @@ const NAMESPACE = "ChoreoDocs";
 service / on new http:Listener(8080) {
     function init() returns error? {
         sheets:Range range = check gSheets->getRange(sheetId, sheetName, "A2:B");
-        pinecone:Vector[] vectorArray = [];
+        pinecone:Vector[] vectors = [];
 
         foreach any[] row in range.values {
             string title = <string>row[0];
             string content = <string>row[1];
             float[] vector = check getEmbedding(string `${title} ${"\n"} ${content}`);
-            vectorArray[vectorArray.length()] = {id: title, values: vector, metadata: {"content": content}};
+            vectors[vectors.length()] = {id: title, values: vector, metadata: {"content": content}};
         }
 
-        pinecone:UpsertRequest req = {vectors: vectorArray, namespace: NAMESPACE};
-        pinecone:UpsertResponse response = check pineconeClient->/vectors/upsert.post(req);
-
+        pinecone:UpsertResponse response = check pineconeClient->/vectors/upsert.post({vectors: vectors, namespace: NAMESPACE});
         if response.upsertedCount != range.values.length() {
             return error("Failed to insert embedding vectors to pinecone.");
         }
