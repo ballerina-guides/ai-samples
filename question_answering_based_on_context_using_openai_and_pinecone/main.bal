@@ -19,6 +19,7 @@ final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken
 final pinecone:Client pineconeClient = check new ({apiKey: pineconeKey}, serviceUrl = pineconeServiceUrl);
 
 const MAXIMUM_NO_OF_DOCS = 10;
+const NAMESPACE = "ChoreoDocs";
 
 service / on new http:Listener(8080) {
     function init() returns error? {
@@ -29,10 +30,10 @@ service / on new http:Listener(8080) {
             string title = <string>row[0];
             string content = <string>row[1];
             float[] vector = check getEmbedding(string `${title} ${"\n"} ${content}`);
-            vectorArray[vectorArray.length()] = {id: title, values:vector, metadata: {"content": content}};
+            vectorArray[vectorArray.length()] = {id: title, values: vector, metadata: {"content": content}};
         }
 
-        pinecone:UpsertRequest req = {vectors: vectorArray, namespace: "ChoreoDocs"};
+        pinecone:UpsertRequest req = {vectors: vectorArray, namespace: NAMESPACE};
         pinecone:UpsertResponse response = check pineconeClient->/vectors/upsert.post(req);
 
         if response.upsertedCount != range.values.length() {
@@ -67,7 +68,7 @@ function countWords(string text) returns int => regex:split(text, " ").length();
 function constructPrompt(string question) returns string|error {
     float[] questionEmbedding = check getEmbedding(question);
 
-    pinecone:QueryRequest req = {namespace: "ChoreoDocs", topK: MAXIMUM_NO_OF_DOCS, vector: questionEmbedding, includeMetadata: true};
+    pinecone:QueryRequest req = {namespace: NAMESPACE, topK: MAXIMUM_NO_OF_DOCS, vector: questionEmbedding, includeMetadata: true};
     pinecone:QueryResponse res = check pineconeClient->/query.post(req);
     pinecone:QueryMatch[]? rows = res.matches;
 
@@ -83,7 +84,7 @@ function constructPrompt(string question) returns string|error {
         if rowMetadata is () {
             return error("No metadata found for the given document.");
         }
-        string content =  check rowMetadata["content"].ensureType();
+        string content = check rowMetadata["content"].ensureType();
         contextLen += countWords(content);
         if contextLen > maxLen {
             break;
