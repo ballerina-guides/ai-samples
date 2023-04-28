@@ -19,7 +19,7 @@ Generate answers to questions in specific contexts. Using this service, you can 
 5. Click **Create**. Your client ID and client secret appear.
 6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Sheets scopes, and then click **Authorize APIs**.
 7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the access token.
-8. Create a new Google Sheet in your account and add your document content as two columns **Heading** and **Content**.
+8. Create a new Google Sheet in your account and add your document content as two columns for **Heading** and **Content** (similar to the example data given in `./data/example_data.csv`).
 9. Obtain the SheetID from the URL and Sheet Name.
 
 ### Setting up OpenAI account
