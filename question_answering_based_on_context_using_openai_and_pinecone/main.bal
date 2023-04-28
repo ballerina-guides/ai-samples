@@ -33,7 +33,7 @@ service / on new http:Listener(8080) {
             vectors[vectors.length()] = {id: title, values: vector, metadata: {"content": content}};
         }
 
-        pinecone:UpsertResponse response = check pineconeClient->/vectors/upsert.post({vectors: vectors, namespace: NAMESPACE});
+        pinecone:UpsertResponse response = check pineconeClient->/vectors/upsert.post({vectors, namespace: NAMESPACE});
         if response.upsertedCount != range.values.length() {
             return error("Failed to insert embedding vectors to pinecone.");
         }
