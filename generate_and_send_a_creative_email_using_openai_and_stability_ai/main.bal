@@ -48,7 +48,7 @@ public function main(*EmailDetails emailDetails) returns error? {
 
     record {|
         string|error? poemWorker;
-        byte[]|error? imageWorker;
+        byte[]|error imageWorker;
     |} results = wait {poemWorker, imageWorker};
 
     string? poem = check results.poemWorker;
