@@ -19,7 +19,6 @@ public type EmailDetails record {|
 
 public function main(*EmailDetails emailDetails) returns error? {
     fork {
-        // Generate greeting text and design in parallel
         worker poemWorker returns string|error? {
             text:CreateCompletionRequest textPrompt = {
                 prompt: string `Generate a creative poem on the topic ${emailDetails.topic}.`,
@@ -30,9 +29,9 @@ public function main(*EmailDetails emailDetails) returns error? {
             return completionRes.choices[0].text;
         }
 
-        worker imageWorker returns byte[]|error? {
+        worker imageWorker returns byte[]|error {
             stabilityai:TextToImageRequestBody payload = {text_prompts: [{"text": emailDetails.topic, "weight": 1}]};
-            stabilityai:ImageRes listResult = check stabilityAI->/v1/generation/["stable-diffusion-v1"]/
+            stabilityai:ImageRes listResult = check stabilityAI->/v1/generation/stable\-diffusion\-v1/
                 text\-to\-image.post(payload);
             string? imageBytesString = listResult.artifacts[0].'base64;
             if imageBytesString is () {
@@ -63,20 +62,14 @@ public function main(*EmailDetails emailDetails) returns error? {
         return error("Error while writing the image to a file.");
     }
 
-    poem = poem.trim();
-    if poem !is string {
-        return error("Error while removing white space characters from the start and the end.");
-    }
+    string messageBody = poem.trim();
     string:RegExp r = re `\n`;
-    poem = r.replaceAll(poem, "<br>");
-    if poem !is string {
-        return error("Error while replacing linebreaks with <br>.");
-    }
+    messageBody = r.replaceAll(messageBody, "<br>");
 
     gmail:MessageRequest messageRequest = {
         recipient: emailDetails.recipientEmail,
         subject: emailDetails.topic,
-        messageBody: poem,
+        messageBody,
         contentType: gmail:TEXT_HTML,
         inlineImagePaths: [{imagePath: "./image.png", mimeType: "image/png"}]
     };
