@@ -66,7 +66,8 @@ function countWords(string text) returns int => regex:split(text, " ").length();
 function constructPrompt(string question) returns string|error {
     float[] questionEmbedding = check getEmbedding(question);
 
-    pinecone:QueryRequest req = {namespace: NAMESPACE, topK: MAXIMUM_NO_OF_DOCS, vector: questionEmbedding, includeMetadata: true};
+    pinecone:QueryRequest req = {
+        namespace: NAMESPACE, topK: MAXIMUM_NO_OF_DOCS, vector: questionEmbedding, includeMetadata: true};
     pinecone:QueryResponse res = check pineconeClient->/query.post(req);
     pinecone:QueryMatch[]? rows = res.matches;
 
