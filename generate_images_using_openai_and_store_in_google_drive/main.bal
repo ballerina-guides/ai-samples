@@ -26,6 +26,7 @@ public function main() returns error? {
         if encodedImage is () {
             return error(string `Failed to generate image for prompt: ${prompt}`);
         }
+        
         // Decode the Base64 string and store image in Google Drive
         byte[] imageBytes = check array:fromBase64(encodedImage);
         _ = check gDrive->uploadFileUsingByteArray(imageBytes, string `${cell}.png`, gDriveFolderId);

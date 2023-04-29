@@ -1,0 +1,8 @@
+[package]
+org = "ai_samples"
+name = "question_answering_based_on_context_using_openai_and_pinecone"
+version = "0.1.0"
+distribution = "2201.4.0"
+
+[build-options]
+observabilityIncluded = true
