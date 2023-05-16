@@ -1,8 +1,8 @@
-# Question Answering based on Context using OpenAI GPT-3 and Pinecone 
-This sample uses OpenAI GPT-3 and Pinecone to answer questions on a specific topic based on provided documents.
+# Question Answering based on Context using OpenAI ChatGPT and Pinecone 
+This sample uses OpenAI's chat model and Pinecone to answer questions on a specific topic based on provided documents.
 
 ## Use case
-Answers questions using OpenAI GPT-3 models and stored documentation in a Pinecone vector database. The contexts obtained from a Google sheet are initially added to the Pinecone vector database along with their embedding vectors to perform a similarity search at the runtime.
+Answers questions using OpenAI chat models and stored documentation in a Pinecone vector database. The contexts obtained from a Google sheet are initially added to the Pinecone vector database along with their embedding vectors to perform a similarity search at the runtime.
 
 ## Prerequisites
 * Google account
