@@ -111,7 +111,5 @@ function constructPrompt(string question) returns string|error {
         context += "\n*" + content;
     }
 
-    string instruction = "Answer the question as truthfully as possible using the provided context," +
-    " and if the answer is not contained within the text below, say \"I don't know.\"\n\n";
-    return string `${instruction}Context:${"\n"} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
+    return string `Context:${"\n"} ${context} ${"\n\n"} Q: ${question} ${"\n"} A:`;
 }
