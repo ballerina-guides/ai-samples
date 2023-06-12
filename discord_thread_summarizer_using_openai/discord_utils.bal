@@ -26,9 +26,8 @@ function getMessages(string threadId, string? timestamp = ()) returns Message[]|
     return discordClient->/channels/[threadId]/messages(AUTH_HEADER);
 }
 
-function getThreadURL(string guildId, string threadId) returns string {
-    return string `https://discord.com/channels/${guildId}/${threadId}`;
-}
+function getThreadURL(string guildId, string threadId) returns string =>
+string `https://discord.com/channels/${guildId}/${threadId}`;
 
 function timestampToSnowflake(time:Utc timestamp, boolean high = true) returns int {
     // https://discord.com/developers/docs/reference#snowflakes-snowflake-id-format-structure-left-to-right
