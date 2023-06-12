@@ -1,10 +1,8 @@
 import ballerina/io;
 import ballerina/time;
 
-const string DISCORD_API_URL = "https://discord.com/api/v9";
 const TYPE_FORUM_CHANEL = 15;
 
-configurable string botToken = ?;
 configurable int forumChannelId = ?;
 
 function readThreads(ActiveThreads activeThreads) returns error? {
@@ -12,19 +10,21 @@ function readThreads(ActiveThreads activeThreads) returns error? {
     foreach ChannelThread thread in activeThreads.threads {
 
         // check if the thread has any recent messages
-        if check checkRecentMessages(thread) {
-            string prompt = check constructPrompt(thread);
-            io:println(prompt);
-
-            string|error generateChatCompletionResult = generateChatCompletion(prompt, model = "gpt-3.5-turbo");
-
-            if generateChatCompletionResult is string {
-                io:println(generateChatCompletionResult);
-            } else {
-                io:println("Error: " + generateChatCompletionResult.toBalString());
-            }
-            io:println("--------------------------------------------------\n\n");
+        if !check checkRecentMessages(thread) {
+            continue;
         }
+
+        string prompt = check constructPrompt(thread);
+        io:println(prompt);
+
+        string|error generateChatCompletionResult = generateChatCompletion(prompt, model = "gpt-3.5-turbo");
+
+        if generateChatCompletionResult is string {
+            io:println(generateChatCompletionResult);
+        } else {
+            io:println("Error: " + generateChatCompletionResult.toBalString());
+        }
+        io:println("--------------------------------------------------\n\n");
     }
 }
 
@@ -33,16 +33,16 @@ function constructPrompt(ChannelThread thread) returns string|error {
     Message[] allMessages = check getMessages(thread.id.toString());
 
     // reverse the array so that the messages are in chronological order
-    allMessages = reverseArray(allMessages);
+    allMessages = allMessages.reverse();
 
     boolean firstMessage = true;
     foreach Message message in allMessages {
         string formattedTimestamp = message.timestamp.toString();
-        if (message.content == "") {
+        if message.content == "" {
             io:println("The message from " + message.author.username.toString() + " is empty.");
         } else {
             // first message is the question
-            if (firstMessage) {
+            if firstMessage {
                 prompt += message.content.toString() + " (" + formattedTimestamp + ")\nReply: ";
                 firstMessage = false;
             } else {
@@ -60,16 +60,12 @@ function checkRecentMessages(ChannelThread thread) returns boolean|error {
     Message[] recentMessages = check getMessages(thread.id.toString(), snowflakeTime);
 
     // check if the thread has any recent messages
-    if (recentMessages.length() > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return recentMessages.length() > 0;
 }
 
 public function main() returns error? {
     Channel channel = check getChannelDetails(forumChannelId);
-    if (channel.'type != TYPE_FORUM_CHANEL) {
+    if channel.'type != TYPE_FORUM_CHANEL {
         io:println("The channel with ID " + forumChannelId.toString() + " is not a Forum channel.");
         return;
     }
