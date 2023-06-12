@@ -3,32 +3,27 @@ import ballerina/time;
 
 const DISCORD_API_URL = "https://discord.com/api/v9";
 const time:Seconds DISCORD_EPOCH = 1420070400000.00;
+map<string|string> AUTH_HEADER = {
+    "Authorization": botToken
+};
+
 configurable string botToken = ?;
 
 final http:Client discordClient = check new (DISCORD_API_URL);
 
 function getChannelDetails(int channelId) returns Channel|error {
-    return discordClient->get(string `/channels/${channelId}`, headers = {
-        "Authorization": botToken
-    });
+    return discordClient->/channels/[channelId](AUTH_HEADER);
 }
 
 function getActiveThreads(string guildId) returns ActiveThreads|error {
-    return discordClient->get(string `/guilds/${guildId}/threads/active`, headers = {
-        "Authorization": botToken
-    });
-    
+    return discordClient->/guilds/[guildId]/threads/active(AUTH_HEADER);
 }
 
 function getMessages(string threadId, string? timestamp = ()) returns Message[]|error {
-    string path = string `/channels/${threadId}/messages`;
-
     if timestamp != () {
-        path = string `/channels/${threadId}/messages?after=${timestamp}`;
+        return discordClient->/channels/[threadId]/messages(after = timestamp, headers = AUTH_HEADER);
     }
-    return discordClient->get(path, headers = {
-        "Authorization": botToken
-    });
+    return discordClient->/channels/[threadId]/messages(AUTH_HEADER);
 }
 
 function getThreadURL(string guildId, string threadId) returns string {
