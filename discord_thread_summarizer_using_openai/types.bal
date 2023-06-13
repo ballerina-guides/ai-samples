@@ -21,5 +21,4 @@ type Message record {
     string content;
     Author author;
     string timestamp;
-    anydata edited_timestamp;
 };

@@ -3,7 +3,7 @@ import ballerina/time;
 
 const DISCORD_API_URL = "https://discord.com/api/v9";
 const time:Seconds DISCORD_EPOCH = 1420070400000.00;
-map<string|string> AUTH_HEADER = {
+map<string> AUTH_HEADER = {
     "Authorization": botToken
 };
 

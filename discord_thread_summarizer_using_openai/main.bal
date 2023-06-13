@@ -1,6 +1,6 @@
 import ballerina/io;
-import ballerina/time;
 import ballerina/log;
+import ballerina/time;
 
 const TYPE_FORUM_CHANEL = 15;
 
@@ -18,7 +18,7 @@ function readThreads(ActiveThreads activeThreads) returns error? {
         string prompt = check constructPrompt(thread);
         io:println(prompt);
 
-        string|error generateChatCompletionResult = generateChatCompletion(prompt, model = "gpt-3.5-turbo");
+        string|error generateChatCompletionResult = generateChatCompletion(prompt);
 
         if generateChatCompletionResult is string {
             io:println(generateChatCompletionResult);
@@ -30,24 +30,24 @@ function readThreads(ActiveThreads activeThreads) returns error? {
 }
 
 function constructPrompt(ChannelThread thread) returns string|error {
-    string prompt = PROMPT + "Thread URL: " + getThreadURL(thread.guild_id, thread.id.toString()) + "\nTitle: " + thread.name.toString() + "\nQuestion: ";
-    Message[] allMessages = check getMessages(thread.id.toString());
+    string prompt = string `${PROMPT}Thread URL: ${getThreadURL(thread.guild_id, thread.id)}${"\n"}Title: ${thread.name}${"\n"}Question: `;
+    Message[] allMessages = check getMessages(thread.id);
 
     // reverse the array so that the messages are in chronological order
     allMessages = allMessages.reverse();
 
     boolean firstMessage = true;
     foreach Message message in allMessages {
-        string formattedTimestamp = message.timestamp.toString();
+        string formattedTimestamp = message.timestamp;
         if message.content == "" {
-            io:println("The message from " + message.author.username.toString() + " is empty.");
+            io:println(string `The message from ${message.author.username} is empty.`);
         } else {
             // first message is the question
             if firstMessage {
-                prompt += message.content.toString() + " (" + formattedTimestamp + ")\nReply: ";
+                prompt += string `${message.content} (${formattedTimestamp})${"\n"}Reply: `;
                 firstMessage = false;
             } else {
-                prompt += message.author.username.toString() + ": " + message.content.toString() + " (" + formattedTimestamp + ")\n";
+                prompt += string `${message.author.username}: ${message.content} (${formattedTimestamp})${"\n"}`;
             }
         }
     }
@@ -58,7 +58,7 @@ function checkRecentMessages(ChannelThread thread) returns boolean|error {
     time:Utc oneDayAgoTime = time:utcAddSeconds(time:utcNow(), -86400);
     string snowflakeTime = timestampToSnowflake(oneDayAgoTime).toString();
 
-    Message[] recentMessages = check getMessages(thread.id.toString(), snowflakeTime);
+    Message[] recentMessages = check getMessages(thread.id, snowflakeTime);
 
     // check if the thread has any recent messages
     return recentMessages.length() > 0;
@@ -67,7 +67,7 @@ function checkRecentMessages(ChannelThread thread) returns boolean|error {
 public function main() returns error? {
     Channel channel = check getChannelDetails(forumChannelId);
     if channel.'type != TYPE_FORUM_CHANEL {
-        io:println("The channel with ID " + forumChannelId.toString() + " is not a Forum channel.");
+        io:println(string `The channel with ID ${forumChannelId} is not a Forum channel.`);
         return;
     }
     ActiveThreads activeThreads = check getActiveThreads(channel.guild_id);
