@@ -1,24 +1,29 @@
-type ChannelThread record {
+type ChannelThread record {|
     string guild_id;
     string id;
     string name;
-};
+    json...;
+|};
 
-type ActiveThreads record {
+type ActiveThreads record {|
     ChannelThread[] threads;
-};
+    json...;
+|};
 
-type Channel record {
+type Channel record {|
     string guild_id;
     int 'type;
-};
+    json...;
+|};
 
-type Author record {
+type Author record {|
     string username;
-};
+    json...;
+|};
 
-type Message record {
+type Message record {|
     string content;
     Author author;
     string timestamp;
-};
+    json...;
+|};

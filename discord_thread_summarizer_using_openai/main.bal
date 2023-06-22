@@ -16,7 +16,6 @@ function readThreads(ActiveThreads activeThreads) returns error? {
         }
 
         string prompt = check constructPrompt(thread);
-        io:println(prompt);
 
         string|error generateChatCompletionResult = generateChatCompletion(prompt);
 
@@ -41,7 +40,6 @@ function constructPrompt(ChannelThread thread) returns string|error {
             io:println(string `The message from ${message.author.username} is empty.`);
             continue;
         }
-        // first message is the question
         if firstMessage {
             prompt += string `${message.content} (${formattedTimestamp})${"\n"}Reply: `;
             firstMessage = false;

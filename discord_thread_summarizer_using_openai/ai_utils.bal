@@ -9,11 +9,10 @@ final chat:Client chatClient = check new ({
 });
 
 function generateChatCompletion(string prompt, string model = "gpt-3.5-turbo") returns string|error {
-    chat:CreateChatCompletionRequest req = {
+    chat:CreateChatCompletionResponse res = check chatClient->/chat/completions.post({
         model,
         messages: [{role: "user", content: prompt}]
-    };
-    chat:CreateChatCompletionResponse res = check chatClient->/chat/completions.post(req);
+    });
     string? content = res.choices[0]?.message?.content;
     return content ?: error("The message is empty.");
 }
