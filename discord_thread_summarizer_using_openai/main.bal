@@ -31,7 +31,7 @@ function readThreads(ActiveThreads activeThreads) returns error? {
 
 function constructPrompt(ChannelThread thread) returns string|error {
     string prompt = string `${PROMPT}Thread URL: ${getThreadURL(thread.guild_id, thread.id)}${"\n"}Title: ${thread.name}${"\n"}Question: `;
-    // reverse the array so that the messages are in chronological order
+    // Reverse the array so that the messages are in chronological order.
     Message[] allMessages = (check getMessages(thread.id)).reverse();
 
     boolean firstMessage = true;
