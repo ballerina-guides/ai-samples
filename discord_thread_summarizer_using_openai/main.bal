@@ -4,6 +4,7 @@ import ballerina/time;
 
 const TYPE_FORUM_CHANEL = 15;
 const time:Seconds ONE_DAY_IN_SECONDS = 86400;
+
 configurable int forumChannelId = ?;
 
 function readThreads(ActiveThreads activeThreads) returns error? {
