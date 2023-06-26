@@ -11,7 +11,6 @@ function readThreads(ActiveThreads activeThreads) returns error? {
 
     foreach ChannelThread thread in activeThreads.threads {
 
-        // check if the thread has any recent messages
         if !check hasRecentMessages(thread) {
             continue;
         }
@@ -31,7 +30,6 @@ function readThreads(ActiveThreads activeThreads) returns error? {
 
 function constructPrompt(ChannelThread thread) returns string|error {
     string prompt = string `${PROMPT}Thread URL: ${getThreadURL(thread.guild_id, thread.id)}${"\n"}Title: ${thread.name}${"\n"}Question: `;
-    // Reverse the array so that the messages are in chronological order.
     Message[] allMessages = (check getMessages(thread.id)).reverse();
 
     boolean firstMessage = true;
@@ -55,10 +53,7 @@ function constructPrompt(ChannelThread thread) returns string|error {
 function hasRecentMessages(ChannelThread thread) returns boolean|error {
     time:Utc oneDayAgoTime = time:utcAddSeconds(time:utcNow(), -ONE_DAY_IN_SECONDS);
     string snowflakeTime = timestampToSnowflake(oneDayAgoTime).toString();
-
     Message[] recentMessages = check getMessages(thread.id, snowflakeTime);
-
-    // check if the thread has any recent messages
     return recentMessages.length() > 0;
 }
 
