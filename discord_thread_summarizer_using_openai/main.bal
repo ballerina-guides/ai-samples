@@ -22,7 +22,9 @@ function readThreads(ActiveThreads activeThreads) returns error? {
         if generateChatCompletionResult is string {
             io:println(generateChatCompletionResult);
         } else {
-            log:printError("Error occured when connecting to OpenAI: ", generateChatCompletionResult, stackTrace = generateChatCompletionResult.stackTrace());
+            log:printError("Error occured when connecting to OpenAI: ",
+            generateChatCompletionResult,
+            stackTrace = generateChatCompletionResult.stackTrace());
         }
         io:println("--------------------------------------------------\n\n");
     }
