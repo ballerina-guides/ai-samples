@@ -37,10 +37,7 @@ function constructPrompt(ChannelThread thread) returns string|error {
     boolean firstMessage = true;
     foreach Message message in allMessages {
         string formattedTimestamp = message.timestamp;
-        if message.content == "" {
-            io:println(string `The message from ${message.author.username} is empty.`);
-            continue;
-        }
+
         if firstMessage {
             prompt += string `${message.content} (${formattedTimestamp})${"\n"}Reply: `;
             firstMessage = false;
