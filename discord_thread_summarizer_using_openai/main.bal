@@ -68,4 +68,3 @@ public function main() returns error? {
     ActiveThreads activeThreads = check getActiveThreads(channel.guild_id);
     check readThreads(activeThreads);
 }
-
