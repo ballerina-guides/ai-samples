@@ -1,7 +1,7 @@
 # Summarize Forum Channel threads in Discord using OpenAI
 
 ## Use case
-Read and summarize Discord Forum Channel threads that has activity within the last 24 hours using OpenAI GPT 3.5-turbo model.
+Read and summarize Discord Forum Channel threads that have had activity within the last 24 hours using OpenAI GPT 3.5-turbo model.
 
 ## Prerequisites
 * OpenAI account
@@ -17,14 +17,14 @@ Read and summarize Discord Forum Channel threads that has activity within the la
 2. Make sure you copy the Bot token and keep it safe.
 3. In the same page, scroll down and enable `MESSAGE CONTENT INTENT` in the Bot settings so that the Bot can read the message content.
 4. Install the app to your Discord server so that the Bot can read the messages.
-**Note:** The Steps 1, 2 and 4 in this Readme are all mentioned in the [Discord Developer Portal](https://discord.com/developers/docs/getting-started#step-1-creating-an-app).
+**Note:** The steps 1, 2, and 4 in this README are all mentioned in the [Discord Developer Portal](https://discord.com/developers/docs/getting-started#step-1-creating-an-app).
 
 ### Getting the Channel ID of the Discord Forum Channel
 1. Follow the steps mentioned in [this article](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) to enable the Developer Mode in Discord.
 2. Right click on the Discord Forum Channel and click on `Copy Channel ID` to copy the Channel ID.
 
 ## Configuration
-Create a file called `Config.toml` at the root of the project.
+Create a file called `Config.toml` at the root of the project and add the relevant configuration.
 
 ### Config.toml
 ```
