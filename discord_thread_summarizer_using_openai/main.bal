@@ -36,18 +36,18 @@ function constructPrompt(ChannelThread thread) returns string|error {
     // Reverse the array so that the messages are in chronological order.
     Message[] allMessages = (check getMessages(thread.id)).reverse();
 
-    boolean firstMessage = true;
-    foreach Message message in allMessages {
-        string formattedTimestamp = message.timestamp;
-
-        if firstMessage {
-            prompt += string `${message.content} (${formattedTimestamp})${"\n"}Reply: `;
-            firstMessage = false;
-            continue;
-        }
-        prompt += string `${message.author.username}: ${message.content} (${formattedTimestamp})${"\n"}`;
-
+    if allMessages.length() == 0 {
+        return prompt;
     }
+
+    prompt += let Message {content, timestamp} = allMessages[0] in
+                string `${content} (${timestamp})${"\n"}Reply: `;
+
+    foreach int index in 1 ..< allMessages.length() {
+        Message {author: {username}, content, timestamp} = allMessages[index];
+        prompt += string `${username}: ${content} (${timestamp})${"\n"}`;
+    }
+    return prompt;
     return prompt;
 }
 
