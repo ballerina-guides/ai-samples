@@ -10,7 +10,7 @@ Read and summarize Discord Forum Channel threads that have had activity within t
 
 ### Setting up OpenAI account
 1. Create an [OpenAI](https://platform.openai.com/) account.
-2. Go to **View API keys** and create a new secret key.
+2. Go to `View API keys` and create a new secret key.
 
 ### Setting up the Discord Bot
 1. Follow the steps mentioned in Step 1 of the [Discord Developer Portal](https://discord.com/developers/docs/getting-started#step-1-creating-an-app) to create a new App and a Discord Bot with `Read Messages/View` Channels.
