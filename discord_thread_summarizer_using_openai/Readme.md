@@ -1,7 +1,7 @@
 # Summarize Forum Channel threads in Discord using OpenAI
 
 ## Use case
-Read and summarize Discord Forum Channel threads that has activity within the last 24 hours using OpenAI GPT 3.5-turbo model.
+Read and summarize Discord Forum Channel threads that have had activity within the last 24 hours using OpenAI GPT 3.5-turbo model.
 
 ## Prerequisites
 * OpenAI account
