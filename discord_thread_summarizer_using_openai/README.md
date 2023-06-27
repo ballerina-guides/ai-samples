@@ -13,7 +13,7 @@ Read and summarize Discord Forum Channel threads that have had activity within t
 2. Go to `View API keys` and create a new secret key.
 
 ### Setting up the Discord Bot
-1. Follow the steps mentioned in Step 1 of the [Discord Developer Portal](https://discord.com/developers/docs/getting-started#step-1-creating-an-app) to create a new App and a Discord Bot with `Read Messages/View` Channels.
+1. Follow the steps mentioned in Step 1 of the [Discord Developer Portal](https://discord.com/developers/docs/getting-started#step-1-creating-an-app) to create a new App and a Discord Bot with `Read Messages/View Channels` Bot permission.
 2. Make sure you copy the Bot token and keep it safe.
 3. In the same page, scroll down and enable `MESSAGE CONTENT INTENT` in the Bot settings so that the Bot can read the message content.
 4. Install the app to your Discord server so that the Bot can read the messages.
