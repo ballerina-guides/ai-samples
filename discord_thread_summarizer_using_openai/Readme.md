@@ -24,7 +24,7 @@ Read and summarize Discord Forum Channel threads that have had activity within t
 2. Right click on the Discord Forum Channel and click on `Copy Channel ID` to copy the Channel ID.
 
 ## Configuration
-Create a file called `Config.toml` at the root of the project.
+Create a file called `Config.toml` at the root of the project and add the relevant configuration.
 
 ### Config.toml
 ```
