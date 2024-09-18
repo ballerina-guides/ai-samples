@@ -1,12 +1,13 @@
 import ballerina/http;
 import ballerinax/googleapis.gmail;
 import ballerinax/openai.images;
-import ballerinax/openai.text;
+import ballerinax/openai.chat;
+import ballerina/io;
 
 configurable string openAIToken = ?;
 configurable string gmailToken = ?;
 
-final text:Client openAIText = check new ({auth: {token: openAIToken}});
+final chat:Client openAIChat = check new({auth: {token: openAIToken}});
 final images:Client openAIImages = check new ({auth: {token: openAIToken}});
 final gmail:Client gmail = check new ({auth: {token: gmailToken}});
 
@@ -18,21 +19,25 @@ type GreetingDetails record {|
 |};
 
 service / on new http:Listener(8080) {
-    resource function post greetingCard(@http:Payload GreetingDetails req) returns error? {
-        string occasion = req.occasion;
-        string specialNotes = req.specialNotes ?: "";
+    isolated resource function post greetingCard(@http:Payload GreetingDetails req) returns error? {
+        final string occasion = req.occasion;
+        final string specialNotes = req.specialNotes ?: "";
 
         fork {
             // Generate greeting text and design in parallel
-            worker greetingWorker returns string|error? {
-                text:CreateCompletionRequest textPrompt = {
-                    prompt: string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`,
-                    model: "text-davinci-003",
-                    max_tokens: 100
+                worker greetingWorker returns string|error? {
+                chat:CreateChatCompletionRequest request = {
+                    model: "gpt-4o-mini",
+                    messages: [{
+                        "role": "user",
+                        "content": string `Generate a greeting for a/an ${occasion}.${"\n"}Special notes: ${specialNotes}`
+                    }]
                 };
-                text:CreateCompletionResponse completionRes = check openAIText->/completions.post(textPrompt);
-                return completionRes.choices[0].text;
+
+                chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
+                return response.choices[0].message.content;
             }
+
             worker imageWorker returns string|error? {
                 images:CreateImageRequest imagePrompt = {
                     prompt: string `Greeting card design for ${occasion}, ${specialNotes}`
@@ -55,11 +60,11 @@ service / on new http:Listener(8080) {
 
         // Send an email with the greeting and the image using the email connector
         gmail:MessageRequest messageRequest = {
-            recipient: req.recipientEmail,
+            to: [req.recipientEmail],
             subject: req.emailSubject,
-            messageBody: string `<p>${greeting}</p> <br/> <img src="${imageURL}">`,
-            contentType: gmail:TEXT_HTML
+            bodyInHtml: string `<p>${greeting}</p> <br/> <img src="${imageURL}">`
         };
-        _ = check gmail->sendMessage(messageRequest, userId = "me");
+
+        gmail:Message sendResult = check gmail->/users/me/messages/send.post(messageRequest);
     }
 }

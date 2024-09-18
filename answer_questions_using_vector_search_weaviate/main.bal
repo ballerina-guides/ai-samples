@@ -1,6 +1,7 @@
 import ballerina/http;
 import ballerinax/openai.embeddings;
 import ballerinax/weaviate;
+import ballerina/io;
 
 configurable string openAIToken = ?;
 configurable string weaviateToken = ?;
@@ -42,7 +43,7 @@ service / on new http:Listener(8080) {
                                 }`;
 
         weaviate:GraphQLResponse results = check weaviate->/graphql.post({query: graphQLQuery});
-
+        io:println("Results: ", results);
         return results.data;
     }
 }
