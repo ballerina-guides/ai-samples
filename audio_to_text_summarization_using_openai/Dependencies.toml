@@ -377,4 +377,3 @@ modules = [
 	{org = "ballerinax", packageName = "twitter", moduleName = "twitter"},
 	{org = "ballerinax", packageName = "twitter", moduleName = "twitter.listener"}
 ]
-

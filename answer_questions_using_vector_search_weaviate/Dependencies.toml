@@ -322,4 +322,3 @@ dependencies = [
 modules = [
 	{org = "ballerinax", packageName = "weaviate", moduleName = "weaviate"}
 ]
-
