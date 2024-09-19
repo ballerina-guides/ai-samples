@@ -8,7 +8,7 @@ configurable string weaviateToken = ?;
 configurable string weaviateURL = ?;
 
 const CLASS_NAME = "QuestionAnswerStore";
-const MODEL = "text-embedding-ada-002";
+const MODEL = "text-embedding-3-small";
 
 final embeddings:Client openai = check new ({auth: {token: openAIToken}});
 final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}}, weaviateURL);
