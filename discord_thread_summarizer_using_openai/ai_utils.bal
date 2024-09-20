@@ -8,7 +8,7 @@ final chat:Client chatClient = check new ({
     }
 });
 
-function generateChatCompletion(string prompt, string model = "gpt-3.5-turbo") returns string|error {
+function generateChatCompletion(string prompt, string model = "gpt-4o-mini") returns string|error {
     chat:CreateChatCompletionResponse res = check chatClient->/chat/completions.post({
         model,
         messages: [{role: "user", content: prompt}]

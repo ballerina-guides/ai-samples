@@ -16,7 +16,8 @@ public function main(string filePath) returns error? {
         model: "gpt-4o-mini",
         messages: [{
             "role": "user",
-            "content": string `Fix grammar and spelling mistakes of the content ${check io:fileReadString(filePath)}`
+            "content": string `Fix grammar and spelling mistakes of the content ${check 
+        io:fileReadString(filePath)}`
         }]
     };
 

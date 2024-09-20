@@ -58,6 +58,6 @@ public function main(string podcastURL) returns error? {
  
     // Tweet it out!
     final twitter:Client twitter = check new({auth: {token:token}});
-    twitter:TweetCreateResponse tweet = check twitter->/tweets.post(payload = {text: summerizedText});
+    twitter:TweetCreateResponse tweet = check twitter->/tweets.post({text: summerizedText});
     io:println("Tweet: ", tweet);
 }
