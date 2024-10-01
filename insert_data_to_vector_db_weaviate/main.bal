@@ -14,7 +14,7 @@ configurable string sheetName = ?;
 const RANGE = "A2:C630";
 const NO_OF_COLUMNS = 3;
 const className = "QuestionAnswerStore";
-const MODEL = "text-embedding-ada-002";
+const MODEL = "text-embedding-3-small";
 
 public function main() returns error? {
     final sheets:Client gsheets = check new ({auth: {token: sheetAccessToken}});
@@ -48,6 +48,7 @@ public function main() returns error? {
     foreach int i in 0 ... embeddingResponse.data.length() - 1 {
         documentObjects[i].vector = embeddingResponse.data[i].embedding;
     }
+
     final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}, timeout: 100}, weaviateURL);
     weaviate:ObjectsGetResponse[] responses = check weaviate->/batch/objects.post({objects: documentObjects});
 
@@ -56,7 +57,7 @@ public function main() returns error? {
         where res.result?.errors?.'error != ()
         select res.properties["question"].toString();
     if failedQuestions.length() > 0 {
-        return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
+        return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());
     }
 
     io:println("Successfully inserted embedding vectors to the Weaviate vector database.");

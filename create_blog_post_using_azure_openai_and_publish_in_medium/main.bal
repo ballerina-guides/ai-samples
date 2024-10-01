@@ -1,5 +1,5 @@
 import ballerina/io;
-import ballerinax/azure.openai.text;
+import ballerinax/azure.openai.chat;
 import ballerinax/medium;
 
 configurable string openAIToken = ?;
@@ -18,18 +18,22 @@ public function main(string title) returns error? {
         return error("Medium user ID is not valid");
     }
 
-    text:Deploymentid_completions_body completionsBody = {
-        prompt: string `Write a blog article on ${title} in markdown format.`,
-        max_tokens: 1000
-    };
-    final text:Client azureOpenAI = check new (
+    final chat:Client chatClient = check new (
         config = {auth: {apiKey: openAIToken}},
         serviceUrl = serviceUrl
     );
-    text:Inline_response_200 completion = check azureOpenAI->/deployments/[deploymentId]/completions.post(
-        API_VERSION, completionsBody
-    );
-    string? content = completion.choices[0].text;
+
+    string prompt = string `Write a blog article on ${title} in markdown format.`;
+
+    chat:CreateChatCompletionRequest chatBody = {
+        messages: [{"role": "user", "content": prompt}]
+    };
+
+    chat:CreateChatCompletionResponse completion = check chatClient->/deployments/[deploymentId]/chat/completions.post("2023-12-01-preview", chatBody);
+
+    record {|chat:ChatCompletionResponseMessage message?; chat:ContentFilterChoiceResults content_filter_results?; int index?; string finish_reason?; anydata...;|}[] choices = check completion.choices.ensureType();
+
+    string? content = choices[0].message?.content;
 
     if content is () {
         return error("Failed to generate the content for the blog");

@@ -2,8 +2,8 @@ import ballerina/http;
 import ballerina/io;
 import ballerina/regex;
 import ballerinax/googleapis.sheets;
+import ballerinax/openai.chat;
 import ballerinax/openai.embeddings;
-import ballerinax/openai.text;
 import ballerinax/pinecone.vector as pinecone;
 
 configurable string sheetsAccessToken = ?;
@@ -14,7 +14,7 @@ configurable string pineconeKey = ?;
 configurable string pineconeServiceUrl = ?;
 
 final sheets:Client gSheets = check new ({auth: {token: sheetsAccessToken}});
-final text:Client openAIText = check new ({auth: {token: openAIToken}});
+final chat:Client openAIChat = check new ({auth: {token: openAIToken}});
 final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken}});
 final pinecone:Client pineconeClient = check new ({apiKey: pineconeKey}, serviceUrl = pineconeServiceUrl);
 
@@ -42,13 +42,19 @@ service / on new http:Listener(8080) {
 
     resource function get answer(string question) returns string?|error {
         string prompt = check constructPrompt(question);
-        text:CreateCompletionRequest prmt = {
-            prompt: prompt,
-            model: "text-davinci-003",
-            max_tokens: 2000
+
+        chat:CreateChatCompletionRequest request = {
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
         };
-        text:CreateCompletionResponse completionRes = check openAIText->/completions.post(prmt);
-        return completionRes.choices[0].text;
+
+        chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
+        return response.choices[0].message.content;
     }
 }
 
@@ -67,9 +73,9 @@ function constructPrompt(string question) returns string|error {
     float[] questionEmbedding = check getEmbedding(question);
 
     pinecone:QueryRequest req = {
-        namespace: NAMESPACE, 
-        topK: MAXIMUM_NO_OF_DOCS, 
-        vector: questionEmbedding, 
+        namespace: NAMESPACE,
+        topK: MAXIMUM_NO_OF_DOCS,
+        vector: questionEmbedding,
         includeMetadata: true
     };
     pinecone:QueryResponse res = check pineconeClient->/query.post(req);

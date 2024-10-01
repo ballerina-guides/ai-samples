@@ -1,7 +1,7 @@
 import ballerina/http;
 import ballerina/io;
-import ballerinax/openai.text;
 import ballerinax/openai.audio;
+import ballerinax/openai.chat;
 
 configurable string openAIToken = ?;
 
@@ -11,7 +11,7 @@ const string AUDIO_FILE_PATH = "./audo_clips/" + AUDIO_FILE;
 public function main(string audioURL, string toLanguage) returns error? {
     // Creates a HTTP client to download the audio file
     http:Client audioEP = check new (audioURL);
-    http:Response httpResp = check audioEP->/get();
+    http:Response httpResp = check audioEP->get("");
     byte[] audioBytes = check httpResp.getBinaryPayload();
     check io:fileWriteBytes(AUDIO_FILE_PATH, audioBytes);
 
@@ -26,10 +26,23 @@ public function main(string audioURL, string toLanguage) returns error? {
     audio:CreateTranscriptionResponse transcriptionRes = check openAIAudio->/audio/translations.post(translationsReq);
     io:println("Audio text in English: ", transcriptionRes.text);
 
+    final chat:Client openAIChat = check new ({
+        auth: {
+            token: openAIToken
+        }
+    });
+
+    string query = string `Translate the following text from English to ${toLanguage} : ${transcriptionRes.text}`;
+
     // Creates a request to translate the text from English to another language
-    text:CreateCompletionRequest completionReq = {
-        model: "text-davinci-003",
-        prompt: string `Translate the following text from English to ${toLanguage} : ${transcriptionRes.text}`,
+    chat:CreateChatCompletionRequest request = {
+        model: "gpt-4o",
+        messages: [
+            {
+                "role": "user",
+                "content": query
+            }
+        ],
         temperature: 0.7,
         max_tokens: 256,
         top_p: 1,
@@ -38,12 +51,11 @@ public function main(string audioURL, string toLanguage) returns error? {
     };
 
     // Translates the text from English to another language
-    text:Client openAIText = check new ({auth: {token: openAIToken}});
-    text:CreateCompletionResponse completionRes = check openAIText->/completions.post(completionReq);
-    string? translatedText = completionRes.choices[0].text;
+    chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
+    string? translatedText = response.choices[0].message.content;
 
-    if translatedText is () { 
-        return error("Failed to translate the given audio.");    
-    } 
+    if translatedText is () {
+        return error("Failed to translate the given audio.");
+    }
     io:println("Translated text: ", translatedText);
 }
