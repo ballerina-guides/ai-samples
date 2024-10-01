@@ -49,22 +49,22 @@ service /slack on new http:Listener(8080) {
 
         ChatMessage[] history = self.chatHistory[channelName] ?:
                                 [{role: SYSTEM, content: "You are an AI slack bot to assist with user questions."}];
-        history.push({role: USER, content: requestText});      
+        history.push({role: USER, content: requestText});
 
         chat:CreateChatCompletionResponse completion = check azureOpenAI->/deployments/[deploymentId]/chat/completions.post(API_VERSION, {messages: history});
         record {|
-        chat:ChatCompletionResponseMessage message?; 
-        chat:ContentFilterChoiceResults content_filter_results?; 
-        int index?; string finish_reason?; anydata...;
+            chat:ChatCompletionResponseMessage message?;
+            chat:ContentFilterChoiceResults content_filter_results?;
+            int index?;
+            string finish_reason?;
+            anydata...;
         |}[] choices = check completion.choices.ensureType();
-
 
         chat:ChatCompletionResponseMessage? response = choices[0].message;
         string? responseText = response?.content;
         if response is () || responseText is () {
             return error("Error in response generation");
         }
-
 
         history.push({role: ASSISTANT, content: requestText});
 

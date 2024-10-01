@@ -14,18 +14,20 @@ public function main(string filePath) returns error? {
 
     chat:CreateChatCompletionRequest request = {
         model: "gpt-4o-mini",
-        messages: [{
-            "role": "user",
-            "content": string `Fix grammar and spelling mistakes of the content ${check 
-        io:fileReadString(filePath)}`
-        }]
+        messages: [
+            {
+                "role": "user",
+                "content": string `Fix grammar and spelling mistakes of the content ${check
+                io:fileReadString(filePath)}`
+            }
+        ]
     };
 
     chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
     string? text = response.choices[0].message.content;
 
-    if text is () { 
+    if text is () {
         return error("Failed to correct grammar and spelling in the given text.");
-    } 
+    }
     io:println(string `Corrected: ${text}`);
 }

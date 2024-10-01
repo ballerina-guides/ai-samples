@@ -2,9 +2,9 @@ import ballerina/http;
 import ballerina/io;
 import ballerina/regex;
 import ballerinax/googleapis.sheets;
+import ballerinax/openai.chat;
 import ballerinax/openai.embeddings;
 import ballerinax/pinecone.vector as pinecone;
-import ballerinax/openai.chat;
 
 configurable string sheetsAccessToken = ?;
 configurable string sheetId = ?;
@@ -45,17 +45,18 @@ service / on new http:Listener(8080) {
 
         chat:CreateChatCompletionRequest request = {
             model: "gpt-4o-mini",
-            messages: [{
-                "role":"user",
-                "content":prompt
-            }]
+            messages: [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
         };
 
         chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
         return response.choices[0].message.content;
-    
     }
-}        
+}
 
 function getEmbedding(string text) returns float[]|error {
     embeddings:CreateEmbeddingRequest embeddingRequest = {
@@ -72,9 +73,9 @@ function constructPrompt(string question) returns string|error {
     float[] questionEmbedding = check getEmbedding(question);
 
     pinecone:QueryRequest req = {
-        namespace: NAMESPACE, 
-        topK: MAXIMUM_NO_OF_DOCS, 
-        vector: questionEmbedding, 
+        namespace: NAMESPACE,
+        topK: MAXIMUM_NO_OF_DOCS,
+        vector: questionEmbedding,
         includeMetadata: true
     };
     pinecone:QueryResponse res = check pineconeClient->/query.post(req);

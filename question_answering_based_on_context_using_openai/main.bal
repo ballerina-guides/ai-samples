@@ -2,8 +2,8 @@ import ballerina/http;
 import ballerina/math.vector;
 import ballerina/regex;
 import ballerinax/googleapis.sheets;
-import ballerinax/openai.embeddings;
 import ballerinax/openai.chat;
+import ballerinax/openai.embeddings;
 
 configurable string sheetsAccessToken = ?;
 configurable string sheetId = ?;
@@ -11,7 +11,7 @@ configurable string sheetName = ?;
 configurable string openAIToken = ?;
 
 final sheets:Client gSheets = check new ({auth: {token: sheetsAccessToken}});
-final chat:Client openAIChat = check new({auth: {token:openAIToken}});
+final chat:Client openAIChat = check new ({auth: {token: openAIToken}});
 final embeddings:Client openaiEmbeddings = check new ({auth: {token: openAIToken}});
 
 service / on new http:Listener(8080) {
@@ -34,17 +34,18 @@ service / on new http:Listener(8080) {
     resource function get answer(string question) returns string?|error {
         string prompt = check constructPrompt(question, self.documents, self.docEmbeddings);
 
-            chat:CreateChatCompletionRequest request = {
+        chat:CreateChatCompletionRequest request = {
             model: "gpt-4o-mini",
-            messages: [{
-                "role": "user",
-                "content": prompt
-                }]
+            messages: [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
         };
 
         chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
         return response.choices[0].message.content;
-       
     }
 }
 

@@ -1,8 +1,8 @@
 import ballerina/io;
 import ballerina/mime;
 import ballerinax/googleapis.gmail;
-import ballerinax/stabilityai;
 import ballerinax/openai.chat;
+import ballerinax/stabilityai;
 
 configurable string gmailToken = ?;
 configurable string openAIToken = ?;
@@ -23,16 +23,17 @@ public function main(*EmailDetails emailDetails) returns error? {
         worker poemWorker returns string|error? {
             chat:CreateChatCompletionRequest request = {
                 model: "gpt-4o-mini",
-                messages: [{
-                    "role": "user",
-                    "content": string `Generate a creative poem on the topic ${emailDetails.topic}.`
-                }],
+                messages: [
+                    {
+                        "role": "user",
+                        "content": string `Generate a creative poem on the topic ${emailDetails.topic}.`
+                    }
+                ],
                 max_tokens: 1000
             };
 
             chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
             return response.choices[0].message.content;
-                
         }
 
         worker imageWorker returns byte[]|error {
@@ -76,7 +77,7 @@ public function main(*EmailDetails emailDetails) returns error? {
         to: [emailDetails.recipientEmail],
         subject: emailDetails.topic,
         bodyInHtml: messageBody,
-        inlineImages: [{path:"./image.png", mimeType:"image/png",name:"dew",contentId:"fwes"}]
+        inlineImages: [{path: "./image.png", mimeType: "image/png", name: "dew", contentId: "fwes"}]
     };
 
     gmail:Message sendResult = check gmail->/users/me/messages/send.post(messageRequest);

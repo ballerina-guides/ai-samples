@@ -1,7 +1,7 @@
 import ballerina/http;
 import ballerina/io;
-import ballerinax/openai.chat;
 import ballerinax/openai.audio;
+import ballerinax/openai.chat;
 import ballerinax/twitter;
 
 configurable string openAIToken = ?;
@@ -31,14 +31,15 @@ public function main(string podcastURL) returns error? {
     audio:CreateTranscriptionResponse transcriptionsRes = check openAIAudio->/audio/transcriptions.post(transcriptionsReq);
     io:println("Text from the audio :", transcriptionsRes.text);
 
-
     // Creates a request to summarize the text
     chat:CreateChatCompletionRequest request = {
         model: "gpt-4o-mini",
-        messages: [{
-            role: "user",
-            content: string `Summarize the following text to 100 characters : ${transcriptionsRes.text}`
-        }],
+        messages: [
+            {
+                role: "user",
+                content: string `Summarize the following text to 100 characters : ${transcriptionsRes.text}`
+            }
+        ],
         temperature: 0.7,
         max_tokens: 256,
         top_p: 1,
@@ -47,17 +48,17 @@ public function main(string podcastURL) returns error? {
     };
 
     // Summarizes the text using OpenAI text completion API
-    final chat:Client openAIChat = check new({auth: {token:openAIToken}});
+    final chat:Client openAIChat = check new ({auth: {token: openAIToken}});
     chat:CreateChatCompletionResponse completionRes = check openAIChat->/chat/completions.post(request);
 
-    string? summerizedText = completionRes.choices[0].message.content;    
+    string? summerizedText = completionRes.choices[0].message.content;
     if summerizedText is () {
-	    return error("Failed to summarize the given audio.");
+        return error("Failed to summarize the given audio.");
     }
     io:println("Summarized text: ", summerizedText);
- 
+
     // Tweet it out!
-    final twitter:Client twitter = check new({auth: {token:token}});
+    final twitter:Client twitter = check new ({auth: {token: token}});
     twitter:TweetCreateResponse tweet = check twitter->/tweets.post({text: summerizedText});
     io:println("Tweet: ", tweet);
 }

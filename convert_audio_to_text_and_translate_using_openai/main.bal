@@ -12,7 +12,7 @@ public function main(string audioURL, string toLanguage) returns error? {
     // Creates a HTTP client to download the audio file
     http:Client audioEP = check new (audioURL);
     http:Response httpResp = check audioEP->get("");
-    byte[] audioBytes = check httpResp.getBinaryPayload();  
+    byte[] audioBytes = check httpResp.getBinaryPayload();
     check io:fileWriteBytes(AUDIO_FILE_PATH, audioBytes);
 
     // Creates a request to translate the audio file to text (English)
@@ -26,8 +26,7 @@ public function main(string audioURL, string toLanguage) returns error? {
     audio:CreateTranscriptionResponse transcriptionRes = check openAIAudio->/audio/translations.post(translationsReq);
     io:println("Audio text in English: ", transcriptionRes.text);
 
-
-    final chat:Client openAIChat = check new({
+    final chat:Client openAIChat = check new ({
         auth: {
             token: openAIToken
         }
@@ -38,10 +37,12 @@ public function main(string audioURL, string toLanguage) returns error? {
     // Creates a request to translate the text from English to another language
     chat:CreateChatCompletionRequest request = {
         model: "gpt-4o",
-        messages: [{
-            "role": "user",
-            "content": query
-            }],
+        messages: [
+            {
+                "role": "user",
+                "content": query
+            }
+        ],
         temperature: 0.7,
         max_tokens: 256,
         top_p: 1,
@@ -53,8 +54,8 @@ public function main(string audioURL, string toLanguage) returns error? {
     chat:CreateChatCompletionResponse response = check openAIChat->/chat/completions.post(request);
     string? translatedText = response.choices[0].message.content;
 
-    if translatedText is () { 
-        return error("Failed to translate the given audio.");    
-    } 
+    if translatedText is () {
+        return error("Failed to translate the given audio.");
+    }
     io:println("Translated text: ", translatedText);
 }

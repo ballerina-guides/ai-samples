@@ -1,7 +1,7 @@
 import ballerina/http;
+import ballerina/io;
 import ballerinax/openai.embeddings;
 import ballerinax/weaviate;
-import ballerina/io;
 
 configurable string openAIToken = ?;
 configurable string weaviateToken = ?;

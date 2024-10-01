@@ -26,12 +26,12 @@ public function main(string title) returns error? {
     string prompt = string `Write a blog article on ${title} in markdown format.`;
 
     chat:CreateChatCompletionRequest chatBody = {
-        messages: [{"role": "user", "content": prompt}]  
+        messages: [{"role": "user", "content": prompt}]
     };
 
     chat:CreateChatCompletionResponse completion = check chatClient->/deployments/[deploymentId]/chat/completions.post("2023-12-01-preview", chatBody);
 
-    record {|chat:ChatCompletionResponseMessage message?; chat:ContentFilterChoiceResults content_filter_results?; int index?; string finish_reason?; anydata...;|}[] choices = check completion.choices.ensureType();       
+    record {|chat:ChatCompletionResponseMessage message?; chat:ContentFilterChoiceResults content_filter_results?; int index?; string finish_reason?; anydata...;|}[] choices = check completion.choices.ensureType();
 
     string? content = choices[0].message?.content;
 

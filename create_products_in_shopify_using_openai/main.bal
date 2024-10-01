@@ -1,8 +1,8 @@
 import ballerina/http;
 import ballerinax/googleapis.sheets;
-import ballerinax/shopify.admin as shopify;
-import ballerinax/openai.images;
 import ballerinax/openai.chat;
+import ballerinax/openai.images;
+import ballerinax/shopify.admin as shopify;
 
 configurable string sheetsAccessToken = ?;
 configurable string googleSheetId = ?;
@@ -12,8 +12,7 @@ configurable string openAIToken = ?;
 configurable string shopifyToken = ?;
 configurable string shopifyStoreURL = ?;
 
-
-final chat:Client openAIChat = check new({auth: {token: openAIToken}});
+final chat:Client openAIChat = check new ({auth: {token: openAIToken}});
 final images:Client openAIImages = check new ({auth: {token: openAIToken}});
 final sheets:Client gsheets = check new ({auth: {token: sheetsAccessToken}});
 final shopify:Client shopify = check new (apiKeyConfig = {xShopifyAccessToken: shopifyToken}, serviceUrl = shopifyStoreURL);
@@ -24,15 +23,16 @@ service / on new http:Listener(9090) {
         sheets:Range range = check gsheets->getRange(googleSheetId, "Sheet1", "A2:F");
         var [name, benefits, features, productType] = getProduct(range);
 
-
         // Generate a product description from OpenAI for a given product name.
         string query = string `generate a product descirption in 250 words about ${name}`;
         chat:CreateChatCompletionRequest request = {
             model: "gpt-4o",
-            messages: [{
-                "role": "user",
-                "content": query
-                }],
+            messages: [
+                {
+                    "role": "user",
+                    "content": query
+                }
+            ],
             max_tokens: 100
         };
 

@@ -16,10 +16,10 @@ public function main() returns error? {
         },
         purpose: "fine-tune"
     };
-    
+
     finetunes:OpenAIFile fileResponse = check openAIFineTunes->/files.post(fileRequest);
     io:println(string `Training file uploaded successfully with ID: ${fileResponse.id}`);
-        
+
     finetunes:CreateFineTuningJobRequest fineTuneRequest = {
         training_file: fileResponse.id,
         model: "gpt-3.5-turbo",

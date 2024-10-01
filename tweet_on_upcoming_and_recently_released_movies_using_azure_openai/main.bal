@@ -28,17 +28,18 @@ public function main() returns error? {
         prompt += string `${i}. ${upcomingMovies.results[i - 1].title} `;
     }
 
-    final twitter:Client twitter = check new({
-    auth: { token:token}});
+    final twitter:Client twitter = check new ({
+        auth: {token: token}
+    });
 
-    final chat:Client chatClient = check new (config = {auth: {apiKey: openAIToken}},serviceUrl = serviceUrl);
+    final chat:Client chatClient = check new (config = {auth: {apiKey: openAIToken}}, serviceUrl = serviceUrl);
 
     chat:CreateChatCompletionRequest chatBody = {
-        messages: [{role: "user", "content": prompt}]  
+        messages: [{role: "user", "content": prompt}]
     };
 
-    chat:CreateChatCompletionResponse chatResult = check chatClient->/deployments/[deploymentId]/chat/completions.post("2023-12-01-preview", chatBody); 
-    record {|chat:ChatCompletionResponseMessage message?; chat:ContentFilterChoiceResults content_filter_results?; int index?; string finish_reason?; anydata...;|}[] choices = check chatResult.choices.ensureType();   
+    chat:CreateChatCompletionResponse chatResult = check chatClient->/deployments/[deploymentId]/chat/completions.post("2023-12-01-preview", chatBody);
+    record {|chat:ChatCompletionResponseMessage message?; chat:ContentFilterChoiceResults content_filter_results?; int index?; string finish_reason?; anydata...;|}[] choices = check chatResult.choices.ensureType();
     string? tweetContent = choices[0].message?.content;
 
     if tweetContent is () {

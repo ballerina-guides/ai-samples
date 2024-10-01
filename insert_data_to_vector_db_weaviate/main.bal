@@ -50,7 +50,6 @@ public function main() returns error? {
     }
 
     final weaviate:Client weaviate = check new ({auth: {token: weaviateToken}, timeout: 100}, weaviateURL);
-    io:println("weaviate client initialized: ", weaviate);
     weaviate:ObjectsGetResponse[] responses = check weaviate->/batch/objects.post({objects: documentObjects});
 
     // Check for any failures while inserting the embedding vectors to Weaviate
@@ -58,7 +57,7 @@ public function main() returns error? {
         where res.result?.errors?.'error != ()
         select res.properties["question"].toString();
     if failedQuestions.length() > 0 {
-        return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());  
+        return error("Failed to insert embedding vectors for the questions: " + failedQuestions.toString());
     }
 
     io:println("Successfully inserted embedding vectors to the Weaviate vector database.");
