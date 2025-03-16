@@ -1,0 +1,8 @@
+[package]
+org = "ai_samples"
+name = "rate_blog_posts_using_natural_programming"
+version = "0.1.0"
+distribution = "2201.12.0"
+
+[build-options]
+observabilityIncluded = true
