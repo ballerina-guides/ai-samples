@@ -1,5 +1,5 @@
 import ballerinax/np;
-import ballerina/io;
+import ballerina/http;
 
 final readonly & string[] categories = ["Gardening", "Sports", "Health", "Technology", "Travel"];
 
@@ -12,22 +12,6 @@ type Review record {|
     string? suggestedCategory;
     int rating;
 |};
-
-final readonly & Blog blog1 = {
-    title: "Tips for Growing a Beautiful Garden",
-    content: string `Spring is the perfect time to start your garden. 
-        Begin by preparing your soil with organic compost and ensure proper drainage. 
-        Choose plants suitable for your climate zone, and remember to water them regularly. 
-        Don't forget to mulch to retain moisture and prevent weeds.`
-};
-
-final readonly & Blog blog2 = {
-    title: "Essential Tips for Sports Performance",
-    content: string `Success in sports requires dedicated preparation and training.
-        Begin by establishing a proper warm-up routine and maintaining good form.
-        Choose the right equipment for your sport, and stay consistent with training.
-        Don't forget to maintain proper hydration and nutrition for optimal performance.`
-};
 
 public isolated function reviewBlog(
     Blog blog,
@@ -50,10 +34,13 @@ public isolated function reviewBlog(
         Title: ${blog.title}
         Content: ${blog.content}`) returns Review|error = @np:NaturalFunction external;
 
-public function main() returns error? {
-    Review reviewBlog1 = check reviewBlog(blog1);
-    io:println("Blog 1 Review: ", reviewBlog1);
-
-    Review reviewBlog2 = check reviewBlog(blog2);
-    io:println("Blog 2 Review: ", reviewBlog2);
+service /blogs on new http:Listener(8088) {
+    resource function post review(Blog blog) returns Review|error {
+        Review|error review = check reviewBlog(blog);
+        if review is error {
+            return error("Failed to review the blog post");
+        }
+        return review;
+    }
 }
+
