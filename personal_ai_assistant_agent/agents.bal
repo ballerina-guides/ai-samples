@@ -60,8 +60,8 @@ isolated function getCurrentDate() returns string|error {
     return string:fromBytes(output);
 }
 
-final agent:OpenAiModel _personalAiAssistantModel = check new (openAiApiKey, agent:GPT_4O);
-final agent:Agent _personalAiAssistantAgent = check new (systemPrompt = {
+final agent:OpenAiModel openAiModel = check new (openAiApiKey, agent:GPT_4O);
+final agent:Agent personalAiAssistantAgent = check new (systemPrompt = {
     role: "Personal AI Assistant",
     instructions: string `You are Nova, an intelligent personal AI assistant designed to help '${userName}' stay organized and efficient.
 Your primary responsibilities include:
@@ -74,4 +74,4 @@ Guidelines:
 - Always confirm before making changes to the user's calendar or sending emails.
 - Provide concise summaries when retrieving information unless the user requests details.
 - Prioritize clarity, efficiency, and user convenience in all tasks.`
-}, model = _personalAiAssistantModel, tools = [readEmails, sendEmail, getCalanderEvents, createCalanderEvent, getCurrentDate]);
+}, model = openAiModel, tools = [readEmails, sendEmail, getCalanderEvents, createCalanderEvent, getCurrentDate]);
