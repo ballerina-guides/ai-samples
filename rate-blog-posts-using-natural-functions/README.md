@@ -20,7 +20,7 @@ This approach is made available to quickly get up and running with natural funct
 
 #### 1.Login to WSO2 Copilot
 
-- Log in to your WSO2 Ballerina Copilot account.
+- Log in to your WSO2 Copilot account.
 
 #### 2.Configure the Default Model for Natural Functions
 
