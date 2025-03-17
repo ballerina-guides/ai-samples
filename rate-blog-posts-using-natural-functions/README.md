@@ -55,15 +55,13 @@ You can use one of the two following options to configure the LLM to use.
     apiVersion = "<API_VERSION>"
     connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
     ```
-   
+
   - For OpenAI
 
     ```toml
     [ballerinax.np.defaultModelConfig]
     serviceUrl = "<SERVICE_URL>"
-    deploymentId = "<DEPLOYMENT_ID>"
-    apiVersion = "<API_VERSION>"
-    connectionConfig
+    connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
     ```
 
 #### Option 2B: Initialize the Model in the Code
@@ -136,4 +134,5 @@ The API returned the following response, indicating the suggested category and r
   "rating": 9
 }
 ```
+
 ---
