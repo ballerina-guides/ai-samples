@@ -9,15 +9,15 @@ distribution-version = "2201.12.0"
 
 [[package]]
 org = "ai_samples"
-name = "rate_blog_posts_using_natural_programming"
+name = "rate_blog_posts_using_natural_functions"
 version = "0.1.0"
 dependencies = [
-	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "http"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "np"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "rate_blog_posts_using_natural_programming", moduleName = "rate_blog_posts_using_natural_programming"}
+	{org = "ai_samples", packageName = "rate_blog_posts_using_natural_functions", moduleName = "rate_blog_posts_using_natural_functions"}
 ]
 
 [[package]]
@@ -108,6 +108,10 @@ dependencies = [
 	{org = "ballerina", name = "time"},
 	{org = "ballerina", name = "url"}
 ]
+modules = [
+	{org = "ballerina", packageName = "http", moduleName = "http"},
+	{org = "ballerina", packageName = "http", moduleName = "http.httpscerr"}
+]
 
 [[package]]
 org = "ballerina"
@@ -116,9 +120,6 @@ version = "1.8.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.value"}
-]
-modules = [
-	{org = "ballerina", packageName = "io", moduleName = "io"}
 ]
 
 [[package]]
