@@ -102,11 +102,25 @@ This approach is made available to quickly get up and running with natural funct
 
 ---
 
-## Example Output
+### **Example Request and Response**
 
-```bash
-Blog 1 Review: {"suggestedCategory":"Gardening","rating":9}
-Blog 2 Review: {"suggestedCategory":"Sports","rating":8}
+#### **Request Payload**
+The following JSON payload was sent to the API:
+
+```json
+{
+    "title": "Tips for Growing a Beautiful Garden",
+    "content": "Spring is the perfect time to start your garden. Begin by preparing your soil with organic compost and ensure proper drainage. Choose plants suitable for your climate zone, and remember to water them regularly. Don't forget to mulch to retain moisture and prevent weeds."
+}
 ```
 
+#### **Response**
+The API returned the following response, indicating the suggested category and rating for the blog post:
+
+```json
+{
+  "suggestedCategory": "Gardening",
+  "rating": 9
+}
+```
 ---
