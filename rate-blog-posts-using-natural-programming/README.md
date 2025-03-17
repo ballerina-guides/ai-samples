@@ -1,6 +1,6 @@
-# Blog Review with Natural Programming
+# Blog Review with Natural Functions
 
-This project demonstrates how to use **Ballerina's Runtime Prompt-as-Code** feature. The example uses natural language prompts to analyze blog content, suggest categories, and rate blog posts based on predefined criteria.
+This project demonstrates how to use natural functions in Ballerina, which allow the function to contain instructions in natural language. Such a function is evaluated at runtime with a call to an LLM. The example uses a natural function to analyze blog content to suggest a category and it based on predefined criteria.
 
 ---
 
@@ -14,13 +14,15 @@ This project demonstrates how to use **Ballerina's Runtime Prompt-as-Code** feat
 
 ## Steps to Run
 
-### **Option 1: Simplified Setup (Recommended for Beginners)**
+### **Option 1: Use the default model (Without LLM keys)**
 
-#### 1. Login to WSO2 Ballerina Copilot
+This approach is made available to quickly get up and running with natural functions. Note that this is only meant to be used for quick testing, and that for development and production use-cases, you would have to provide your keys.
+
+#### 1.Login to WSO2 Copilot
 
 - Log in to your WSO2 Ballerina Copilot account.
 
-#### 2. Configure Default Model for Natural Functions
+#### 2.Configure the Default Model for Natural Functions
 
 - Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the command palette.
 - Search for and select **"Configure Default Model for Natural Functions"**.
@@ -37,9 +39,9 @@ This project demonstrates how to use **Ballerina's Runtime Prompt-as-Code** feat
 
 ---
 
-### **Option 2: Manual Configuration (Advanced Users)**
+### **Option 2: Manual Configuration**
 
-#### 1. Configure the Model in `Config.toml`
+#### Option 2A: Configure the Model in `Config.toml`
 
 - Add the following configuration to your `Config.toml` file for Azure OpenAI (or your preferred LLM provider):
   
@@ -51,7 +53,7 @@ This project demonstrates how to use **Ballerina's Runtime Prompt-as-Code** feat
   connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
   ```
 
-#### 2. Initialize the Model in Code (Optional)
+#### Option 2B: Initialize the Model in Code (Optional)
 
 - If you need more control over the model, you can initialize it in your code and pass it as a parameter:
 
@@ -63,6 +65,28 @@ This project demonstrates how to use **Ballerina's Runtime Prompt-as-Code** feat
 
   final np:Model azureOpenAIModel = check new np:AzureOpenAIModel({
       serviceUrl, connectionConfig: {auth: {apiKey}}}, deploymentId, apiVersion);
+
+  public isolated function reviewBlog(
+    Blog blog,
+    np:Context context,
+    np:Prompt prompt = `You are an expert content reviewer for a blog site that 
+      categorizes posts under the following categories: ${categories}
+
+      Your tasks are:
+      1. Suggest a suitable category for the blog from exactly the specified categories. 
+          If there is no match, use null.
+
+      2. Rate the blog post on a scale of 1 to 10 based on the following criteria:
+      - **Relevance**: How well the content aligns with the chosen category.
+      - **Depth**: The level of detail and insight in the content.
+      - **Clarity**: How easy it is to read and understand.
+      - **Originality**: Whether the content introduces fresh perspectives or ideas.
+      - **Language Quality**: Grammar, spelling, and overall writing quality.
+
+      Here is the blog post content:
+
+      Title: ${blog.title}
+      Content: ${blog.content}`) returns Review|error = @np:NaturalFunction external;
 
   Review review = check reviewBlog(blog, {model: azureOpenAIModel});
   ```
