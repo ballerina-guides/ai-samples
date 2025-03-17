@@ -1,0 +1,4 @@
+[package]
+org = "admin"
+name = "personal_ai_assistant"
+version = "0.1.0"
