@@ -1,5 +1,5 @@
-import ballerinax/np;
 import ballerina/http;
+import ballerinax/np;
 
 final readonly & string[] categories = ["Gardening", "Sports", "Health", "Technology", "Travel"];
 
@@ -14,8 +14,8 @@ type Review record {|
 |};
 
 public isolated function reviewBlog(
-    Blog blog,
-    np:Prompt prompt = `You are an expert content reviewer for a blog site that 
+        Blog blog,
+        np:Prompt prompt = `You are an expert content reviewer for a blog site that 
         categorizes posts under the following categories: ${categories}
 
         Your tasks are:
@@ -35,12 +35,13 @@ public isolated function reviewBlog(
         Content: ${blog.content}`) returns Review|error = @np:NaturalFunction external;
 
 service /blogs on new http:Listener(8088) {
-    resource function post review(Blog blog) returns Review|error {
-        Review|error review = check reviewBlog(blog);
+    resource function post review(Blog blog) returns Review|http:InternalServerError {
+        Review|error review = reviewBlog(blog);
         if review is error {
-            return error("Failed to review the blog post");
+            return {
+                body: "Failed to review the blog post"
+            };
         }
         return review;
     }
 }
-

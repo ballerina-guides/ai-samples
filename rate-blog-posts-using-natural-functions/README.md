@@ -1,6 +1,6 @@
 # Blog Review with Natural Functions
 
-This project demonstrates how to use natural functions in Ballerina, which allow the function to contain instructions in natural language. Such a function is evaluated at runtime with a call to an LLM. The example uses a natural function to analyze blog content to suggest a category and it based on predefined criteria.
+This project demonstrates how to use natural functions in Ballerina, which allow the function to contain instructions in natural language. Such a function is evaluated at runtime with a call to an LLM. The example uses a natural function to analyze blog content to suggest a category and rate it based on predefined criteria.
 
 ---
 
@@ -16,7 +16,7 @@ This project demonstrates how to use natural functions in Ballerina, which allow
 
 ### **Option 1: Use the default model (Without LLM keys)**
 
-This approach is made available to quickly get up and running with natural functions. Note that this is only meant to be used for quick testing, and that for development and production use-cases, you would have to provide your keys.
+This approach is made available to quickly get up and running with natural functions. Note that this is only meant to be used for trying out, and that for development and production use-cases, you would have to provide your keys.
 
 #### 1.Login to WSO2 Copilot
 
@@ -41,21 +41,34 @@ This approach is made available to quickly get up and running with natural funct
 
 ### **Option 2: Manual Configuration**
 
-#### Option 2A: Configure the Model in `Config.toml`
+You can use one of the two following options to configure the LLM to use.
 
-- Add the following configuration to your `Config.toml` file for Azure OpenAI (or your preferred LLM provider):
-  
-  ```toml
-  [ballerinax.np.defaultModelConfig]
-  serviceUrl = "<SERVICE_URL>"
-  deploymentId = "<DEPLOYMENT_ID>"
-  apiVersion = "<API_VERSION>"
-  connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
-  ```
+#### Option 2A: Configure the Model in the `Config.toml` file
 
-#### Option 2B: Initialize the Model in Code (Optional)
+- Add the model configuration to your `Config.toml` file.
+  - For Azure OpenAI
 
-- If you need more control over the model, you can initialize it in your code and pass it as a parameter:
+    ```toml
+    [ballerinax.np.defaultModelConfig]
+    serviceUrl = "<SERVICE_URL>"
+    deploymentId = "<DEPLOYMENT_ID>"
+    apiVersion = "<API_VERSION>"
+    connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
+    ```
+   
+  - For OpenAI
+
+    ```toml
+    [ballerinax.np.defaultModelConfig]
+    serviceUrl = "<SERVICE_URL>"
+    deploymentId = "<DEPLOYMENT_ID>"
+    apiVersion = "<API_VERSION>"
+    connectionConfig
+    ```
+
+#### Option 2B: Initialize the Model in the Code
+
+- If you need more control over the model by function, you can add the `np:Context context` parameter which allows setting the model. You can then initialize the model in your code and pass it as an argument to the context parameter.
 
   ```ballerina
   configurable string apiKey = ?;
