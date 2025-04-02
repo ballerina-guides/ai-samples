@@ -61,7 +61,8 @@ You can use one of the two following options to configure the LLM to use.
     ```toml
     [ballerinax.np.defaultModelConfig]
     serviceUrl = "<SERVICE_URL>"
-    connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
+    model = "<MODEL>"
+    connectionConfig.auth.token = "<TOKEN>"
     ```
 
 #### Option 2B: Initialize the Model in the Code
