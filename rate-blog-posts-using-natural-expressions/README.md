@@ -1,32 +1,38 @@
-# Blog Review with Natural Functions
+# Blog Review with Natural Expressions
 
-This project demonstrates how to use natural functions in Ballerina, which allow the function to contain instructions in natural language. Such a function is evaluated at runtime with a call to an LLM. The example uses a natural function to analyze blog content to suggest a category and rate it based on predefined criteria.
+This project demonstrates how to use natural expressions in Ballerina, which allow you to specify logic in natural language. Such an expression is evaluated at runtime with a call to an LLM and returns a typed response automatically structured and bound to your expected format. The example uses a natural expression/function to analyze the content of a blog to suggest a category and rate it based on predefined criteria.
 
 ---
 
 ## Prerequisites
 
-1. Install **Ballerina 2201.12.0** or higher.  
-   Download and install Ballerina from [here](https://ballerina.io/downloads/).
+1. Install **Ballerina 2201.13.0-m3** or higher.  
+
+    Download and install Ballerina from [here](https://ballerina.io/downloads/). Switch to a specific version using the `bal dist use` command.
+
+    ```cmd
+    $ bal dist use 2201.13.0-m3
+    ```
+
 2. Install the **Ballerina extension** for Visual Studio Code.
 
 ---
 
 ## Steps to Run
 
-### **Option 1: Use the default model (Without LLM keys)**
+### **Option 1: Use the default model (without your own LLM keys)**
 
-This approach is made available to quickly get up and running with natural functions. Note that this is only meant to be used for trying out, and that for development and production use-cases, you would have to provide your keys.
+This approach is made available to quickly get up and running with natural expressions. Note that this is only meant to be used for trying out, and that for development and production use-cases, you would have to provide your keys.
 
-#### 1.Login to WSO2 Copilot
+#### 1. Log in to WSO2 Copilot
 
 - Log in to your WSO2 Copilot account.
 
-#### 2.Configure the Default Model for Natural Functions
+#### 2. Configure the Default Model for Natural Expressions
 
 - Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the command palette.
-- Search for and select **"Configure Default Model for Natural Functions"**.
-- Your API keys will be automatically generated and added to the `Config.toml` file in your project directory.
+- Search for and select **"Configure default WSO2 Model Provider"**.
+- Your configuration will be automatically generated and added to the `Config.toml` file in your project directory.
 
 #### 3. Run the Program
 
@@ -39,69 +45,43 @@ This approach is made available to quickly get up and running with natural funct
 
 ---
 
-### **Option 2: Manual Configuration**
+### **Option 2: Using your own LLM keys**
 
-You can use one of the two following options to configure the LLM to use.
+You can use your own LLM keys with a model provider from the relevant `ballerinax/ai.<provider>` package (e.g., `ballerinax/ai.openai`, `ballerinax/ai.azure`, etc.).
 
-#### Option 2A: Configure the Model in the `Config.toml` file
+For example, you can use an Open AI model as follows.
 
-- Add the model configuration to your `Config.toml` file.
-  - For Azure OpenAI
+```ballerina
+import ballerina/ai;
+import ballerinax/ai.openai;
 
-    ```toml
-    [ballerinax.np.defaultModelConfig]
-    serviceUrl = "<SERVICE_URL>"
-    deploymentId = "<DEPLOYMENT_ID>"
-    apiVersion = "<API_VERSION>"
-    connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
-    ```
+configurable string apiKey = ?;
 
-  - For OpenAI
+final ai:ModelProvider openAiModel = check new openai:ModelProvider(apiKey, openai:GPT_4O);
 
-    ```toml
-    [ballerinax.np.defaultModelConfig]
-    serviceUrl = "<SERVICE_URL>"
-    model = "<MODEL>"
-    connectionConfig.auth.token = "<TOKEN>"
-    ```
+public isolated function reviewBlog(Blog blog) returns Review|error => natural (openAiModel) {
+    You are an expert content reviewer for a blog site that 
+    categorizes posts under the following categories: ${categories}
 
-#### Option 2B: Initialize the Model in the Code
+    Your tasks are:
+    1. Suggest a suitable category for the blog from exactly the specified categories. 
+    If there is no match, use null.
 
-- If you need more control over the model by function, you can add the `np:Context context` parameter which allows setting the model. You can then initialize the model in your code and pass it as an argument to the context parameter.
+    2. Rate the blog post on a scale of 1 to 10 based on the following criteria:
+    - **Relevance**: How well the content aligns with the chosen category.
+    - **Depth**: The level of detail and insight in the content.
+    - **Clarity**: How easy it is to read and understand.
+    - **Originality**: Whether the content introduces fresh perspectives or ideas.
+    - **Language Quality**: Grammar, spelling, and overall writing quality.
 
-  ```ballerina
-  configurable string apiKey = ?;
-  configurable string serviceUrl = ?;
-  configurable string deploymentId = ?;
-  configurable string apiVersion = ?;
+    Here is the blog post content:
 
-  final np:Model azureOpenAIModel = check new np:AzureOpenAIModel({
-      serviceUrl, connectionConfig: {auth: {apiKey}}}, deploymentId, apiVersion);
+    Title: ${blog.title}
+    Content: ${blog.content}
+};
 
-  public isolated function reviewBlog(
-    Blog blog,
-    np:Context context,
-    np:Prompt prompt = `You are an expert content reviewer for a blog site that 
-      categorizes posts under the following categories: ${categories}
-
-      Your tasks are:
-      1. Suggest a suitable category for the blog from exactly the specified categories. 
-          If there is no match, use null.
-
-      2. Rate the blog post on a scale of 1 to 10 based on the following criteria:
-      - **Relevance**: How well the content aligns with the chosen category.
-      - **Depth**: The level of detail and insight in the content.
-      - **Clarity**: How easy it is to read and understand.
-      - **Originality**: Whether the content introduces fresh perspectives or ideas.
-      - **Language Quality**: Grammar, spelling, and overall writing quality.
-
-      Here is the blog post content:
-
-      Title: ${blog.title}
-      Content: ${blog.content}`) returns Review|error = @np:NaturalFunction external;
-
-  Review review = check reviewBlog(blog, {model: azureOpenAIModel});
-  ```
+Review review = check reviewBlog(blog);
+```
 
 #### 3. Run the Program
 
@@ -117,7 +97,8 @@ You can use one of the two following options to configure the LLM to use.
 ### **Example Request and Response**
 
 #### **Request Payload**
-The following JSON payload was sent to the API:
+
+Use the following JSON payload in a request to the API:
 
 ```json
 {
@@ -127,7 +108,8 @@ The following JSON payload was sent to the API:
 ```
 
 #### **Response**
-The API returned the following response, indicating the suggested category and rating for the blog post:
+
+A response will contain a payload similar to the following, indicating the suggested category and rating for the blog post:
 
 ```json
 {
