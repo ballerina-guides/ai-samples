@@ -31,7 +31,7 @@ This approach is made available to quickly get up and running with natural expre
 #### 2. Configure the Default Model for Natural Expressions
 
 - Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the command palette.
-- Search for and select **"Configure Default Model for Natural Functions"**.
+- Search for and select **"Configure default WSO2 Model Provider"**.
 - Your configuration will be automatically generated and added to the `Config.toml` file in your project directory.
 
 #### 3. Run the Program
