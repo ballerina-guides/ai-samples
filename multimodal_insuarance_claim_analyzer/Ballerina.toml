@@ -1,0 +1,6 @@
+[package]
+org = "ai_samples"
+name = "multimodal_insuarance_claim_analyzer"
+version = "0.1.0"
+distribution = "2201.12.7"
+
