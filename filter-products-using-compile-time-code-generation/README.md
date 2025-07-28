@@ -1,6 +1,6 @@
-# E-commerce Order Filtering with Compile-Time Code Generation
+# E-commerce Product Filtering with Compile-Time Code Generation
 
-This project demonstrates compile-time code generation in Ballerina. This feature allows you to define a function's logic using a natural language prompt. During compilation, an LLM generates the corresponding Ballerina code, which is then compiled into your program. This example uses this feature to generate the logic for filtering orders in a simple e-commerce API.
+This project demonstrates compile-time code generation in Ballerina. This feature allows you to define a function's logic using a natural language prompt. During compilation, an LLM generates the corresponding Ballerina code, which is then compiled into your program. This example uses this feature to generate the logic for filtering products in a simple e-commerce API.
 
 -----
 
@@ -94,5 +94,4 @@ The API will return a JSON array containing the products that match the filter.
     }
 ]
 ```
-
 -----

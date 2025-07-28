@@ -9,7 +9,7 @@ distribution-version = "2201.13.0-m3"
 
 [[package]]
 org = "ai_samples"
-name = "compile_time_code_generation_with_order_system"
+name = "filter_products_using_compile_time_code_generation"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "ai.np"},
@@ -17,7 +17,7 @@ dependencies = [
 	{org = "ballerina", name = "test"}
 ]
 modules = [
-	{org = "ai_samples", packageName = "compile_time_code_generation_with_order_system", moduleName = "compile_time_code_generation_with_order_system"}
+	{org = "ai_samples", packageName = "filter_products_using_compile_time_code_generation", moduleName = "filter_products_using_compile_time_code_generation"}
 ]
 
 [[package]]
@@ -288,11 +288,10 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.11.0"
+version = "2.7.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "time"},
-	{org = "ballerina", name = "uuid"}
+	{org = "ballerina", name = "time"}
 ]
 
 [[package]]
@@ -323,16 +322,5 @@ name = "url"
 version = "2.6.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
-]
-
-[[package]]
-org = "ballerina"
-name = "uuid"
-version = "1.10.0"
-dependencies = [
-	{org = "ballerina", name = "crypto"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.int"},
-	{org = "ballerina", name = "time"}
 ]
 
