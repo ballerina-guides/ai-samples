@@ -1,0 +1,5 @@
+[package]
+org = "ai_samples"
+name = "filter_products_using_compile_time_code_generation"
+version = "0.1.0"
+distribution = "2201.13.0-m3"
