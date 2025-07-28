@@ -1,0 +1,5 @@
+[package]
+org = "ai_samples"
+name = "compile_time_code_generation_with_order_system"
+version = "0.1.0"
+distribution = "2201.13.0-m3"
