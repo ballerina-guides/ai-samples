@@ -1,6 +1,6 @@
-# E-commerce Order Processing with Compile-Time Code Generation
+# E-commerce Order Filtering with Compile-Time Code Generation
 
-This project demonstrates compile-time code generation in Ballerina. This feature allows you to define a function's logic using a natural language prompt. During compilation, an LLM generates the corresponding Ballerina code, which is then compiled into your program. This example uses this feature to generate the logic for calculating the total price of an order in a simple e-commerce API.
+This project demonstrates compile-time code generation in Ballerina. This feature allows you to define a function's logic using a natural language prompt. During compilation, an LLM generates the corresponding Ballerina code, which is then compiled into your program. This example uses this feature to generate the logic for filtering orders in a simple e-commerce API.
 
 -----
 
@@ -27,7 +27,7 @@ Use the VS Code command palette to log in to your WSO2 Copilot account.
 
   - Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the command palette.
   - Search for and select **"Ballerina: Configure default WSO2 model provider"**.
-  - This will open a configuration file containing your credentials. **Copy the URL and Token** from this file for the next step.
+  - This will write your credentials into `Config.toml`. **Copy the service url and access token** from this file for the next step.
 
 #### 3\. Set Environment Variables
 
@@ -66,31 +66,33 @@ set BAL_CODEGEN_TOKEN="<PASTE_THE_TOKEN_HERE>"
   - The test data is generated at compile time using Ballerina's constant natural expression feature.
 -----
 
-## Example Request and Response
+## Example Request & Response
 
-Once the service is running, you can send a `POST` request to the `/orders` endpoint.
+You can test the running service by sending a `GET` request to the `/shop/products/filter` endpoint with a `minPrice` query parameter.
 
-#### **Request Payload**
+### Request
 
-Use a tool like `cURL` or an API client to send the following JSON payload:
+This example filters for products with a price greater than `100.00`.
 
-```json
-{
-    "productId": "PROD002",
-    "quantity": 2
-}
+```bash
+$ curl "http://localhost:8080/shop/products/filter?minPrice=100.00"
 ```
 
-#### **Response**
+### Response
 
-The service will process the order and return a response similar to this:
+The API will return a JSON array containing the products that match the filter.
 
 ```json
-{
-    "orderId": "ORD-a1b2c3d4",
-    "total": 1399.98,
-    "status": "confirmed"
-}
+[
+    {
+        "id": "PROD001",
+        "price": 999.99
+    },
+    {
+        "id": "PROD002",
+        "price": 699.99
+    }
+]
 ```
 
-*Note: The `orderId` will be dynamically generated and will differ in your response.*
+-----
