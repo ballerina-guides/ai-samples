@@ -45,9 +45,9 @@ This approach allows you to run the example without needing your own LLM API key
 
 ### **Option 2: Use Your Own LLM Keys**
 
-For development and production, it's recommended to use your own LLM API keys. You can use a model provider from a specific `ballerinax/ai.<provider>` package (e.g., `ballerinax/ai.openai`, `ballerinax/ai.azure`, etc.).
+You can use your own LLM keys with a model provider from the relevant `ballerinax/ai.<provider>` package (e.g., `ballerinax/ai.openai`, `ballerinax/ai.azure`, etc.).
 
-The following example shows how to modify the code to use the OpenAI provider.
+For example, you can use an Open AI model as follows.
 
 #### 1\. Modify the Code
 
@@ -76,7 +76,7 @@ configurable string apiKey = ?;
 final ai:ModelProvider modelProvider = check new openai:ModelProvider(apiKey, openai:GPT_4O);
 
 # Claims Processing API Service
-service /insuarance on new http:Listener(8080) {
+service /insurance on new http:Listener(8080) {
 
     resource function post claims(http:Request request) returns ClaimResponse|error {
         mime:Entity[] bodyParts = check request.getBodyParts();
@@ -130,7 +130,7 @@ You can test the service by sending a `multipart/form-data` request using a tool
 ### Sample Request
 
 ```bash
-curl -X POST http://localhost:8080/insuarance/claims \
+curl -X POST http://localhost:8080/insurance/claims \
 -F "description=Claim for a cracked phone screen." \
 -F "image=@./resources/cracked_phone.jpeg"
 ```

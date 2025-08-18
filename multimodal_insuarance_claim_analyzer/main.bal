@@ -2,20 +2,22 @@ import ballerina/ai;
 import ballerina/http;
 import ballerina/mime;
 
-enum submissionStatus {
-    SUCCESS,
+enum SubmissionStatus {
+    SUCCESSFUL,
     FAILED
 }
 
 type ClaimResponse record {|
-    submissionStatus submissionStatus;
+    SubmissionStatus submissionStatus;
     string summary?;
 |};
+
+final ai:Wso2ModelProvider modelProvider = check ai:getDefaultModelProvider();
 
 # Claims Processing API Service
 #
 # This service provides endpoints for processing insurance claims with AI-powered analysis.
-service /insuarance on new http:Listener(8080) {
+service /insurance on new http:Listener(8080) {
 
     # Process a new insurance claim submission
     #
@@ -37,13 +39,12 @@ service /insuarance on new http:Listener(8080) {
             content: claimImage
         };
 
-        ai:Wso2ModelProvider modelProvider = check ai:getDefaultModelProvider();
         string summary = check modelProvider->generate(
             `Please summarize the following claim
                 - Description: ${description}
                 - Image of the claim: ${claimImageDocument}`);
         return {
-            submissionStatus: SUCCESS,
+            submissionStatus: SUCCESSFUL,
             summary
         };
     }
