@@ -75,7 +75,7 @@ You can test the running service by sending a `GET` request to the `/shop/produc
 This example filters products with a price greater than `100`.
 
 ```bash
-$ curl "http://localhost:8080/shop/products/filter?minPrice=100.00"
+$ curl "http://localhost:8080/products/filter?minPrice=100.00"
 ```
 
 ### Response
