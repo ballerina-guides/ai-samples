@@ -1,4 +1,3 @@
-import ballerina/http;
 import ballerina/test;
 
 function getTestProducts() returns Product[] =>
