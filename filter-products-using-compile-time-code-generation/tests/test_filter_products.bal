@@ -15,9 +15,8 @@ function testFilterProducts() returns error? {
         int? index = filteredProducts.indexOf(product);
         if product.price > 100d {
             test:assertTrue(index != ());
-            continue;
+        } else {
+            test:assertEquals(index, ());
         }
-
-        test:assertTrue(index == ());
     }
 }
