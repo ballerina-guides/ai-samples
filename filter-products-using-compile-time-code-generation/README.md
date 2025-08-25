@@ -1,6 +1,6 @@
-# E-commerce Product Filtering with Compile-Time Code Generation
+# E-commerce product filtering with compile-time code generation
 
-This project demonstrates compile-time code generation in Ballerina. This feature allows you to define a function's logic using a natural language prompt. During compilation, an LLM generates the corresponding Ballerina code, which is then compiled into your program. This example uses this feature to generate the logic for filtering products in a simple e-commerce API.
+This project demonstrates Large Language Model (LLM)-powered compile-time code generation in Ballerina. This feature allows you to define a function's logic in natural language. During compilation, an LLM generates the corresponding Ballerina code. This example uses this feature to generate the logic for filtering products in a simple e-commerce API.
 
 -----
 
@@ -17,19 +17,19 @@ This project demonstrates compile-time code generation in Ballerina. This featur
 
 -----
 
-## Steps to Run
+## Steps to run
 
-#### 1\. Log in to WSO2 Copilot
+#### 1\. Log in to WSO2 copilot
 
 Use the VS Code command palette to log in to your WSO2 Copilot account.
 
-#### 2\. Get Your Credentials
+#### 2\. Get your credentials
 
   - Press `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the command palette.
   - Search for and select **"Ballerina: Configure default WSO2 model provider"**.
-  - This will write your credentials into `Config.toml`. **Copy the service url and access token** from this file for the next step.
+  - This will write your credentials into the `Config.toml` file. **Copy the service URL and access token** from this file for the next step.
 
-#### 3\. Set Environment Variables
+#### 3\. Set environment variables
 
 You need to set the following environment variables in your terminal. Use the values you copied in the previous step.
 
@@ -47,7 +47,7 @@ set BAL_CODEGEN_URL="<PASTE_THE_URL_HERE>"
 set BAL_CODEGEN_TOKEN="<PASTE_THE_TOKEN_HERE>"
 ```
 
-#### 4\. Run the Program
+#### 4\. Run the program
 
   - Open a new terminal in the project directory.
   - Run the following command to start the service:
@@ -56,31 +56,31 @@ set BAL_CODEGEN_TOKEN="<PASTE_THE_TOKEN_HERE>"
     ```
 -----
 
-#### 5\. Run the Test
+#### 5\. Run the test
 
   - Open a new terminal in the project directory.
   - Run the following command to run the tests:
     ```bash
     $ bal test
     ```
-  - The test data is generated at compile time using Ballerina's constant natural expression feature.
+  - The test data is generated at compile time using Ballerina's `const natural` expression feature.
 -----
 
-## Example Request & Response
+## Sample request and response
 
 You can test the running service by sending a `GET` request to the `/shop/products/filter` endpoint with a `minPrice` query parameter.
 
 ### Request
 
-This example filters for products with a price greater than `100.00`.
+This example filters products with a price greater than `100`.
 
 ```bash
-$ curl "http://localhost:8080/shop/products/filter?minPrice=100.00"
+$ curl "http://localhost:8080/products/filter?minPrice=100.00"
 ```
 
 ### Response
 
-The API will return a JSON array containing the products that match the filter.
+The response payload will be a JSON array containing the products with a price greater than 100.
 
 ```json
 [
