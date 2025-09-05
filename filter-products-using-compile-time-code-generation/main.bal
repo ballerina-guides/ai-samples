@@ -13,11 +13,11 @@ final Product[] productCatalog = [
     {id: "PROD005", price: 49.99}
 ];
 
-function filterProductsAbovePrice(Product[] products, decimal priceThreshold) returns Product[] = @natural:code {
+isolated function filterProductsAbovePrice(Product[] products, decimal priceThreshold) returns Product[] = @natural:code {
     prompt: "Filter products that have a price greater than the given price threshold."
 } external;
 
-service /shop on new http:Listener(8080) {
+service / on new http:Listener(8080) {
     resource function get products/filter(decimal minPrice) returns Product[]|http:BadRequest {
         return filterProductsAbovePrice(productCatalog, minPrice);
     }
