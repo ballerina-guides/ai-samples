@@ -1,35 +1,28 @@
 import ballerina/ai;
 import ballerina/http;
+import ballerina/log;
 import ballerina/mime;
+import ballerina/uuid;
 
-enum SubmissionStatus {
-    SUCCESSFUL,
-    FAILED
+enum Status {
+    ACCEPTED,
+    REJECTED
 }
 
+type ValidationResponse record {|
+    boolean isValid;
+    string reason;
+|};
+
 type ClaimResponse record {|
-    SubmissionStatus submissionStatus;
-    string summary?;
+    string claimId;
+    Status status;
+    string reason;
 |};
 
 final ai:Wso2ModelProvider modelProvider = check ai:getDefaultModelProvider();
 
-# Claims Processing API Service
-#
-# This service provides endpoints for processing insurance claims with AI-powered analysis.
 service /insurance on new http:Listener(8080) {
-
-    # Process a new insurance claim submission
-    #
-    # This resource function accepts multipart form data containing a claim description
-    # and an associated image. It uses AI model providers to analyze the content and
-    # generate an intelligent summary of the claim.
-    #
-    # + request - HTTP request containing multipart form data with:
-    # - First part: Text description of the claim
-    # - Second part: Binary image data related to the claim
-    # + return - ClaimResponse containing submission status and AI-generated summary,
-    # or an error if processing fails
     resource function post claims(http:Request request) returns ClaimResponse|error {
         mime:Entity[] bodyParts = check request.getBodyParts();
 
@@ -39,13 +32,32 @@ service /insurance on new http:Listener(8080) {
             content: claimImage
         };
 
-        string summary = check modelProvider->generate(
-            `Please summarize the following claim
-                - Description: ${description}
-                - Image of the claim: ${claimImageDocument}`);
+        ValidationResponse validation = check modelProvider->generate(`
+                You are an insurance claim validator. Your task is to determine if the user's
+                claim description is consistent with the provided image. 
+                
+                Respond ONLY with a JSON object containing two fields: "isValid" (boolean) and "reason" (string).
+                - Set "isValid" to true if the image strongly supports the description.
+                - Set "isValid" to false if there is a mismatch or ambiguity.
+                - The "reason" should be a concise, one-sentence explanation for your decision.
+
+                Claim Description: ${description}
+                Image of the claim: ${claimImageDocument}
+        `);
+
+        string claimId = uuid:createRandomUuid();
+        Status status = validation.isValid ? ACCEPTED : REJECTED;
+
+        if status == ACCEPTED {
+            log:printInfo("Claim validated and accepted", claimId = claimId, reason = validation.reason);
+        } else {
+            log:printInfo("Claim validation failed and was rejected", reason = validation.reason);
+        }
+
         return {
-            submissionStatus: SUCCESSFUL,
-            summary
+            claimId,
+            status,
+            reason: validation.reason
         };
     }
 }
