@@ -51,30 +51,13 @@ For example, you can use an OpenAI model as follows.
 Update your `.bal` file to import the specific provider and initialize it with your API key.
 
 ```ballerina
-import ballerina/ai;
-import ballerina/http;
-import ballerina/log;
-import ballerina/mime;
-import ballerina/uuid;
 import ballerinax/ai.openai; // Import the specific provider
-
-// --- Types and Enums remain the same ---
-enum Status {
-    ACCEPTED,
-    REJECTED
-}
-// ... (rest of the types)
 
 // Configure the API key
 configurable string apiKey = ?;
 
 // Initialize the specific model provider
 final ai:ModelProvider modelProvider = check new openai:ModelProvider(apiKey, openai:GPT_4O);
-
-# Claims Processing API Service
-service /insurance on new http:Listener(8080) {
-    // ... (resource function remains the same)
-}
 ````
 
 #### 2\. Configure your API key
