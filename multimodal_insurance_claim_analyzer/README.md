@@ -112,7 +112,7 @@ curl -X POST http://localhost:8080/insurance/claims \
 
 ### Sample responses
 
-A successful request will receive a JSON response indicating whether the claim was `ACCEPTED` or `REJECTED` based on the AI's validation.
+A successful request will receive a JSON response indicating whether the claim was `ACCEPTED` or `REJECTED`.
 
 #### **Example of an ACCEPTED claim**
 

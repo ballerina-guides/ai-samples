@@ -8,7 +8,7 @@ enum Status {
     REJECTED
 }
 
-# Represents the final response for a claim validation request.
+# Represents the response for a claim validation request.
 type ClaimResponse record {|
     # The final status of the claim (`ACCEPTED` or `REJECTED`)
     Status status;
