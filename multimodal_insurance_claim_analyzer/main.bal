@@ -2,22 +2,18 @@ import ballerina/ai;
 import ballerina/http;
 import ballerina/log;
 import ballerina/mime;
-import ballerina/uuid;
 
 enum Status {
     ACCEPTED,
     REJECTED
 }
 
-type ValidationResponse record {|
-    boolean isValid;
-    string reason;
-|};
-
+# Represents the final response for a claim validation request.
 type ClaimResponse record {|
-    string claimId;
+    # The final status of the claim (`ACCEPTED` or `REJECTED`)
     Status status;
-    string reason;
+    # Included only when the claim is `REJECTED`, providing the reason for rejection
+    string reason?;
 |};
 
 final ai:Wso2ModelProvider modelProvider = check ai:getDefaultModelProvider();
@@ -32,32 +28,21 @@ service /insurance on new http:Listener(8080) {
             content: claimImage
         };
 
-        ValidationResponse validation = check modelProvider->generate(`
+        ClaimResponse claimResonse = check modelProvider->generate(`
                 You are an insurance claim validator. Your task is to determine if the user's
-                claim description is consistent with the provided image. 
-                
-                Respond ONLY with a JSON object containing two fields: "isValid" (boolean) and "reason" (string).
-                - Set "isValid" to true if the image strongly supports the description.
-                - Set "isValid" to false if there is a mismatch or ambiguity.
-                - The "reason" should be a concise, one-sentence explanation for your decision.
+                claim description is consistent with the provided image.
+                Consider a description valid if and only if the image strongly supports the description.
 
-                Claim Description: ${description}
-                Image of the claim: ${claimImageDocument}
+                Submitted description: ${description}
+                Submitted image: ${claimImageDocument}
         `);
 
-        string claimId = uuid:createRandomUuid();
-        Status status = validation.isValid ? ACCEPTED : REJECTED;
-
-        if status == ACCEPTED {
-            log:printInfo("Claim validated and accepted", claimId = claimId, reason = validation.reason);
+        if claimResonse.status == ACCEPTED {
+            log:printInfo("Claim validated and accepted");
         } else {
-            log:printInfo("Claim validation failed and was rejected", reason = validation.reason);
+            log:printInfo("Claim successfully validated and approved", reason = claimResonse.reason);
         }
 
-        return {
-            claimId,
-            status,
-            reason: validation.reason
-        };
+        return claimResonse;
     }
 }
