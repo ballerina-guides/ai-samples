@@ -1,35 +1,24 @@
 import ballerina/ai;
 import ballerina/http;
+import ballerina/log;
 import ballerina/mime;
 
-enum SubmissionStatus {
-    SUCCESSFUL,
-    FAILED
+enum Status {
+    ACCEPTED,
+    REJECTED
 }
 
+# Represents the response for a claim validation request.
 type ClaimResponse record {|
-    SubmissionStatus submissionStatus;
-    string summary?;
+    # The final status of the claim (`ACCEPTED` or `REJECTED`)
+    Status status;
+    # Included only when the claim is `REJECTED`, providing the reason for rejection
+    string reason?;
 |};
 
 final ai:Wso2ModelProvider modelProvider = check ai:getDefaultModelProvider();
 
-# Claims Processing API Service
-#
-# This service provides endpoints for processing insurance claims with AI-powered analysis.
 service /insurance on new http:Listener(8080) {
-
-    # Process a new insurance claim submission
-    #
-    # This resource function accepts multipart form data containing a claim description
-    # and an associated image. It uses AI model providers to analyze the content and
-    # generate an intelligent summary of the claim.
-    #
-    # + request - HTTP request containing multipart form data with:
-    # - First part: Text description of the claim
-    # - Second part: Binary image data related to the claim
-    # + return - ClaimResponse containing submission status and AI-generated summary,
-    # or an error if processing fails
     resource function post claims(http:Request request) returns ClaimResponse|error {
         mime:Entity[] bodyParts = check request.getBodyParts();
 
@@ -39,13 +28,21 @@ service /insurance on new http:Listener(8080) {
             content: claimImage
         };
 
-        string summary = check modelProvider->generate(
-            `Please summarize the following claim
-                - Description: ${description}
-                - Image of the claim: ${claimImageDocument}`);
-        return {
-            submissionStatus: SUCCESSFUL,
-            summary
-        };
+        ClaimResponse claimResonse = check modelProvider->generate(`
+                You are an insurance claim validator. Your task is to determine if the user's
+                claim description is consistent with the provided image.
+                Consider a description valid if and only if the image strongly supports the description.
+
+                Submitted description: ${description}
+                Submitted image: ${claimImageDocument}
+        `);
+
+        if claimResonse.status == ACCEPTED {
+            log:printInfo("Claim validated and accepted");
+        } else {
+            log:printInfo("Claim successfully validated and approved", reason = claimResonse.reason);
+        }
+
+        return claimResonse;
     }
 }
