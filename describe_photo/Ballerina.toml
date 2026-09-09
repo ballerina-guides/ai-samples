@@ -1,0 +1,8 @@
+[package]
+org = "wso2"
+name = "describe_photo"
+version = "0.1.0"
+distribution = "2201.10.3"
+
+[build-options]
+observabilityIncluded = true

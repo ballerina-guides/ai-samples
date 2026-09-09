@@ -1,0 +1,5 @@
+[ballerinax.np.defaultModelConfig]
+serviceUrl = "<SERVICE_URL>"
+deploymentId = "<DEPLOYMENT_ID>"
+apiVersion = "<API_VERSION>"
+connectionConfig.auth.apiKey = "<YOUR_API_KEY>"
