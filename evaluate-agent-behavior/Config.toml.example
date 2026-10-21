@@ -1,0 +1,5 @@
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+# Optional: the maximum number of reasoning-action cycles in one agent run (default 5).
+# maxIterations = 5
+# Optional: the port of the HTTP service (default 8080).
+# port = 8080

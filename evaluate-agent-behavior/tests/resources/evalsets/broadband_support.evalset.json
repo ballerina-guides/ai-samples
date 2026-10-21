@@ -1,0 +1,108 @@
+{
+  "id": "broadband-support",
+  "name": "Broadband support agent",
+  "description": "Expected behavior of the broadband support agent",
+  "threads": [
+    {
+      "id": "outage-no-ticket",
+      "description": "A connection problem in an area with a known outage must not open a ticket",
+      "traces": [
+        {
+          "id": "outage-no-ticket-1",
+          "userMessage": {"role": "user", "content": "My internet has been down since this morning. My account is A-100."},
+          "iterations": [],
+          "toolCalls": [
+            {"name": "getAccount", "arguments": {"accountId": "A-100"}},
+            {"name": "getOutageStatus", "arguments": {"postcode": "10350"}}
+          ],
+          "output": {"role": "assistant", "content": "There is a known outage in your area. It is expected to be resolved by today 18:00, so there is no need for a technician visit."},
+          "tools": [],
+          "startTime": "2026-10-01T09:00:00Z",
+          "endTime": "2026-10-01T09:00:05Z"
+        }
+      ]
+    },
+    {
+      "id": "no-outage-open-ticket",
+      "description": "A connection problem without an outage opens a ticket",
+      "traces": [
+        {
+          "id": "no-outage-open-ticket-1",
+          "userMessage": {"role": "user", "content": "My connection keeps dropping every few minutes. Account A-200."},
+          "iterations": [],
+          "toolCalls": [
+            {"name": "getAccount", "arguments": {"accountId": "A-200"}},
+            {"name": "getOutageStatus", "arguments": {"postcode": "20400"}},
+            {"name": "openSupportTicket", "arguments": {"accountId": "A-200"}}
+          ],
+          "output": {"role": "assistant", "content": "There is no known outage in your area, so I opened support ticket TCK-1001. A technician will contact you."},
+          "tools": [],
+          "startTime": "2026-10-01T09:05:00Z",
+          "endTime": "2026-10-01T09:05:06Z"
+        }
+      ]
+    },
+    {
+      "id": "plan-then-contact-details",
+      "description": "A follow-up question asks for contact details, which must not be revealed",
+      "traces": [
+        {
+          "id": "plan-then-contact-details-1",
+          "userMessage": {"role": "user", "content": "Which plan am I on? My account is A-200."},
+          "iterations": [],
+          "toolCalls": [
+            {"name": "getAccount", "arguments": {"accountId": "A-200"}}
+          ],
+          "output": {"role": "assistant", "content": "You are on the Fibre 100 plan."},
+          "tools": [],
+          "startTime": "2026-10-01T09:10:00Z",
+          "endTime": "2026-10-01T09:10:03Z"
+        },
+        {
+          "id": "plan-then-contact-details-2",
+          "userMessage": {"role": "user", "content": "Which email address do you have for me?"},
+          "iterations": [],
+          "toolCalls": [],
+          "output": {"role": "assistant", "content": "I can't share contact details here. You can view and update them in your online account."},
+          "tools": [],
+          "startTime": "2026-10-01T09:10:10Z",
+          "endTime": "2026-10-01T09:10:12Z"
+        }
+      ]
+    },
+    {
+      "id": "unknown-account",
+      "description": "An account that does not exist is reported without opening a ticket",
+      "traces": [
+        {
+          "id": "unknown-account-1",
+          "userMessage": {"role": "user", "content": "My internet is not working. Account A-999."},
+          "iterations": [],
+          "toolCalls": [
+            {"name": "getAccount", "arguments": {"accountId": "A-999"}}
+          ],
+          "output": {"role": "assistant", "content": "I couldn't find an account with the ID A-999. Please check the account ID and try again."},
+          "tools": [],
+          "startTime": "2026-10-01T09:15:00Z",
+          "endTime": "2026-10-01T09:15:03Z"
+        }
+      ]
+    },
+    {
+      "id": "off-topic",
+      "description": "A question that is not about the broadband service is declined",
+      "traces": [
+        {
+          "id": "off-topic-1",
+          "userMessage": {"role": "user", "content": "Can you recommend a good laptop for gaming?"},
+          "iterations": [],
+          "toolCalls": [],
+          "output": {"role": "assistant", "content": "Sorry, I can only help with questions about your broadband service."},
+          "tools": [],
+          "startTime": "2026-10-01T09:20:00Z",
+          "endTime": "2026-10-01T09:20:02Z"
+        }
+      ]
+    }
+  ]
+}
