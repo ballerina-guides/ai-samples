@@ -1,0 +1,2 @@
+# Port on which the MCP server listens (optional, defaults to 9090)
+port = 9090
