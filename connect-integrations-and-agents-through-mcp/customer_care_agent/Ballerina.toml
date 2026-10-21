@@ -1,0 +1,5 @@
+[package]
+org = "ai_samples"
+name = "customer_care_agent"
+version = "0.1.0"
+distribution = "2201.14.0"

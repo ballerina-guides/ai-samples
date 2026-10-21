@@ -1,0 +1,4 @@
+openAiApiKey = "test-key"
+
+[ballerina.workflow]
+mode = "IN_MEMORY"

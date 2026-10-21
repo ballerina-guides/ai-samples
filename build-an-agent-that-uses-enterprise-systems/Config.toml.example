@@ -1,0 +1,8 @@
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+
+# Optional overrides (defaults shown)
+# orderApiUrl = "http://localhost:9090/api"
+# memorySize = 20
+# maxIterations = 5
+# servicePort = 8080
+# backendPort = 9090

@@ -1,0 +1,3 @@
+openAiApiKey = "test-key"
+ingestOnStartup = false
+port = 9611

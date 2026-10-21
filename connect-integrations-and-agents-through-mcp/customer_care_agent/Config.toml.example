@@ -1,0 +1,5 @@
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+mcpServerUrl = "http://localhost:9090/mcp"
+# Optional: timeout (seconds) for each MCP request, and the HTTP port of the agent service
+# mcpTimeout = 30
+# port = 8080

@@ -1,0 +1,27 @@
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+
+# The identity provider that issues tokens to client applications.
+tokenIssuer = "https://idp.example.com"
+tokenAudience = "claims-assistant"
+# The public certificate of the identity provider. This is the local test certificate.
+issuerCertFile = "tests/resources/public.crt"
+
+# Credentials of the tools. Each one grants only what its tool needs.
+claimsReadToken = "<READ_ONLY_TOKEN>"
+callbackWriteToken = "<CALLBACK_TOKEN>"
+
+# Optional settings (defaults shown).
+# servicePort = 8080
+# claimsApiPort = 9090
+# claimsApiUrl = "http://localhost:9090/api"
+# maxIterations = 5
+
+[ballerina.observe]
+tracingEnabled = true
+tracingProvider = "otel"
+
+[ballerina.otel]
+tracesEndpoint = "http://localhost:4317"
+
+[ballerina.log]
+enableSensitiveDataMasking = true

@@ -1,0 +1,20 @@
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+
+[ballerina.workflow]
+mode = "IN_MEMORY"
+
+[ballerina.workflow.management.rest]
+enableManagementApi = true
+enableBasicAuth = false
+
+# Optional settings (defaults shown).
+# Maximum share of an order total that can be refunded through this flow.
+# maxRefundRatio = 1.0
+# Number of times the simulated payment gateway fails before it accepts a refund.
+# Set it to a positive value to try out the failure review.
+# gatewayFailuresBeforeSuccess = 0
+
+# To run on a durable engine instead, start `temporal server start-dev` and use:
+# [ballerina.workflow]
+# mode = "LOCAL"
+# taskQueue = "REFUND_APPROVAL_QUEUE"

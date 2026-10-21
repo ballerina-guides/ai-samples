@@ -1,0 +1,4 @@
+openAiApiKey = "test-key"
+# Nothing listens on this port, so the agent cannot connect to an MCP server.
+mcpServerUrl = "http://localhost:9393/mcp"
+port = 9595

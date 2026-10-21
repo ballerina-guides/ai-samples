@@ -1,0 +1,9 @@
+# Copy this file to Config.toml and set your OpenAI API key.
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+
+# Alternatively, to use the default WSO2 model provider instead of OpenAI,
+# change the model initialization in service.bal to
+#   final ai:ModelProvider model = check ai:getDefaultModelProvider();
+# and run the "Configure default WSO2 Model Provider" command from the
+# Ballerina VS Code extension (after logging in to WSO2 Copilot). It adds
+# the required configuration to Config.toml.
