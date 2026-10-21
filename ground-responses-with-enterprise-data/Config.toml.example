@@ -1,0 +1,11 @@
+# Copy this file to Config.toml and set your OpenAI API key.
+openAiApiKey = "<YOUR_OPENAI_API_KEY>"
+
+# Optional settings. The values below are the defaults.
+# policyFiles = ["policies/leave-policy.md", "policies/remote-work-policy.md", "policies/expense-policy.md"]
+# maxChunkSize = 400
+# maxOverlapSize = 40
+# ingestOnStartup = true
+# port = 8080
+# topK = 5
+# minSimilarity = 0.3
