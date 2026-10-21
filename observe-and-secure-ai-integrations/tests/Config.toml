@@ -1,0 +1,12 @@
+openAiApiKey = "test-key"
+
+tokenIssuer = "https://idp.example.com"
+tokenAudience = "claims-assistant"
+issuerCertFile = "tests/resources/public.crt"
+
+claimsReadToken = "test-read-token"
+callbackWriteToken = "test-callback-token"
+
+servicePort = 18480
+claimsApiPort = 19490
+claimsApiUrl = "http://localhost:19490/api"
